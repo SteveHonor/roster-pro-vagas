@@ -112,10 +112,10 @@ export default {
     breadcrumbStore: () => useBreadcrumbStore(),
     filterTabs() {
       return [
-        { key: 'all',       name: 'Todas',      badge: this.jobs.length || undefined },
-        { key: 'published', name: 'Publicadas',  badge: this.countByStatus('published') || undefined },
-        { key: 'draft',     name: 'Rascunhos',   badge: this.countByStatus('draft') || undefined },
-        { key: 'closed',    name: 'Encerradas',  badge: this.countByStatus('closed') || undefined }
+        { key: 'all',       name: 'Todas',      icon: 'Squares',     badge: this.jobs.length || undefined },
+        { key: 'published', name: 'Publicadas',  icon: 'CheckCircle', badge: this.countByStatus('published') || undefined },
+        { key: 'draft',     name: 'Rascunhos',   icon: 'Pencil',      badge: this.countByStatus('draft') || undefined },
+        { key: 'closed',    name: 'Encerradas',  icon: 'ArchiveBox',  badge: this.countByStatus('closed') || undefined }
       ];
     }
   },
