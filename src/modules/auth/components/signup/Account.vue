@@ -252,14 +252,14 @@ import FormInput from '@/components/form/Input';
 import LgpdFieldHint from '@/components/form/LgpdFieldHint.vue';
 import BaseIcon from '@/components/icons/BaseIcon';
 
-import { useVuelidate } from '@vuelidate/core/index.js';
+import { useVuelidate } from '@vuelidate/core';
 import {
   required,
   email,
   minLength,
   sameAs,
   helpers
-} from '@vuelidate/validators/index.js';
+} from '@vuelidate/validators';
 import { useAuthStore } from '@/modules/auth/store';
 
 export default {

@@ -97,8 +97,8 @@
 import FormInput from '@/components/form/Input';
 import BaseIcon from '@/components/icons/BaseIcon';
 
-import { useVuelidate } from '@vuelidate/core/index.js';
-import { required, minLength, sameAs, helpers } from '@vuelidate/validators/index.js';
+import { useVuelidate } from '@vuelidate/core';
+import { required, minLength, sameAs, helpers } from '@vuelidate/validators';
 import { useAuthStore } from '@/modules/auth/store';
 import { useCompanyStore } from '@/modules/users/store/company';
 import { useUserStore } from '@/modules/users/store/user';

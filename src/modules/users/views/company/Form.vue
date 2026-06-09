@@ -291,9 +291,9 @@
 <script>
 import Drawer from '@/components/drawer/Drawer.vue';
 import LgpdFieldHint from '@/components/form/LgpdFieldHint.vue';
-import useVuelidate from '@vuelidate/core/index.js';
+import useVuelidate from '@vuelidate/core';
 
-import { required } from '@vuelidate/validators/index.js';
+import { required } from '@vuelidate/validators';
 import { useCompanyStore } from '@/modules/users/store/company';
 
 export default {

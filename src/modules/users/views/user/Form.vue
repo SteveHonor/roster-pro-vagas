@@ -357,10 +357,10 @@ import Input from '@/components/form/Input';
 import Select from '@/components/form/Select';
 import AdminPermissionsForm from '@/modules/users/components/AdminPermissionsForm';
 
-import useVuelidate from '@vuelidate/core/index.js';
+import useVuelidate from '@vuelidate/core';
 import { track, EVENTS } from '@/analytics';
 
-import { required, helpers } from '@vuelidate/validators/index.js';
+import { required, helpers } from '@vuelidate/validators';
 import { useUserStore } from '@/modules/users/store/user';
 import { useCompanyStore } from '@/modules/users/store/company';
 import { useTeamStore } from '@/modules/users/store/team';

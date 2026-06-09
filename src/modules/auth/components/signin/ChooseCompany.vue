@@ -99,8 +99,8 @@
 </template>
 
 <script>
-import useVuelidate from '@vuelidate/core/index.js';
-import { required } from '@vuelidate/validators/index.js';
+import useVuelidate from '@vuelidate/core';
+import { required } from '@vuelidate/validators';
 import { useAuthStore } from '@/modules/auth/store';
 import { useCompanyStore } from '@/modules/users/store/company';
 

@@ -240,8 +240,8 @@ import FormInput from '@/components/form/Input';
 import FormSelect from '@/components/form/Select';
 import BaseIcon from '@/components/icons/BaseIcon';
 
-import { useVuelidate } from '@vuelidate/core/index.js';
-import { requiredIf, helpers } from '@vuelidate/validators/index.js';
+import { useVuelidate } from '@vuelidate/core';
+import { requiredIf, helpers } from '@vuelidate/validators';
 import { useAuthStore } from '@/modules/auth/store';
 
 

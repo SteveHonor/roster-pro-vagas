@@ -138,10 +138,10 @@
 
 <script>
 import Drawer from '@/components/drawer/Drawer.vue';
-import useVuelidate from '@vuelidate/core/index.js';
+import useVuelidate from '@vuelidate/core';
 import { track, EVENTS } from '@/analytics';
 
-import { required } from '@vuelidate/validators/index.js';
+import { required } from '@vuelidate/validators';
 import { useTeamStore } from '@/modules/users/store/team';
 import { useCompanyStore } from '@/modules/users/store/company';
 import { useAuthStore } from '@/modules/auth/store';
