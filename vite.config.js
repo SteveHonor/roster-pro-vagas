@@ -55,7 +55,7 @@ export default defineConfig({
       usePolling: true
     },
     host: 'lvh.me',
-    port: 5173,
+    port: 5174,
     cors: true,
     https: {
       key: fs.readFileSync('./cert/localhost.key'),
