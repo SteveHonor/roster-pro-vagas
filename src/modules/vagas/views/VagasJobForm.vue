@@ -14,82 +14,94 @@
       </div>
     </div>
 
-    <div class="rounded-md border border-slate-200 bg-white p-6 space-y-5">
-      <!-- Título -->
-      <FormInput
-        v-model="form.title"
-        label="Título da vaga"
-        placeholder="ex: Analista de Marketing Sênior"
-      />
+    <div class="rounded-md border border-slate-200 bg-white p-6 space-y-6">
 
-      <!-- Tipo + Senioridade -->
-      <div class="grid grid-cols-2 gap-4">
-        <FormSelect
-          v-model="form.employmentType"
-          label="Tipo de contrato"
-          :options="employmentOptions"
-        />
-        <FormSelect
-          v-model="form.seniority"
-          label="Senioridade"
-          :options="seniorityOptions"
-        />
-      </div>
+      <!-- ── Informações básicas ─────────────────────── -->
+      <div class="space-y-4">
+        <p class="text-[11px] font-semibold uppercase tracking-wide text-slate-400">Informações básicas</p>
 
-      <!-- Departamento + Vagas -->
-      <div class="grid grid-cols-2 gap-4">
-        <FormInput
-          v-model="form.department"
-          label="Área / Departamento"
-          placeholder="ex: Marketing"
-        />
-        <FormInput
-          v-model="form.vacanciesCount"
-          label="Nº de vagas"
-          type="number"
-          placeholder="1"
-        />
-      </div>
+        <div>
+          <FormInput
+            v-model="form.title"
+            label="Título da vaga"
+            placeholder="ex: Analista de Marketing Sênior"
+          />
+          <p class="mt-1 text-[11px] text-slate-400">* Campo obrigatório para publicar</p>
+        </div>
 
-      <!-- Modalidade -->
-      <div>
-        <label class="mb-2 block text-sm font-medium text-slate-700">Modalidade</label>
-        <div class="flex gap-2">
-          <button
-            v-for="opt in modalityOptions"
-            :key="opt.value"
-            type="button"
-            class="flex items-center gap-1.5 rounded-md border px-3 py-2 text-sm font-medium transition"
-            :class="form.modality === opt.value
-              ? 'border-slate-700 bg-slate-800 text-white'
-              : 'border-slate-200 bg-white text-slate-600 hover:border-slate-300 hover:bg-slate-50'"
-            @click="form.modality = opt.value"
-          >
-            <BaseIcon :name="opt.icon" class="!size-4" />
-            {{ opt.label }}
-          </button>
+        <div class="grid grid-cols-2 gap-4">
+          <FormSelect
+            v-model="form.employmentType"
+            label="Tipo de contrato"
+            :options="employmentOptions"
+          />
+          <FormSelect
+            v-model="form.seniority"
+            label="Senioridade"
+            :options="seniorityOptions"
+          />
+        </div>
+
+        <div class="grid grid-cols-2 gap-4">
+          <FormInput
+            v-model="form.department"
+            label="Área / Departamento"
+            placeholder="ex: Marketing"
+          />
+          <FormInput
+            v-model="form.vacanciesCount"
+            label="Nº de vagas"
+            type="number"
+            placeholder="1"
+          />
         </div>
       </div>
 
-      <!-- Dias presenciais (híbrido) -->
-      <div v-if="form.modality === 'hybrid'" class="grid grid-cols-2 gap-4">
-        <FormSelect
-          v-model="form.hybridDaysPerWeek"
-          label="Dias presenciais por semana"
-          :options="hybridDaysOptions"
-        />
+      <hr class="border-slate-100" />
+
+      <!-- ── Local de trabalho ──────────────────────── -->
+      <div class="space-y-4">
+        <p class="text-[11px] font-semibold uppercase tracking-wide text-slate-400">Local de trabalho</p>
+
+        <div>
+          <label class="mb-2 block text-sm font-medium text-slate-700">Modalidade</label>
+          <div class="flex gap-2">
+            <button
+              v-for="opt in modalityOptions"
+              :key="opt.value"
+              type="button"
+              class="flex items-center gap-1.5 rounded-md border px-3 py-2 text-sm font-medium transition"
+              :class="form.modality === opt.value
+                ? 'border-slate-700 bg-slate-800 text-white'
+                : 'border-slate-200 bg-white text-slate-600 hover:border-slate-300 hover:bg-slate-50'"
+              @click="form.modality = opt.value"
+            >
+              <BaseIcon :name="opt.icon" class="!size-4" />
+              {{ opt.label }}
+            </button>
+          </div>
+        </div>
+
+        <div v-if="form.modality === 'hybrid'" class="grid grid-cols-2 gap-4">
+          <FormSelect
+            v-model="form.hybridDaysPerWeek"
+            label="Dias presenciais por semana"
+            :options="hybridDaysOptions"
+          />
+        </div>
+
+        <div v-if="form.modality !== 'remote'" class="grid grid-cols-2 gap-4">
+          <FormInput v-model="form.locationCity" label="Cidade" placeholder="ex: São Paulo" />
+          <FormInput v-model="form.locationState" label="Estado (sigla)" placeholder="ex: SP" />
+        </div>
       </div>
 
-      <!-- Localização (presencial ou híbrido) -->
-      <div v-if="form.modality !== 'remote'" class="grid grid-cols-2 gap-4">
-        <FormInput v-model="form.locationCity" label="Cidade" placeholder="ex: São Paulo" />
-        <FormInput v-model="form.locationState" label="Estado (sigla)" placeholder="ex: SP" />
-      </div>
+      <hr class="border-slate-100" />
 
-      <!-- Faixa salarial -->
-      <div>
-        <div class="mb-2 flex items-center justify-between">
-          <label class="text-sm font-medium text-slate-700">Faixa salarial</label>
+      <!-- ── Remuneração ────────────────────────────── -->
+      <div class="space-y-4">
+        <div class="flex items-center justify-between">
+          <p class="text-[11px] font-semibold uppercase tracking-wide text-slate-400">Remuneração</p>
           <label class="flex cursor-pointer items-center gap-2 text-xs text-slate-500">
             <span>A combinar</span>
             <button
@@ -105,45 +117,60 @@
             </button>
           </label>
         </div>
+
         <div v-if="!form.salaryNegotiable" class="grid grid-cols-2 gap-4">
           <FormInput v-model="form.salaryMin" label="Mínimo (R$)" :currency="true" />
           <FormInput v-model="form.salaryMax" label="Máximo (R$)" :currency="true" />
         </div>
-        <div v-else class="rounded-md border border-dashed border-slate-200 bg-slate-50 px-4 py-2.5 text-xs text-slate-400">
-          Salário será exibido como "A combinar" para candidatos
+        <div v-else class="rounded-md border border-dashed border-slate-200 bg-slate-50 px-4 py-3 text-xs text-slate-400">
+          Salário será exibido como "A combinar" para os candidatos
         </div>
       </div>
 
-      <!-- Descrição -->
-      <FormTextarea
-        v-model="form.description"
-        label="Descrição da vaga"
-        placeholder="Descreva as responsabilidades e o contexto da posição..."
-        :rows="5"
-      />
+      <hr class="border-slate-100" />
 
-      <!-- Requisitos -->
-      <FormTextarea
-        v-model="form.requirements"
-        label="Requisitos"
-        placeholder="Liste os requisitos necessários e desejáveis..."
-        :rows="4"
-      />
+      <!-- ── Descrição do cargo ─────────────────────── -->
+      <div class="space-y-4">
+        <p class="text-[11px] font-semibold uppercase tracking-wide text-slate-400">Descrição do cargo</p>
 
-      <!-- Benefícios -->
-      <FormTextarea
-        v-model="form.benefits"
-        label="Benefícios"
-        placeholder="Liste os benefícios oferecidos..."
-        :rows="3"
-      />
+        <FormTextarea
+          v-model="form.description"
+          label="Descrição da vaga"
+          placeholder="Descreva as responsabilidades e o contexto da posição..."
+          :rows="5"
+        />
+        <FormTextarea
+          v-model="form.requirements"
+          label="Requisitos"
+          placeholder="Liste os requisitos necessários e desejáveis..."
+          :rows="4"
+        />
+        <FormTextarea
+          v-model="form.benefits"
+          label="Benefícios"
+          placeholder="Liste os benefícios oferecidos..."
+          :rows="4"
+        />
+      </div>
 
-      <!-- Prazo de candidatura -->
-      <FormInput
-        v-model="form.closesAt"
-        label="Prazo de candidatura"
-        type="date"
-      />
+      <hr class="border-slate-100" />
+
+      <!-- ── Configurações ──────────────────────────── -->
+      <div class="space-y-4">
+        <p class="text-[11px] font-semibold uppercase tracking-wide text-slate-400">Configurações</p>
+
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <FormInput
+              v-model="form.closesAt"
+              label="Prazo de candidatura"
+              type="date"
+            />
+            <p class="mt-1 text-[11px] text-slate-400">Deixe em branco para não definir prazo</p>
+          </div>
+        </div>
+      </div>
+
     </div>
 
     <!-- Ações -->
@@ -214,25 +241,25 @@ export default {
         closesAt: ''
       },
       modalityOptions: [
-        { value: 'remote', label: 'Remoto', icon: 'Pin' },
-        { value: 'hybrid', label: 'Híbrido', icon: 'Clock' },
+        { value: 'remote',     label: 'Remoto',     icon: 'Pin'     },
+        { value: 'hybrid',     label: 'Híbrido',    icon: 'Clock'   },
         { value: 'presential', label: 'Presencial', icon: 'Company' }
       ],
       employmentOptions: [
-        { label: 'CLT / Integral', value: 'full_time' },
-        { label: 'Meio período', value: 'part_time' },
-        { label: 'Estágio', value: 'internship' },
-        { label: 'Freelance', value: 'freelance' },
-        { label: 'Temporário', value: 'temporary' }
+        { label: 'CLT / Integral', value: 'full_time'  },
+        { label: 'Meio período',   value: 'part_time'  },
+        { label: 'Estágio',        value: 'internship' },
+        { label: 'Freelance',      value: 'freelance'  },
+        { label: 'Temporário',     value: 'temporary'  }
       ],
       seniorityOptions: [
-        { label: 'Estágio', value: 'intern' },
-        { label: 'Júnior', value: 'junior' },
-        { label: 'Pleno', value: 'mid' },
-        { label: 'Sênior', value: 'senior' },
-        { label: 'Especialista', value: 'specialist' },
-        { label: 'Gerente', value: 'manager' },
-        { label: 'Diretor', value: 'director' }
+        { label: 'Estágio',     value: 'intern'     },
+        { label: 'Júnior',      value: 'junior'     },
+        { label: 'Pleno',       value: 'mid'        },
+        { label: 'Sênior',      value: 'senior'     },
+        { label: 'Especialista',value: 'specialist' },
+        { label: 'Gerente',     value: 'manager'    },
+        { label: 'Diretor',     value: 'director'   }
       ],
       hybridDaysOptions: [1, 2, 3, 4, 5].map(n => ({ label: `${n} dia${n > 1 ? 's' : ''}`, value: n }))
     };
@@ -250,22 +277,22 @@ export default {
       try {
         const job = await vagasService.fetchJob(this.$route.params.id);
         this.form = {
-          title: job.title || '',
-          employmentType: job.employmentType || '',
-          seniority: job.seniority || '',
-          department: job.department || '',
-          vacanciesCount: job.vacanciesCount || 1,
-          modality: job.modality || 'remote',
+          title:             job.title || '',
+          employmentType:    job.employmentType || '',
+          seniority:         job.seniority || '',
+          department:        job.department || '',
+          vacanciesCount:    job.vacanciesCount || 1,
+          modality:          job.modality || 'remote',
           hybridDaysPerWeek: job.hybridDaysPerWeek || null,
-          locationCity: job.locationCity || '',
-          locationState: job.locationState || '',
-          salaryMin: job.salaryMin || null,
-          salaryMax: job.salaryMax || null,
-          salaryNegotiable: !job.salaryVisible,
-          description: job.description || '',
-          requirements: job.requirements || '',
-          benefits: job.benefits || '',
-          closesAt: job.closesAt ? job.closesAt.slice(0, 10) : ''
+          locationCity:      job.locationCity || '',
+          locationState:     job.locationState || '',
+          salaryMin:         job.salaryMin || null,
+          salaryMax:         job.salaryMax || null,
+          salaryNegotiable:  !job.salaryVisible,
+          description:       job.description || '',
+          requirements:      job.requirements || '',
+          benefits:          job.benefits || '',
+          closesAt:          job.closesAt ? job.closesAt.slice(0, 10) : ''
         };
       } finally {
         this.loading = false;
