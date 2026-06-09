@@ -1,0 +1,23 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "node",
+      "runtimeExecutable": "vite",
+      "args": ["--port", "5173", "--mode", "development"],
+      "request": "launch",
+      "name": "Launch Development server",
+      "skipFiles": ["<node_internals>/**"],
+      "program": "${workspaceFolder}",
+      "outFiles": ["${workspaceFolder}/**/*.js"]
+    },
+    {
+      "type": "chrome",
+      "request": "launch",
+      "name": "Launch Chrome",
+      "url": "https://lvh.me:5173",
+      "webRoot": "${workspaceFolder}",
+      "skipFiles": ["<node_internals>/**"]
+    }
+  ]
+}

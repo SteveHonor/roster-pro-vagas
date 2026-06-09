@@ -1,0 +1,24 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,900&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+  font-family: 'Roboto', system-ui, sans-serif;
+}
+
+:root {
+  --brand-primary:      #2563eb;
+  --brand-primary-dark: #1d4ed8;
+  --brand-primary-text: #ffffff;
+}
+
+.btn-brand {
+  background-color: var(--brand-primary)      !important;
+  color:            var(--brand-primary-text)  !important;
+
+  &:hover {
+    background-color: var(--brand-primary-dark) !important;
+  }
+}
