@@ -1,29 +1,40 @@
-# melogic
+# Roster Pro — Vagas
 
-This template should help get you started developing with Vue 3 in Vite.
+Dashboard SaaS do produto **RosterPro Vagas** — recrutamento e seleção com pipeline kanban.
 
-## Recommended IDE Setup
+## Stack
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
+- Vue 3
+- Vite
+- Pinia
+- Tailwind CSS
+- Axios
 
-## Customize configuration
+## Funcionalidades
 
-See [Vite Configuration Reference](https://vitejs.dev/config/).
+- Pipeline kanban por vaga (Triagem → Entrevista → Proposta → Contratado)
+- Publicação de vagas com link público de candidatura
+- Candidaturas via WhatsApp (zero fricção)
+- Proposta digital com aceite por e-mail
+- IA para análise de currículos
+- Feature gating por plano (Free / Essential / Pro / Business)
 
-## Project Setup
+## Rodando localmente
 
-```sh
+```bash
 npm install
-```
-
-### Compile and Hot-Reload for Development
-
-```sh
 npm run dev
 ```
 
-### Compile and Minify for Production
+## Variáveis de ambiente
 
-```sh
+```
+VITE_API_URL=http://localhost:3000
+VITE_APP_URL=http://localhost:5173
+```
+
+## Build
+
+```bash
 npm run build
 ```
