@@ -14,65 +14,72 @@
       <template #tabs="{ activeTab }">
         <SkeletonRows v-if="loading" :rows="4" has-trailing />
 
-        <div v-else-if="filteredJobs(activeTab).length" class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-          <div
+        <div v-else-if="filteredJobs(activeTab).length" class="flex flex-col gap-2">
+          <CardRow
             v-for="job in filteredJobs(activeTab)"
             :key="job.id"
-            class="flex flex-col gap-3 rounded-md border border-slate-200 bg-white p-4 transition hover:border-slate-300 hover:shadow-sm"
           >
-            <div class="flex items-start justify-between gap-2">
-              <div class="min-w-0">
-                <p class="truncate font-semibold text-slate-800">{{ job.title }}</p>
-                <p class="mt-0.5 text-xs text-slate-400">{{ job.department || 'Sem área definida' }}</p>
+            <template #prefix>
+              <span :class="statusBadge(job.status).dot" class="h-2.5 w-2.5 rounded-full flex-shrink-0" />
+            </template>
+
+            <div class="flex min-w-0 flex-col gap-1">
+              <span class="truncate text-sm font-semibold text-slate-900">{{ job.title }}</span>
+              <div class="flex flex-wrap items-center gap-1.5">
+                <span class="flex items-center gap-1 text-[11px] text-slate-500">
+                  <BaseIcon :name="modalityIcon(job.modality)" class="!size-3" />
+                  {{ modalityLabel(job.modality) }}
+                </span>
+                <span v-if="job.locationCity && job.modality !== 'remote'" class="text-[11px] text-slate-400">
+                  · {{ job.locationCity }}, {{ job.locationState }}
+                </span>
+                <span class="flex items-center gap-1 text-[11px] text-slate-500">
+                  <BaseIcon name="Briefcase" class="!size-3" />
+                  {{ employmentLabel(job.employmentType) }}
+                </span>
+                <span class="flex items-center gap-1 text-[11px] text-slate-500">
+                  <BaseIcon name="Users" class="!size-3" />
+                  {{ job.applicationsCount || 0 }} candidatos
+                </span>
+                <span v-if="job.publishedAt" class="flex items-center gap-1 text-[11px] text-slate-400">
+                  <BaseIcon name="Clock" class="!size-3" />
+                  {{ timeAgo(job.publishedAt) }}
+                </span>
               </div>
-              <span :class="statusBadge(job.status).cls" class="inline-flex flex-shrink-0 items-center rounded px-2 py-0.5 text-[11px] font-semibold">
-                {{ statusBadge(job.status).label }}
-              </span>
             </div>
 
-            <div class="flex flex-col gap-1.5 text-xs text-slate-500">
-              <div class="flex items-center gap-1.5">
-                <BaseIcon :name="modalityIcon(job.modality)" class="!size-3.5 flex-shrink-0" />
-                <span>{{ modalityLabel(job.modality) }}</span>
-                <span v-if="job.locationCity && job.modality !== 'remote'">· {{ job.locationCity }}, {{ job.locationState }}</span>
+            <template #trailing>
+              <div class="flex w-full items-center justify-between gap-2 sm:w-auto sm:justify-end">
+                <span :class="statusBadge(job.status).cls" class="rounded px-2 py-0.5 text-[11px] font-semibold">
+                  {{ statusBadge(job.status).label }}
+                </span>
+                <div class="flex items-center gap-1">
+                  <button
+                    class="inline-flex items-center gap-1.5 rounded border border-slate-200 px-3 py-1.5 text-[11px] font-medium text-slate-600 transition hover:bg-slate-50"
+                    @click="$router.push(`/vagas/${job.id}/pipeline`)"
+                  >
+                    <BaseIcon name="QueueList" class="!size-3.5" />
+                    Pipeline
+                  </button>
+                  <button
+                    class="inline-flex items-center justify-center rounded p-1.5 text-slate-400 transition hover:bg-slate-100 hover:text-slate-700"
+                    title="Editar vaga"
+                    @click="$router.push(`/vagas/${job.id}/editar`)"
+                  >
+                    <BaseIcon name="Pencil" class="!size-4" />
+                  </button>
+                  <button
+                    v-if="job.status === 'published'"
+                    class="inline-flex items-center justify-center rounded p-1.5 text-slate-400 transition hover:bg-red-50 hover:text-red-500"
+                    title="Encerrar vaga"
+                    @click="closeJob(job)"
+                  >
+                    <BaseIcon name="XMark" class="!size-4" />
+                  </button>
+                </div>
               </div>
-              <div class="flex items-center gap-1.5">
-                <BaseIcon name="Briefcase" class="!size-3.5 flex-shrink-0" />
-                <span>{{ employmentLabel(job.employmentType) }}</span>
-              </div>
-              <div class="flex items-center gap-1.5">
-                <BaseIcon name="Users" class="!size-3.5 flex-shrink-0" />
-                <span>{{ job.applicationsCount || 0 }} candidatos</span>
-              </div>
-              <div v-if="job.publishedAt" class="flex items-center gap-1.5">
-                <BaseIcon name="Clock" class="!size-3.5 flex-shrink-0" />
-                <span>Publicada {{ timeAgo(job.publishedAt) }}</span>
-              </div>
-            </div>
-
-            <div class="flex items-center gap-2 border-t border-slate-100 pt-3">
-              <button
-                class="flex flex-1 items-center justify-center gap-1.5 rounded-md border border-slate-200 bg-slate-50 px-3 py-1.5 text-xs font-medium text-slate-600 transition hover:bg-slate-100"
-                @click="$router.push(`/vagas/${job.id}/pipeline`)"
-              >
-                <BaseIcon name="QueueList" class="!size-3.5" />
-                Pipeline
-              </button>
-              <button
-                class="flex items-center justify-center gap-1.5 rounded-md border border-slate-200 bg-slate-50 px-3 py-1.5 text-xs font-medium text-slate-600 transition hover:bg-slate-100"
-                @click="$router.push(`/vagas/${job.id}/editar`)"
-              >
-                <BaseIcon name="Pencil" class="!size-3.5" />
-              </button>
-              <button
-                v-if="job.status === 'published'"
-                class="flex items-center justify-center gap-1.5 rounded-md border border-red-200 bg-red-50 px-3 py-1.5 text-xs font-medium text-red-600 transition hover:bg-red-100"
-                @click="closeJob(job)"
-              >
-                <BaseIcon name="XMark" class="!size-3.5" />
-              </button>
-            </div>
-          </div>
+            </template>
+          </CardRow>
         </div>
 
         <Empty
@@ -93,6 +100,7 @@
 import Tab from '@/components/tab/Tab';
 import BaseButton from '@/components/base/Button';
 import BaseIcon from '@/components/icons/BaseIcon';
+import CardRow from '@/components/card/CardRow';
 import Empty from '@/components/empty/Empty';
 import SkeletonRows from '@/components/skeleton/SkeletonRows';
 import vagasService from '@/services/vagas';
@@ -100,7 +108,7 @@ import { useBreadcrumbStore } from '@/components/breadcrumb/store';
 import { useConfirmationStore } from '@/components/confirmation/store';
 
 export default {
-  components: { Tab, BaseButton, BaseIcon, Empty, SkeletonRows },
+  components: { Tab, BaseButton, BaseIcon, CardRow, Empty, SkeletonRows },
 
   data() {
     return {
@@ -110,8 +118,9 @@ export default {
   },
 
   computed: {
-    breadcrumbStore:    () => useBreadcrumbStore(),
-    confirmationStore:  () => useConfirmationStore(),
+    breadcrumbStore:   () => useBreadcrumbStore(),
+    confirmationStore: () => useConfirmationStore(),
+
     filterTabs() {
       return [
         { key: 'all',       name: 'Todas',      icon: 'Squares',     badge: this.jobs.length || undefined },
@@ -143,11 +152,11 @@ export default {
 
     statusBadge(status) {
       return {
-        draft:     { cls: 'bg-slate-100 text-slate-600', label: 'Rascunho' },
-        published: { cls: 'bg-green-100 text-green-700', label: 'Publicada' },
-        paused:    { cls: 'bg-amber-100 text-amber-700', label: 'Pausada'   },
-        closed:    { cls: 'bg-red-100 text-red-600',     label: 'Encerrada' }
-      }[status] || { cls: 'bg-slate-100 text-slate-500', label: status };
+        draft:     { cls: 'bg-slate-100 text-slate-600',  label: 'Rascunho', dot: 'bg-slate-300' },
+        published: { cls: 'bg-green-100 text-green-700',  label: 'Publicada', dot: 'bg-green-500' },
+        paused:    { cls: 'bg-amber-100 text-amber-700',  label: 'Pausada',   dot: 'bg-amber-400' },
+        closed:    { cls: 'bg-red-100 text-red-600',      label: 'Encerrada', dot: 'bg-red-400'   }
+      }[status] || { cls: 'bg-slate-100 text-slate-500', label: status, dot: 'bg-slate-300' };
     },
 
     modalityIcon(modality) {
@@ -160,11 +169,11 @@ export default {
 
     employmentLabel(type) {
       return {
-        full_time:   'CLT / Integral',
-        part_time:   'Meio período',
-        internship:  'Estágio',
-        freelance:   'Freelance',
-        temporary:   'Temporário'
+        full_time:  'CLT / Integral',
+        part_time:  'Meio período',
+        internship: 'Estágio',
+        freelance:  'Freelance',
+        temporary:  'Temporário'
       }[type] || type;
     },
 
