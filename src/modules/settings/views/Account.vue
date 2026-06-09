@@ -142,37 +142,6 @@
         </div>
       </div>
 
-      <!-- Responsabilidades -->
-      <div class="overflow-hidden rounded-xl border border-gray-200 bg-white">
-        <div class="flex items-center gap-2 border-b border-gray-100 bg-gray-50 px-4 py-3">
-          <BaseIcon name="Briefcase" class="h-4 w-4 text-gray-400" />
-          <div>
-            <p class="text-sm font-semibold text-gray-800">Responsabilidades</p>
-            <p class="text-xs text-gray-400">Equipes e posições onde você atua</p>
-          </div>
-        </div>
-        <div class="divide-y divide-gray-100">
-          <div
-            v-for="group in groupedResponsibilities"
-            :key="group.team"
-            class="flex items-center gap-3 px-4 py-3"
-          >
-            <div class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-gray-100 text-gray-500">
-              <BaseIcon name="Users" class="h-4 w-4" />
-            </div>
-            <div class="min-w-0">
-              <p class="truncate text-sm font-medium text-gray-800">{{ group.team }}</p>
-              <p class="truncate text-xs text-gray-400">{{ group.positions.join(' · ') }}</p>
-            </div>
-          </div>
-          <div v-if="!groupedResponsibilities.length" class="flex flex-col items-center gap-1 px-4 py-8 text-center">
-            <BaseIcon name="Briefcase" class="h-6 w-6 text-gray-300" />
-            <p class="text-sm font-medium text-gray-500">Nenhuma responsabilidade atribuída</p>
-            <p class="text-xs text-gray-400">Quando você for adicionado a uma equipe, ela aparecerá aqui.</p>
-          </div>
-        </div>
-      </div>
-
       <!-- Seus dados (LGPD) -->
       <div class="overflow-hidden rounded-xl border border-gray-200 bg-white">
         <div class="flex items-center gap-2 border-b border-gray-100 bg-gray-50 px-4 py-3">
@@ -207,11 +176,6 @@
         </div>
       </div>
 
-    </div>
-
-    <!-- Tab: Agenda -->
-    <div v-show="activeTab === 'agenda'" class="space-y-4">
-      <CalendarFeedSettings :collapsible="false" />
     </div>
 
     <!-- Tab: Segurança -->
@@ -376,7 +340,7 @@
           <BaseIcon name="ArchiveBox" class="h-4 w-4 text-gray-400" />
           <div>
             <p class="text-sm font-semibold text-gray-800">Backup da conta</p>
-            <p class="text-xs text-gray-400">Exporte colaboradores, equipes, escalas e eventos em um único arquivo JSON</p>
+            <p class="text-xs text-gray-400">Exporte colaboradores, vagas e candidaturas em um único arquivo JSON</p>
           </div>
         </div>
         <div class="p-4">
@@ -535,7 +499,6 @@ import CompanyForm from '@/modules/users/views/company/Form';
 import RatingStars from '@/components/rating/Star';
 import PlanLimitsWidget from '@/components/plan/PlanLimitsWidget';
 import SkeletonRows from '@/components/skeleton/SkeletonRows';
-import CalendarFeedSettings from '@/modules/settings/components/CalendarFeedSettings';
 import { useAuthStore } from '@/modules/auth/store';
 import { useUserStore } from '@/modules/users/store/user';
 import { useCompanyStore } from '@/modules/users/store/company';
@@ -551,7 +514,6 @@ export default {
     RatingStars,
     SkeletonRows,
     PlanLimitsWidget,
-    CalendarFeedSettings,
     PinInput
   },
   props: {
@@ -596,8 +558,7 @@ export default {
     },
     tabs() {
       const list = [
-        { id: 'perfil',    label: 'Perfil',   icon: 'User'       },
-        { id: 'agenda',    label: 'Agenda',   icon: 'Calendar'   },
+        { id: 'perfil',    label: 'Perfil',    icon: 'User'       },
         { id: 'seguranca', label: 'Segurança', icon: 'LockClosed' }
       ];
       if (this.$can.canAccess('admin')) {
@@ -805,11 +766,10 @@ export default {
   <div class="rounded border border-red-200 bg-red-50 p-4">
     <h4 class="font-semibold text-red-700 mb-2">O que será removido:</h4>
     <ul class="list-disc pl-5 space-y-1 text-red-700">
-      <li>Eventos e histórico</li>
-      <li>Escalas e alocações</li>
-      <li>Avaliações e feedbacks</li>
-      <li>Notificações e Mensagens</li>
-      <li>Ausências</li>
+      <li>Vagas publicadas e rascunhos</li>
+      <li>Candidaturas e pipelines</li>
+      <li>Histórico de recrutamento</li>
+      <li>Notificações e mensagens</li>
     </ul>
   </div>
 

@@ -211,141 +211,10 @@
       <AdminPermissionsForm v-model="adminPermissions" />
     </div>
 
-    <!-- Equipes gerenciadas (apenas operadores) -->
-    <div v-if="userStore.user.profile === 'operator' && $can.canAccess('admin')" class="mb-6">
-      <div class="mb-3 flex items-start gap-2">
-        <div class="mt-0.5 flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-lg bg-indigo-50">
-          <BaseIcon name="Shield" class="h-3.5 w-3.5 text-indigo-500" />
-        </div>
-        <div>
-          <label class="block text-sm font-semibold text-gray-800">Equipes gerenciadas</label>
-          <p class="text-xs text-gray-500">Escopo de acesso — o operador só visualiza e age nas escalas destas equipes.</p>
-        </div>
-      </div>
-
-      <div class="rounded-xl border border-gray-200 bg-white overflow-hidden">
-        <div v-if="managedTeams.length" class="divide-y divide-gray-100">
-          <div
-            v-for="(team, idx) in managedTeams"
-            :key="team.id"
-            class="flex items-center justify-between px-3.5 py-2.5"
-          >
-            <div class="flex items-center gap-2">
-              <div class="h-2 w-2 rounded-full bg-indigo-400" />
-              <span class="text-sm font-medium text-gray-800">{{ team.name }}</span>
-            </div>
-            <button type="button" class="rounded-lg p-1.5 text-gray-300 hover:bg-red-50 hover:text-red-400 transition-colors" @click="removeManagedTeam(idx)">
-              <BaseIcon name="trash" class="h-3.5 w-3.5" />
-            </button>
-          </div>
-        </div>
-        <div v-else class="px-3.5 py-3 text-xs text-gray-400 italic">
-          {{ teams.length === 0
-            ? 'Você ainda não tem equipes criadas. Salve o líder agora e vincule as equipes depois.'
-            : 'Nenhuma equipe vinculada a este líder ainda.' }}
-        </div>
-
-        <div class="flex gap-2 border-t border-gray-100 bg-gray-50 p-2.5">
-          <div class="flex-1">
-            <Select
-              v-model="selectedManagedTeam"
-              :revert-color="true"
-              placeholder="Adicionar equipe"
-              :options="availableManagedTeams.map(t => ({ value: t.id, label: t.name }))"
-            />
-          </div>
-          <button
-            type="button"
-            class="flex items-center justify-center rounded-lg btn-brand px-3 py-2"
-            @click="addManagedTeam"
-          >
-            <BaseIcon name="plus" class="h-4 w-4" />
-          </button>
-        </div>
-      </div>
-      <span v-if="errors.managedTeams" class="mt-1.5 block text-xs text-red-500">{{ errors.managedTeams }}</span>
-    </div>
-
-    <!-- Separador visual -->
-    <div v-if="$can.canAccess('operator')" class="mb-6 flex items-center gap-3">
-      <div class="h-px flex-1 bg-gray-100" />
-      <span class="text-[10px] font-semibold uppercase tracking-widest text-gray-300">Alocação</span>
-      <div class="h-px flex-1 bg-gray-100" />
-    </div>
-
-    <!-- Equipes e Posições -->
-    <div v-if="$can.canAccess('operator')" class="mb-4">
-      <div class="mb-3 flex items-start gap-2">
-        <div class="mt-0.5 flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-lg bg-slate-100">
-          <BaseIcon name="Briefcase" class="h-3.5 w-3.5 text-slate-500" />
-        </div>
-        <div>
-          <label class="block text-sm font-semibold text-gray-800">Equipes e Posições</label>
-          <p class="text-xs text-gray-500">Em quais equipes e funções este colaborador atua.</p>
-        </div>
-      </div>
-
-      <div class="rounded-xl border border-gray-200 bg-white overflow-hidden">
-        <div v-if="userStore.getResponsibilities.length" class="divide-y divide-gray-100">
-          <div
-            v-for="(resp, idx) in userStore.getResponsibilities"
-            :key="idx"
-            class="flex items-center justify-between px-3.5 py-2.5"
-          >
-            <div class="flex items-center gap-2">
-              <div class="h-2 w-2 rounded-full bg-slate-300" />
-              <span class="text-sm font-medium text-gray-800">{{ resp.team?.name }}</span>
-              <span v-if="resp.position" class="rounded-md bg-slate-100 px-2 py-0.5 text-xs text-slate-500">{{ resp.position.name }}</span>
-            </div>
-            <button
-              type="button"
-              class="rounded-lg p-1.5 text-gray-300 hover:bg-red-50 hover:text-red-400 transition-colors"
-              @click="removeResponsibility(idx, resp.id)"
-            >
-              <BaseIcon name="trash" class="h-3.5 w-3.5" />
-            </button>
-          </div>
-        </div>
-        <div v-else class="px-3.5 py-3 text-xs text-gray-400 italic">Nenhuma alocação adicionada.</div>
-
-        <div class="border-t border-gray-100 bg-gray-50 p-2.5">
-          <div class="flex flex-wrap gap-2 md:flex-nowrap">
-            <div class="w-full md:flex-1">
-              <Select
-                v-model="selectedTeam"
-                :revert-color="true"
-                placeholder="Escolha a equipe"
-                :options="teams.map(t => ({ value: t.id, label: t.name }))"
-                @change="fetchPositionsForTeam"
-              />
-            </div>
-            <div class="w-full md:flex-1">
-              <Select
-                v-model="selectedPosition"
-                :revert-color="true"
-                placeholder="Escolha a posição"
-                :options="filteredPositions.map(p => ({ value: p.id, label: p.name }))"
-              />
-            </div>
-            <button
-              type="button"
-              class="flex w-full items-center justify-center rounded-lg btn-brand p-2 md:w-11"
-              @click="addResponsibility"
-            >
-              <BaseIcon name="plus" class="h-4 w-4" />
-            </button>
-          </div>
-          <span v-if="errors.positions" class="mt-1.5 block text-xs text-red-500">{{ errors.positions }}</span>
-        </div>
-      </div>
-    </div>
-
-    <div
-      class="mt-4 rounded border border-blue-100 bg-blue-50 p-3 text-xs text-blue-700"
-    >
-      Os dados do colaborador serão usados exclusivamente para gestão de escalas
-      nesta plataforma. Um convite por e-mail será enviado para que o
-      colaborador confirme o acesso.
+    <div class="mt-4 rounded border border-blue-100 bg-blue-50 p-3 text-xs text-blue-700">
+      Os dados do colaborador serão usados exclusivamente para gestão de
+      recrutamento nesta plataforma. Um convite por e-mail será enviado para
+      que o colaborador confirme o acesso.
     </div>
   </Drawer>
 </template>
@@ -354,7 +223,6 @@
 import Drawer from '@/components/drawer/Drawer';
 import BaseIcon from '@/components/icons/BaseIcon';
 import Input from '@/components/form/Input';
-import Select from '@/components/form/Select';
 import AdminPermissionsForm from '@/modules/users/components/AdminPermissionsForm';
 
 import useVuelidate from '@vuelidate/core';
@@ -363,7 +231,6 @@ import { track, EVENTS } from '@/analytics';
 import { required, helpers } from '@vuelidate/validators';
 import { useUserStore } from '@/modules/users/store/user';
 import { useCompanyStore } from '@/modules/users/store/company';
-import { useTeamStore } from '@/modules/users/store/team';
 import { useAuthStore } from '@/modules/auth/store';
 import { useOnboardingStore } from '@/components/onboarding/store';
 import { usePlanStore } from '@/components/plan/store';
@@ -373,20 +240,14 @@ export default {
     Drawer,
     BaseIcon,
     AdminPermissionsForm,
-    Input,
-    Select
+    Input
   },
   setup() {
     return { v$: useVuelidate() };
   },
   data() {
     return {
-      selectedTeam: '',
-      selectedPosition: '',
-      selectedManagedTeam: '',
-      managedTeams: [],
       managedTeamsWarning: false,
-      teams: [],
       adminPermissions: {
         billing: false,
         members: false,
@@ -400,9 +261,6 @@ export default {
       errors: {
         user: '',
         phone: null,
-        teams: '',
-        positions: '',
-        managedTeams: '',
         email: null
       },
       roles: [
@@ -410,19 +268,19 @@ export default {
           value: 'user',
           label: 'Usuário',
           icon: 'User',
-          description: 'Acessa o app, vê sua própria escala e gerencia disponibilidade.'
+          description: 'Acesso limitado — pode ser candidato ou visualizador do processo.'
         },
         {
           value: 'operator',
-          label: 'Operador',
-          icon: 'Tool',
-          description: 'Cria e gerencia escalas, equipes e posições da empresa.'
+          label: 'Recrutador',
+          icon: 'Briefcase',
+          description: 'Cria vagas, gerencia candidatos e conduz processos seletivos.'
         },
         {
           value: 'admin',
           label: 'Administrador',
           icon: 'Star',
-          description: 'Acesso total: usuários, billing e configurações.'
+          description: 'Acesso total: recrutadores, billing e configurações.'
         }
       ]
     };
@@ -454,7 +312,6 @@ export default {
     };
   },
   computed: {
-    teamStore: () => useTeamStore(),
     userStore: () => useUserStore(),
     companyStore: () => useCompanyStore(),
     authStore: () => useAuthStore(),
@@ -468,18 +325,6 @@ export default {
     },
     canManageAdmins() {
       return this.$can.canManage('manage_admins');
-    },
-    availableManagedTeams() {
-      const selectedIds = this.managedTeams.map(t => t.id);
-      return this.teams.filter(t => !selectedIds.includes(t.id));
-    },
-    filteredPositions() {
-      const team = this.teams.find(t => t.id === this.selectedTeam);
-      const allPositions = team?.positions || [];
-      const usedIds = this.userStore.getResponsibilities
-        .filter(r => r.team?.id === this.selectedTeam)
-        .map(r => r.position?.id);
-      return allPositions.filter(p => !usedIds.includes(p.id));
     }
   },
   methods: {
@@ -534,102 +379,23 @@ export default {
         .then(() => this.v$.userStore.user.email.$touch());
     },
     async fetchTeams() {
-      try {
-        const teams = await this.axios.get('/teams');
-        this.teams = teams;
-
-        const ids = (this.userStore.user.managedTeamIds ?? []).map(String);
-        this.managedTeams = teams.filter(t => ids.includes(String(t.id)));
-
-        if (this.userStore.user.profile === 'admin' && this.userStore.user.adminPermissions) {
-          const raw = this.userStore.user.adminPermissions;
-          this.adminPermissions = {
-            ...this.adminPermissions,
-            ...raw,
-            manage_admins: raw.manageAdmins ?? raw.manage_admins ?? false
-          };
-          delete this.adminPermissions.manageAdmins;
-        }
-      } catch (error) {
-        console.error('Erro ao carregar times', error);
+      if (this.userStore.user.profile === 'admin' && this.userStore.user.adminPermissions) {
+        const raw = this.userStore.user.adminPermissions;
+        this.adminPermissions = {
+          ...this.adminPermissions,
+          ...raw,
+          manage_admins: raw.manageAdmins ?? raw.manage_admins ?? false
+        };
+        delete this.adminPermissions.manageAdmins;
       }
-    },
-
-    addManagedTeam() {
-      if (!this.selectedManagedTeam) return;
-      const team = this.teams.find(t => t.id === this.selectedManagedTeam);
-      if (!team) return;
-      this.managedTeams.push(team);
-      this.selectedManagedTeam = '';
-      this.errors.managedTeams = '';
-    },
-
-    removeManagedTeam(idx) {
-      this.managedTeams.splice(idx, 1);
-    },
-    // Função para carregar as posições de um time específico
-    fetchPositionsForTeam() {
-      this.selectedPosition = '';
-    },
-
-    // Função para adicionar a posição ao time
-    addResponsibility() {
-      if (!this.selectedTeam || !this.selectedPosition) return;
-
-      const responsibilities = this.userStore.getResponsibilities;
-
-      const alreadyExists = responsibilities.some(
-        ({ team, position }) =>
-          team?.id === this.selectedTeam &&
-          position?.id === this.selectedPosition
-      );
-
-      if (alreadyExists) {
-        this.errors.positions =
-          'Essa posição já foi adicionada para este time.';
-        return;
-      }
-
-      this.errors.positions = '';
-
-      const team = this.teams.find(({ id }) => id === this.selectedTeam);
-      if (!team) return;
-
-      const position = team.positions.find(
-        ({ id }) => id === this.selectedPosition
-      );
-      if (!position) return;
-
-      this.userStore.setResponsibility([
-        ...responsibilities,
-        {
-          team: { id: team.id, name: team.name },
-          position: { id: position.id, name: position.name }
-        }
-      ]);
-
-      this.selectedPosition = '';
-    },
-    removeResponsibility(responsibilityIndex, id) {
-      this.userStore.removeResponsibility(responsibilityIndex, id);
     },
     submitForm() {
-      if (this.selectedTeam?.id && this.selectedPosition?.id) {
-        this.addResponsibility();
-      }
-
       return this.userStore.user.id ? this.update() : this.create();
     },
     handleClose() {
       this.errors.email = false;
       this.errors.phone = null;
-      this.errors.positions = '';
-      this.errors.managedTeams = '';
       this.errors.user = '';
-      this.selectedTeam = '';
-      this.selectedPosition = '';
-      this.selectedManagedTeam = '';
-      this.managedTeams = [];
       this.managedTeamsWarning = false;
       this.adminPermissions = {
         billing: false, members: false, schedules: false, approvals: false,

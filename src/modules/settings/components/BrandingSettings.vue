@@ -6,7 +6,7 @@
 
       <span class="inline-flex items-center gap-1.5 rounded-full bg-orange-50 px-3 py-1.5 text-xs font-semibold text-orange-500">
         <BaseIcon name="LockClosed" class="!size-3" />
-        Disponível a partir do plano Essential
+        Disponível a partir do plano Pro
       </span>
 
       <h2 class="mt-5 text-2xl font-bold text-gray-900">Identidade Visual</h2>
@@ -48,9 +48,9 @@
         <!-- Seta -->
         <BaseIcon name="ChevronRight" class="!size-7 flex-shrink-0 text-gray-300" />
 
-        <!-- Com Essential: identidade própria -->
+        <!-- Com Pro: identidade própria -->
         <div class="flex flex-col items-center gap-3">
-          <p class="text-xs font-semibold uppercase tracking-wide text-orange-500">Com Essential</p>
+          <p class="text-xs font-semibold uppercase tracking-wide text-orange-500">Com Pro</p>
           <div class="overflow-hidden rounded-xl border-2 border-orange-300 shadow-lg" style="width:210px;height:160px">
             <div class="flex h-full">
               <div class="flex w-24 flex-shrink-0 flex-col gap-1.5 bg-gray-800 p-3">

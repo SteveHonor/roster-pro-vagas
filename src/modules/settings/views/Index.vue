@@ -59,7 +59,7 @@ export default {
           name:    'Identidade Visual',
           key:     'branding',
           icon:    'Sparkles',
-          premium: brandingLocked ? 'Essential' : false
+          premium: brandingLocked ? 'Pro' : false
         });
         list.push({
           name:    'Integrações',
