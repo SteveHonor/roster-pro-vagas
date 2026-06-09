@@ -141,10 +141,10 @@ export default {
       return [
         { icon: 'Briefcase', title: 'Vagas ilimitadas',       description: 'Publique sem restrição de quantidade' },
         { icon: 'Users',     title: 'Candidatos ilimitados',  description: 'Sem teto por vaga' },
-        { icon: 'Squares2X2', title: 'Pipeline personalizado', description: 'Crie etapas customizadas por processo' },
-        { icon: 'Sparkles',  title: 'IA de currículos',       description: 'Parsing automático de perfil e skills' },
-        { icon: 'ChartBar',  title: 'Analytics de funil',     description: 'Taxa de conversão por etapa do pipeline' },
-        { icon: 'ChatBubbleLeft', title: 'Suporte prioritário', description: 'Chat + WhatsApp 24h' }
+        { icon: 'Squares',   title: 'Pipeline personalizado', description: 'Crie etapas customizadas por processo' },
+        { icon: 'Sparkles', title: 'IA de currículos',       description: 'Parsing automático de perfil e skills' },
+        { icon: 'ChartBar', title: 'Analytics de funil',     description: 'Taxa de conversão por etapa do pipeline' },
+        { icon: 'Chat',     title: 'Suporte prioritário',    description: 'Chat + WhatsApp 24h' }
       ];
     }
   }

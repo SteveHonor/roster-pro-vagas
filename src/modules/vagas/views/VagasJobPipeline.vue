@@ -40,7 +40,7 @@
     <SkeletonRows v-if="loading" :rows="3" />
 
     <!-- Kanban board -->
-    <div v-else class="flex gap-3 overflow-x-auto pb-4">
+    <div v-else class="scrollbar-hide flex gap-3 overflow-x-auto pb-4">
       <div
         v-for="stage in stages"
         :key="stage.id"
@@ -267,3 +267,8 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+.scrollbar-hide::-webkit-scrollbar { display: none; }
+.scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+</style>

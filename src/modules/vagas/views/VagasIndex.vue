@@ -97,6 +97,7 @@ import Empty from '@/components/empty/Empty';
 import SkeletonRows from '@/components/skeleton/SkeletonRows';
 import vagasService from '@/services/vagas';
 import { useBreadcrumbStore } from '@/components/breadcrumb/store';
+import { useConfirmationStore } from '@/components/confirmation/store';
 
 export default {
   components: { Tab, BaseButton, BaseIcon, Empty, SkeletonRows },
@@ -109,7 +110,8 @@ export default {
   },
 
   computed: {
-    breadcrumbStore: () => useBreadcrumbStore(),
+    breadcrumbStore:    () => useBreadcrumbStore(),
+    confirmationStore:  () => useConfirmationStore(),
     filterTabs() {
       return [
         { key: 'all',       name: 'Todas',      icon: 'Squares',     badge: this.jobs.length || undefined },
@@ -175,13 +177,22 @@ export default {
       return `há ${Math.floor(diff / 30)} meses`;
     },
 
-    async closeJob(job) {
-      try {
-        await this.axios.delete(`/vagas/jobs/${job.id}`);
-        job.status = 'closed';
-      } catch (error) {
-        console.error(error);
-      }
+    closeJob(job) {
+      this.confirmationStore.setConfirmation({
+        title:       'Encerrar vaga?',
+        description: `A vaga "${job.title}" será encerrada e não aceitará novos candidatos. Candidaturas existentes são preservadas.`,
+        open:        true,
+        confirmText: 'Encerrar vaga',
+        onConfirm:   async () => {
+          try {
+            await this.axios.delete(`/vagas/jobs/${job.id}`);
+            job.status = 'closed';
+          } catch (error) {
+            console.error(error);
+          }
+        },
+        onCancel: () => this.confirmationStore.close()
+      });
     }
   }
 };

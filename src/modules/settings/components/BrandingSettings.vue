@@ -96,9 +96,9 @@
           @click="openUpgrade"
         >
           <BaseIcon name="Rocket" class="!size-4" />
-          Fazer upgrade — a partir de R$ 29/mês
+          Fazer upgrade — a partir de R$ 79/mês
         </button>
-        <p class="text-xs text-gray-400">Cancele quando quiser · Essential e superiores</p>
+        <p class="text-xs text-gray-400">Cancele quando quiser · Pro e superiores</p>
       </div>
 
     </div>
@@ -257,7 +257,7 @@ export default {
       colorInput:  authStore.branding?.primaryColor || '#4f46e5',
       saving:   false,
       saved:    false,
-      navItems: ['Escalas', 'Equipe', 'Relatórios', 'Configurações']
+      navItems: ['Vagas', 'Equipe', 'Configurações']
     };
   },
   computed: {

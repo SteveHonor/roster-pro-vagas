@@ -61,7 +61,7 @@ export const usePlanStore = defineStore('plan', {
       if (this.plans.length) return;
       this.plansLoading = true;
       try {
-        const data = await axios.get(`https://public.${import.meta.env.VITE_API_URL}/plans`);
+        const data = await axios.get(`https://public.${import.meta.env.VITE_API_URL}/plans?module=vagas`);
         if (Array.isArray(data)) this.plans = data;
       } catch {
         // silent

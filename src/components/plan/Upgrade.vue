@@ -207,7 +207,7 @@ import { usePlanStore } from '@/components/plan/store';
 import { useAuthStore } from '@/modules/auth/store';
 import { loadStripe } from '@stripe/stripe-js';
 
-const PLAN_ORDER = { Free: 0, Essential: 1, Pro: 2, Business: 3 };
+const PLAN_ORDER = { 'Vagas Free': 0, 'Vagas Pro': 1 };
 
 const RESOURCE_LABELS = {
   users:     'colaboradores',
