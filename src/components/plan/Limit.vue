@@ -81,7 +81,7 @@
               <div class="mt-0.5 flex h-7 w-7 flex-shrink-0 items-center justify-center rounded bg-blue-100">
                 <BaseIcon :name="benefit.icon" class="h-4 w-4 text-blue-600" />
               </div>
-              <div>
+              <div class="flex-1 min-w-0 text-left">
                 <p class="text-sm font-semibold text-gray-800">{{ benefit.title }}</p>
                 <p class="mt-0.5 text-xs text-gray-500">{{ benefit.description }}</p>
               </div>

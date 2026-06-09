@@ -44,7 +44,7 @@
       <div
         v-for="stage in stages"
         :key="stage.id"
-        class="flex w-64 flex-shrink-0 flex-col rounded-md border border-slate-200 bg-slate-50"
+        class="flex min-w-52 flex-1 flex-col rounded-md border border-slate-200 bg-slate-50"
       >
         <!-- Cabeçalho da coluna -->
         <div class="flex items-center gap-2 border-b border-slate-200 px-3 py-2.5">
@@ -145,6 +145,8 @@ import VagasCandidateDrawer from '@/modules/vagas/components/VagasCandidateDrawe
 import VagasInterviewModal from '@/modules/vagas/components/VagasInterviewModal';
 import VagasOfferModal from '@/modules/vagas/components/VagasOfferModal';
 import { useVagasStore } from '@/modules/vagas/store';
+import { useAuthStore } from '@/modules/auth/store';
+import { useDrawerStore } from '@/components/drawer/store';
 import vagasService from '@/services/vagas';
 
 export default {
@@ -162,6 +164,7 @@ export default {
 
   computed: {
     vagasStore: () => useVagasStore(),
+    drawerStore: () => useDrawerStore(),
     stages() {
       return this.vagasStore.stages;
     },
@@ -188,7 +191,12 @@ export default {
 
   methods: {
     applicationsInStage(stageId) {
-      return this.applications.filter(a => a.stageId === stageId && a.status === 'active');
+      const sorted = [...this.stages].sort((a, b) => a.position - b.position);
+      const isFirstStage = sorted[0]?.id === stageId;
+      return this.applications.filter(a => {
+        if (a.status !== 'active') return false;
+        return a.stageId === stageId || (isFirstStage && !a.stageId);
+      });
     },
 
     nextStage(currentStage) {
@@ -242,7 +250,7 @@ export default {
       const next = this.nextStage(currentStage);
       if (!next) return;
       try {
-        await vagasService.moveApplicationStage(application.id, next.id);
+        await vagasService.moveApplicationStage(this.$route.params.id, application.id, next.id);
         this.vagasStore.moveApplication(application.id, next.id);
       } catch (error) {
         console.error(error);
@@ -255,7 +263,9 @@ export default {
     },
 
     async copyPublicLink() {
-      const url = `${window.location.origin}/jobs/${this.$route.params.id}`;
+      const authStore = useAuthStore();
+      const siteUrl = import.meta.env.VITE_SITE_URL || 'https://www.rosterpro.com.br';
+      const url = `${siteUrl}/empregos/${authStore.subdomain}/${this.$route.params.id}`;
       try {
         await navigator.clipboard.writeText(url);
         this.copied = true;

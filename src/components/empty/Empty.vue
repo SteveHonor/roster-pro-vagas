@@ -2,7 +2,7 @@
   <div class="flex items-center justify-center" :class="wrapperClass">
     <div class="text-center px-6">
       <div class="mb-3 flex justify-center">
-        <BaseIcon name="inbox" :class="iconClass" />
+        <BaseIcon :name="icon" :class="iconClass" />
       </div>
       <h2
         class="font-semibold"
@@ -13,10 +13,7 @@
       <p v-if="description" class="mt-1 text-sm text-gray-400 leading-relaxed">
         {{ description }}
       </p>
-      <div
-        v-if="hasSlotContent"
-        :class="{ 'my-10 flex w-full justify-center': hasSlotContent }"
-      >
+      <div v-if="hasSlotContent" class="mt-5 flex w-full justify-center">
         <slot />
       </div>
     </div>
@@ -34,6 +31,10 @@ export default {
     title: {
       type: String,
       required: true
+    },
+    icon: {
+      type: String,
+      default: 'inbox'
     },
     titleClass: {
       type: String

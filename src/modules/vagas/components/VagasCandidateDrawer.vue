@@ -125,6 +125,7 @@
 import Drawer from '@/components/drawer/Drawer';
 import BaseIcon from '@/components/icons/BaseIcon';
 import { useVagasStore } from '@/modules/vagas/store';
+import { useDrawerStore } from '@/components/drawer/store';
 import vagasService from '@/services/vagas';
 
 export default {
@@ -141,6 +142,7 @@ export default {
 
   computed: {
     vagasStore: () => useVagasStore(),
+    drawerStore: () => useDrawerStore(),
     application() {
       return this.vagasStore.application || {};
     },
@@ -170,7 +172,7 @@ export default {
     async setRating(n) {
       this.localRating = n;
       try {
-        await vagasService.updateApplication(this.application.id, { rating: n });
+        await vagasService.updateApplication(this.application.jobId, this.application.id, { rating: n });
         this.vagasStore.updateApplicationRating(this.application.id, n);
       } catch (error) {
         console.error(error);
@@ -179,7 +181,7 @@ export default {
 
     async saveNotes() {
       try {
-        await vagasService.updateApplication(this.application.id, { internalNotes: this.localNotes });
+        await vagasService.updateApplication(this.application.jobId, this.application.id, { internalNotes: this.localNotes });
       } catch (error) {
         console.error(error);
       }
@@ -187,7 +189,7 @@ export default {
 
     async archiveApplication() {
       try {
-        await vagasService.updateApplication(this.application.id, { status: 'archived' });
+        await vagasService.updateApplication(this.application.jobId, this.application.id, { status: 'archived' });
         this.$emit('updated');
         this.drawerStore.close();
       } catch (error) {
@@ -197,7 +199,7 @@ export default {
 
     async rejectApplication() {
       try {
-        await vagasService.updateApplication(this.application.id, { status: 'rejected' });
+        await vagasService.updateApplication(this.application.jobId, this.application.id, { status: 'rejected' });
         this.$emit('updated');
         this.drawerStore.close();
       } catch (error) {

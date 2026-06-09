@@ -90,7 +90,7 @@
 
     <div v-if="$can.canAccess('operator') && !isEditingSelf" class="mb-4">
       <span class="mb-2 block text-sm font-medium text-gray-700">Perfil*</span>
-      <div class="grid grid-cols-3 gap-2">
+      <div class="grid grid-cols-2 gap-2">
         <button
           v-for="role in roles"
           :key="role.value"
@@ -159,7 +159,7 @@
     </div>
     <div v-else class="mb-4">
       <span class="mb-2 block text-sm font-medium text-gray-700">Perfil</span>
-      <div class="grid grid-cols-3 gap-2">
+      <div class="grid grid-cols-2 gap-2">
         <div
           v-for="role in roles"
           :key="role.value"
@@ -265,12 +265,6 @@ export default {
       },
       roles: [
         {
-          value: 'user',
-          label: 'Usuário',
-          icon: 'User',
-          description: 'Acesso limitado — pode ser candidato ou visualizador do processo.'
-        },
-        {
           value: 'operator',
           label: 'Recrutador',
           icon: 'Briefcase',
@@ -328,11 +322,8 @@ export default {
     }
   },
   methods: {
-    isRoleLocked(role) {
-      if (role.value !== 'admin') return false;
-      if (!this.$can.canAccess('admin')) return true;
-      const isExistingAdmin = this.userStore.user.id && this.userStore.user.profile === 'admin';
-      return !isExistingAdmin && !this.$can.canCreate('admins');
+    isRoleLocked() {
+      return false;
     },
     selectRole(role) {
       if (this.isRoleLocked(role)) {
@@ -379,6 +370,9 @@ export default {
         .then(() => this.v$.userStore.user.email.$touch());
     },
     async fetchTeams() {
+      if (!this.userStore.user.id && !this.userStore.user.profile) {
+        this.userStore.user.profile = 'operator';
+      }
       if (this.userStore.user.profile === 'admin' && this.userStore.user.adminPermissions) {
         const raw = this.userStore.user.adminPermissions;
         this.adminPermissions = {

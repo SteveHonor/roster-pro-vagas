@@ -8,9 +8,9 @@ export default {
   publishJob: id => axios.put(`/vagas/jobs/${id}/publish`),
 
   fetchApplications: jobId => axios.get(`/vagas/jobs/${jobId}/applications`),
-  updateApplication: (id, data) => axios.put(`/vagas/applications/${id}`, data),
-  moveApplicationStage: (id, stageId) =>
-    axios.put(`/vagas/applications/${id}/move_stage`, { stageId }),
+  updateApplication: (jobId, id, data) => axios.put(`/vagas/jobs/${jobId}/applications/${id}`, data),
+  moveApplicationStage: (jobId, id, stageId) =>
+    axios.put(`/vagas/jobs/${jobId}/applications/${id}/move_stage`, { stageId }),
 
   fetchPipelineStages: jobId => axios.get(`/vagas/jobs/${jobId}/pipeline_stages`),
 

@@ -29,12 +29,10 @@
               <BaseIcon name="Shield" class="h-3 w-3" />
               {{ user?.profile || 'colaborador' }}
             </span>
-            <RatingStars class="text-sm md:hidden" :rating="user?.averageRating" mode="numeric" />
           </div>
         </div>
       </div>
       <div class="flex shrink-0 items-center gap-3">
-        <RatingStars class="hidden text-base md:flex" :rating="user?.averageRating" mode="numeric" />
         <button
           class="flex items-center gap-1.5 rounded-md border border-gray-200 bg-white px-3 py-1.5 text-xs font-medium text-gray-600 shadow-sm transition hover:bg-gray-50 hover:text-gray-900"
           @click="editUser"
@@ -478,9 +476,6 @@
         </div>
       </div>
 
-      <!-- Limites do Plano -->
-      <PlanLimitsWidget />
-
     </div>
 
     <UserForm />
@@ -496,8 +491,6 @@ import PinInput from '@/components/form/PinInput';
 import FormInput from '@/components/form/Input.vue';
 import UserForm from '@/modules/users/views/user/Form';
 import CompanyForm from '@/modules/users/views/company/Form';
-import RatingStars from '@/components/rating/Star';
-import PlanLimitsWidget from '@/components/plan/PlanLimitsWidget';
 import SkeletonRows from '@/components/skeleton/SkeletonRows';
 import { useAuthStore } from '@/modules/auth/store';
 import { useUserStore } from '@/modules/users/store/user';
@@ -511,9 +504,7 @@ export default {
     FormInput,
     UserForm,
     CompanyForm,
-    RatingStars,
     SkeletonRows,
-    PlanLimitsWidget,
     PinInput
   },
   props: {

@@ -42,11 +42,10 @@
         Funil de recrutamento
       </h2>
 
-      <div v-if="loading" class="flex items-end gap-3 pt-2">
-        <div v-for="i in 4" :key="i" class="flex flex-1 flex-col items-center gap-2">
-          <div class="h-2 w-8 animate-pulse rounded bg-slate-200" />
-          <div class="w-full animate-pulse rounded-t bg-slate-200" :style="`height:${[60,45,30,20][i-1]}px`" />
-          <div class="h-2 w-12 animate-pulse rounded bg-slate-200" />
+      <div v-if="loading" class="flex items-end gap-3 pt-2 h-24">
+        <div v-for="(h, i) in [80, 60, 38, 18]" :key="i" class="flex flex-1 flex-col items-center gap-1.5">
+          <div class="w-full animate-pulse rounded-t bg-slate-200" :style="`height:${h}px`" />
+          <div class="h-2 w-10 flex-shrink-0 animate-pulse rounded bg-slate-100" />
         </div>
       </div>
 
@@ -65,30 +64,41 @@
         </div>
       </div>
 
-      <div v-else class="flex flex-col items-start gap-5 py-6 sm:flex-row sm:items-center sm:gap-10">
-        <div class="flex flex-col items-center gap-2 text-center sm:w-1/3 sm:flex-shrink-0">
-          <BaseIcon name="ChartBar" class="!size-10 text-slate-200" />
-          <p class="text-sm font-semibold text-slate-500">Nenhum candidato ainda</p>
-          <p class="text-xs text-slate-400">Publique vagas para ver o funil</p>
+      <Empty
+        v-else
+        title="Nenhum candidato ainda"
+        description="Publique sua primeira vaga para começar a receber candidatos e ver o funil aqui."
+        icon="ChartBar"
+        wrapper-class="py-8"
+        icon-class="!size-12 text-slate-200"
+      >
+        <div class="flex flex-col items-center gap-5">
+          <button
+            class="inline-flex items-center gap-2 rounded-md bg-slate-800 px-4 py-2 text-sm font-semibold text-white transition hover:bg-slate-700"
+            @click="$router.push('/vagas/nova')"
+          >
+            <BaseIcon name="Plus" class="!size-4" />
+            Publicar primeira vaga
+          </button>
+
+          <div class="flex flex-wrap items-center justify-center gap-2 text-xs text-slate-400">
+            <span class="flex items-center gap-1.5">
+              <span class="flex h-4 w-4 items-center justify-center rounded-full bg-slate-100 text-[9px] font-bold text-slate-500">1</span>
+              Publique a vaga
+            </span>
+            <span class="text-slate-200">›</span>
+            <span class="flex items-center gap-1.5">
+              <span class="flex h-4 w-4 items-center justify-center rounded-full bg-slate-100 text-[9px] font-bold text-slate-500">2</span>
+              Candidatos se inscrevem
+            </span>
+            <span class="text-slate-200">›</span>
+            <span class="flex items-center gap-1.5">
+              <span class="flex h-4 w-4 items-center justify-center rounded-full bg-slate-100 text-[9px] font-bold text-slate-500">3</span>
+              Gerencie o pipeline
+            </span>
+          </div>
         </div>
-        <div class="flex-1 rounded-md border border-blue-100 bg-blue-50 px-5 py-4">
-          <p class="mb-3 text-[11px] font-bold uppercase tracking-wider text-blue-400">Como funciona</p>
-          <ol class="space-y-2.5">
-            <li class="flex items-start gap-2.5">
-              <span class="flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full bg-blue-600 text-[10px] font-bold text-white">1</span>
-              <span class="text-xs text-slate-700">Crie e publique uma vaga em <strong>Vagas</strong></span>
-            </li>
-            <li class="flex items-start gap-2.5">
-              <span class="flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full bg-blue-600 text-[10px] font-bold text-white">2</span>
-              <span class="text-xs text-slate-700">Candidatos se inscrevem e entram no pipeline automaticamente</span>
-            </li>
-            <li class="flex items-start gap-2.5">
-              <span class="flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full bg-emerald-500 text-[10px] font-bold text-white">3</span>
-              <span class="text-xs text-slate-700">Mova candidatos pelas etapas até a contratação</span>
-            </li>
-          </ol>
-        </div>
-      </div>
+      </Empty>
     </div>
 
     <!-- Vagas recentes -->
@@ -124,20 +134,22 @@
         </CardRow>
       </div>
 
-      <div v-else class="flex flex-col items-start gap-5 py-6 sm:flex-row sm:items-center sm:gap-10">
-        <div class="flex flex-col items-center gap-2 text-center sm:w-48 sm:flex-shrink-0">
-          <BaseIcon name="Briefcase" class="!size-10 text-slate-200" />
-          <p class="text-sm font-semibold text-slate-500">Nenhuma vaga ainda</p>
-          <p class="text-xs text-slate-400">Crie sua primeira vaga</p>
-        </div>
-        <div class="flex-1 rounded-md border border-slate-100 bg-slate-50 px-5 py-4 text-xs text-slate-500">
-          Publique vagas, receba candidatos e gerencie todo o processo seletivo em um só lugar.
-          <button class="mt-2 flex items-center gap-1 font-semibold text-blue-600 hover:underline" @click="$router.push('/vagas/nova')">
-            Criar primeira vaga
-            <BaseIcon name="ChevronRight" class="!size-3" />
-          </button>
-        </div>
-      </div>
+      <Empty
+        v-else
+        title="Nenhuma vaga ainda"
+        description="Publique vagas, receba candidatos e gerencie o processo seletivo em um só lugar."
+        icon="Briefcase"
+        wrapper-class="py-6"
+        icon-class="!size-10 text-slate-200"
+      >
+        <button
+          class="inline-flex items-center gap-2 rounded-md bg-slate-800 px-4 py-2 text-sm font-semibold text-white transition hover:bg-slate-700"
+          @click="$router.push('/vagas/nova')"
+        >
+          <BaseIcon name="Plus" class="!size-4" />
+          Criar primeira vaga
+        </button>
+      </Empty>
     </div>
   </div>
 </template>
@@ -146,6 +158,7 @@
 import BaseButton from '@/components/base/Button';
 import BaseIcon from '@/components/icons/BaseIcon';
 import CardRow from '@/components/card/CardRow';
+import Empty from '@/components/empty/Empty';
 import SkeletonRows from '@/components/skeleton/SkeletonRows';
 import { useBreadcrumbStore } from '@/components/breadcrumb/store';
 import vagasService from '@/services/vagas';
@@ -153,7 +166,7 @@ import vagasService from '@/services/vagas';
 const FUNNEL_COLORS = ['#3b82f6', '#8b5cf6', '#f59e0b', '#10b981'];
 
 export default {
-  components: { BaseButton, BaseIcon, CardRow, SkeletonRows },
+  components: { BaseButton, BaseIcon, CardRow, Empty, SkeletonRows },
 
   data() {
     return {

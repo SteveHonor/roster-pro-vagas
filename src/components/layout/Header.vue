@@ -35,14 +35,8 @@
             @click="toggleDropdown"
           >
             <div class="mr-8 flex w-full flex-col">
-              <span
-                class="flex w-full gap-2 truncate text-sm font-semibold text-gray-700"
-                >{{ authStore.me?.name }}
-                <RatingStars
-                  :rating="authStore.me?.averageRating"
-                  :background="false"
-                  mode="numeric"
-                />
+              <span class="flex w-full truncate text-sm font-semibold text-gray-700">
+                {{ authStore.me?.name }}
               </span>
               <span
                 v-if="companyStore?.hasCompany"
@@ -85,10 +79,8 @@
             :class="{ hidden: !isOpen }"
           >
             <li class="rounded-t border-b border-gray-100 bg-white px-4 py-2">
-              <div class="flex items-center gap-2">
-                <span class="text-xs text-gray-500">Sua avaliação:</span>
-                <RatingStars :rating="authStore.me?.averageRating" />
-              </div>
+              <p class="text-sm font-semibold text-gray-700">{{ authStore.me?.name }}</p>
+              <p class="text-xs text-gray-500">{{ companyName }}</p>
             </li>
             <li>
               <a
@@ -183,9 +175,7 @@
               </ul>
             </li>
 
-            <li v-if="$can.canAccess('admin')" class="border-t border-gray-100 bg-white px-4 py-3">
-              <PlanLimitsWidget :compact="true" />
-            </li>
+
 
             <li>
               <button
@@ -232,9 +222,7 @@
 <script>
 import Breadcrumb from '@/components/breadcrumb/Breadcrumb';
 import Notification from '@/components/notification/Notification';
-import RatingStars from '@/components/rating/Star';
 import HeaderMobile from '@/components/layout/HeaderMobile.vue';
-import PlanLimitsWidget from '@/components/plan/PlanLimitsWidget';
 
 import { createConsumer } from '@rails/actioncable';
 import { useCompanyStore } from '@/modules/users/store/company';
@@ -247,9 +235,7 @@ export default {
   components: {
     HeaderMobile,
     Breadcrumb,
-    Notification,
-    RatingStars,
-    PlanLimitsWidget
+    Notification
   },
   data: () => ({
     isActive: false,
@@ -265,6 +251,9 @@ export default {
     isLoggedIn: self => self.authStore.isSignedIn,
     brandLogo() {
       return this.authStore.branding?.logoUrl || logoDefault;
+    },
+    companyName() {
+      return this.companyStore?.getChosenCompany?.name || this.authStore.me?.email || '';
     }
   },
   async mounted() {

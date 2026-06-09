@@ -36,10 +36,7 @@ class="mb-5 flex w-full flex-col gap-3 sm:flex-row sm:items-center sm:justify-be
       :key="user.id"
     >
       <div class="flex flex-col gap-1">
-        <span class="flex items-center gap-3 text-sm font-bold capitalize text-slate-800">
-          {{ user.name }}
-          <RatingStars :rating="user.averageRating" />
-        </span>
+        <span class="text-sm font-bold capitalize text-slate-800">{{ user.name }}</span>
         <div class="flex flex-wrap gap-1">
           <span class="rounded border border-slate-100 bg-white px-2 py-0.5 text-xs text-slate-600">{{ user.email }}</span>
           <span class="rounded border border-slate-100 bg-white px-2 py-0.5 text-xs text-slate-600">{{ user.phone }}</span>
@@ -187,7 +184,6 @@ import BaseIcon from '@/components/icons/BaseIcon';
 import CardRow from '@/components/card/CardRow';
 import FeedbackForm from '@/components/feedback/Feedback';
 import FormInput from '@/components/form/Input';
-import RatingStars from '@/components/rating/Star';
 import SkeletonRows from '@/components/skeleton/SkeletonRows';
 
 import { useConfirmationStore } from '@/components/confirmation/store';
@@ -202,7 +198,6 @@ export default {
     CardRow,
     FeedbackForm,
     FormInput,
-    RatingStars,
     SkeletonRows
   },
   data() {
@@ -377,15 +372,11 @@ export default {
       });
     },
     addUser() {
-      if (this.$can.canCreate('users')) {
-        this.drawerStore.setDrawer({
-          title: 'Convidar colaborador',
-          context: 'user',
-          open: true
-        });
-      } else {
-        this.planStore.setOpen('limit');
-      }
+      this.drawerStore.setDrawer({
+        title: 'Convidar colaborador',
+        context: 'user',
+        open: true
+      });
     },
     handlePermissions(user) {
       const loggedUser = this.authStore.user;
