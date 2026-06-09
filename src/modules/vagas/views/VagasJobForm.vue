@@ -246,11 +246,12 @@ export default {
         { value: 'presential', label: 'Presencial', icon: 'Company' }
       ],
       employmentOptions: [
-        { label: 'CLT / Integral', value: 'full_time'  },
-        { label: 'Meio período',   value: 'part_time'  },
-        { label: 'Estágio',        value: 'internship' },
-        { label: 'Freelance',      value: 'freelance'  },
-        { label: 'Temporário',     value: 'temporary'  }
+        { label: 'CLT / Integral',  value: 'full_time'  },
+        { label: 'Pessoa Jurídica', value: 'pj'         },
+        { label: 'Meio período',    value: 'part_time'  },
+        { label: 'Estágio',         value: 'internship' },
+        { label: 'Freelance',       value: 'freelance'  },
+        { label: 'Temporário',      value: 'temporary'  }
       ],
       seniorityOptions: [
         { label: 'Estágio',     value: 'intern'     },

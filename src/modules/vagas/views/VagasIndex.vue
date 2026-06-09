@@ -180,6 +180,7 @@ export default {
     employmentLabel(type) {
       return {
         full_time:  'CLT / Integral',
+        pj:         'Pessoa Jurídica',
         part_time:  'Meio período',
         internship: 'Estágio',
         freelance:  'Freelance',
