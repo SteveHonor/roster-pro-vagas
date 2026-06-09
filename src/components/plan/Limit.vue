@@ -91,7 +91,7 @@
           <!-- Prova social -->
           <div class="mb-6 rounded-md border border-blue-100 bg-blue-50 px-4 py-3">
             <p class="text-xs text-blue-700">
-              <span class="font-semibold">Organizações que fazem upgrade</span> reduzem o tempo de montagem de escalas em até 60% com histórico e notificações automáticas.
+              <span class="font-semibold">Empresas que usam o Vagas Pro</span> preenchem vagas 2× mais rápido com pipeline personalizado e IA de currículos.
             </p>
           </div>
 
@@ -133,45 +133,18 @@ export default {
   computed: {
     planStore: () => usePlanStore(),
     getUpgradeMessage() {
-      const messages = {
-        Free: 'Você está usando o plano gratuito. Faça upgrade e escale sua operação sem limites.',
-        Pro: 'Precisa de mais poder? O Business oferece limites ampliados e suporte dedicado.',
-        Business: 'Você está no plano máximo. Para necessidades customizadas, fale conosco: (11) 9 2557-2056'
-      };
-      return messages[this.planStore.name] || 'Conheça nossos planos e encontre o ideal para sua organização.';
+      const name = this.planStore.name || '';
+      if (name.includes('Free')) return 'Você está no plano gratuito. Faça upgrade e contrate sem limites.';
+      return 'Conheça nossos planos e encontre o ideal para sua organização.';
     },
     upgradeBenefits() {
       return [
-        {
-          icon: 'Users',
-          title: 'Mais colaboradores',
-          description: 'Escale equipes maiores sem se preocupar com limites'
-        },
-        {
-          icon: 'Calendar',
-          title: 'Mais agendas ativas',
-          description: 'Gerencie múltiplos serviços e turnos simultaneamente'
-        },
-        {
-          icon: 'ArchiveBox',
-          title: 'Histórico completo',
-          description: 'Acesse todas as escalas passadas e identifique padrões'
-        },
-        {
-          icon: 'BellAlert',
-          title: 'Notificações automáticas',
-          description: 'Avise sua equipe por WhatsApp e e-mail automaticamente'
-        },
-        {
-          icon: 'ChartBar',
-          title: 'Relatórios de desempenho',
-          description: 'Acompanhe avaliações e engajamento da equipe'
-        },
-        {
-          icon: 'Sparkles',
-          title: 'Recursos com IA',
-          description: 'Mensagens personalizadas e sugestões inteligentes'
-        }
+        { icon: 'Briefcase', title: 'Vagas ilimitadas',       description: 'Publique sem restrição de quantidade' },
+        { icon: 'Users',     title: 'Candidatos ilimitados',  description: 'Sem teto por vaga' },
+        { icon: 'Squares2X2', title: 'Pipeline personalizado', description: 'Crie etapas customizadas por processo' },
+        { icon: 'Sparkles',  title: 'IA de currículos',       description: 'Parsing automático de perfil e skills' },
+        { icon: 'ChartBar',  title: 'Analytics de funil',     description: 'Taxa de conversão por etapa do pipeline' },
+        { icon: 'ChatBubbleLeft', title: 'Suporte prioritário', description: 'Chat + WhatsApp 24h' }
       ];
     }
   }

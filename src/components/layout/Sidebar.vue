@@ -13,7 +13,7 @@
       class="rounded-lg hover:bg-gray-50"
     >
       <router-link
-        v-if="$can.canView('dashboard') && $can.canAccess(item?.role)"
+        v-if="$can.canAccess(item?.role)"
         :to="item.to"
         class="group flex items-center rounded-lg px-2 py-2"
         :class="
@@ -45,35 +45,13 @@ export default {
   computed: {
     sidebarStore: () => useSidebarStore(),
     menu() {
-      const isOperator = this.$can.canAccess('operator');
       return [
         {
-          to: isOperator ? '/' : '/my-dashboard',
+          to: '/',
           icon: 'dashboard',
           title: 'Dashboard',
-          subtitle: isOperator ? 'Resumo | Métricas' : 'Início',
-          role: 'user'
-        },
-        {
-          to: '/calendar',
-          icon: 'calendar',
-          title: 'Calendário',
-          subtitle: 'Escalas e Agendas',
-          role: 'user'
-        },
-        {
-          to: '/requests',
-          icon: 'block',
-          title: 'Solicitações',
-          subtitle: 'Ausências e Trocas',
-          role: 'user'
-        },
-        {
-          to: '/evaluations',
-          icon: 'chart-bar',
-          title: 'Avaliações',
-          subtitle: 'Desempenho',
-          role: 'user'
+          subtitle: 'Resumo | Métricas',
+          role: 'operator'
         },
         {
           to: '/vagas',
@@ -83,18 +61,11 @@ export default {
           role: 'operator'
         },
         {
-          to: '/reports',
-          icon: 'document-text',
-          title: 'Relatórios',
-          subtitle: 'Resumo mensal',
-          role: 'operator'
-        },
-        {
           to: '/users',
           icon: 'users',
-          title: 'Cadastros',
-          subtitle: 'Equipes e Colaboradores',
-          role: 'user'
+          title: 'Equipe',
+          subtitle: 'Recruiters e Gestores',
+          role: 'operator'
         },
         {
           to: '/settings',

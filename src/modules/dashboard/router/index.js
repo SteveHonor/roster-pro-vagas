@@ -1,25 +1,15 @@
-import Dashboard from "@/modules/dashboard/views/Index";
-import UserDashboard from "@/modules/dashboard/views/UserDashboard";
+import Dashboard from '@/modules/dashboard/views/Index';
 
 export default [
   {
-    path: "/",
-    name: "dashboard",
+    path: '/',
+    name: 'dashboard',
     component: Dashboard,
     meta: {
-      layout: "default",
+      layout: 'default',
       requiresAuth: true,
-      title: "DASHBOARD"
-    },
-  },
-  {
-    path: "/my-dashboard",
-    name: "user-dashboard",
-    component: UserDashboard,
-    meta: {
-      layout: "default",
-      requiresAuth: true,
-      title: "INÍCIO"
-    },
-  },
+      requiresOperator: true,
+      title: 'DASHBOARD'
+    }
+  }
 ];

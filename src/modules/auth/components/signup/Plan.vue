@@ -205,32 +205,29 @@ export default {
       loadError: false,
       signupError: '',
       stripe: null,
-      planNames: ['Free', 'Essential', 'Pro', 'Business'],
+      planNames: ['Free', 'Pro'],
       comparison: [
         {
           category: 'Limites',
           rows: [
-            { label: 'Usuários', values: ['Até 20', 'Até 30', 'Até 50', 'Até 100'] },
-            { label: 'Equipes', values: ['Até 5', 'Até 10', 'Até 30', 'Até 50'] },
-            { label: 'Instituições', values: ['1', '1', 'Até 3', 'Até 5'] }
+            { label: 'Vagas simultâneas',    values: ['Até 3', 'Ilimitadas'] },
+            { label: 'Candidatos por vaga',  values: ['Até 50', 'Ilimitados'] }
           ]
         },
         {
           category: 'Funcionalidades',
           rows: [
-            { label: 'Histórico de escalas', values: [false, true, true, true] },
-            { label: 'Notificações WhatsApp', values: [false, true, true, true] },
-            { label: 'IA — Mensagens personalizadas', values: [false, true, true, true] },
-            { label: 'IA — Insights do time', values: [false, false, true, true] },
-            { label: 'IA — Sugestão de escala', values: [false, false, false, true] },
-            { label: 'Integrações com API', values: [false, false, true, true] }
+            { label: 'Pipeline básico',          values: [true,  true] },
+            { label: 'Pipeline personalizado',    values: [false, true] },
+            { label: 'IA — Parsing de currículo', values: [false, true] },
+            { label: 'Analytics de funil',        values: [false, true] },
+            { label: 'Publicação LinkedIn',       values: [false, true] }
           ]
         },
         {
           category: 'Suporte',
           rows: [
-            { label: 'Canal', values: ['E-mail', 'E-mail + Chat', 'Chat + WhatsApp 24h', 'Dedicado'] },
-            { label: 'Recursos personalizados', values: [false, false, 'Limitado', 'Sob demanda'] }
+            { label: 'Canal', values: ['E-mail', 'Chat + WhatsApp 24h'] }
           ]
         }
       ]
@@ -263,8 +260,7 @@ export default {
       this.loading = true;
       this.loadError = false;
       try {
-        const module = this.authStore.activeProduct || 'escalas';
-        const response = await this.axios.get(`plans?module=${module}`);
+        const response = await this.axios.get('plans?module=vagas');
         if (response?.length) {
           this.apiPlans = response;
         } else {
@@ -312,8 +308,7 @@ export default {
           this.authStore.setLoginMethod(this.authStore.isOauth ? 'google' : 'password');
           this.companyStore.setChosenCompany(response?.companies[0]);
           this.userStore.setUserCompany(response?.companies[0]?.id);
-          const redirectModule = response.redirectTo || this.authStore.activeProduct || 'escalas';
-          this.$router.replace(redirectModule === 'vagas' ? '/vagas' : '/');
+          this.$router.replace('/');
         } else {
           // Sem token = cadastro em andamento (confirmação de e-mail) → passo 4
           this.authStore.stepRegister += 1;

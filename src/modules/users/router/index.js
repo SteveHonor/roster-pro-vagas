@@ -8,7 +8,7 @@ export default [
     meta: {
       layout: 'default',
       requiresAuth: true,
-      breadcrumb: 'Cadastros'
+      breadcrumb: 'Equipe'
     }
   }
 ];

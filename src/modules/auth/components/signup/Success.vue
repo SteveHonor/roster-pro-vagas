@@ -14,14 +14,7 @@
       <h2 class="text-2xl font-bold text-slate-900">
         Parabéns, {{ firstName }}!
       </h2>
-      <p class="mt-2 text-slate-500">
-        <template v-if="authStore.activeProduct === 'vagas'">
-          Sua conta RosterPro Vagas está pronta!
-        </template>
-        <template v-else>
-          Seu cadastro foi realizado com sucesso.
-        </template>
-      </p>
+      <p class="mt-2 text-slate-500">Sua conta RosterPro Vagas está pronta!</p>
 
       <!-- Caixa informativa -->
       <div class="mt-6 rounded-xl border border-slate-100 bg-slate-50 p-5 text-sm text-slate-600 leading-relaxed">
@@ -29,17 +22,7 @@
         Verifique sua caixa de entrada e clique no link para ativar sua conta.
       </div>
 
-      <!-- CTA contextual -->
       <router-link
-        v-if="authStore.activeProduct === 'vagas'"
-        to="/vagas"
-        class="mt-8 flex w-full items-center justify-center gap-2 rounded-lg bg-slate-900 py-3 text-sm font-bold text-white transition hover:bg-slate-800"
-      >
-        Acessar o RosterPro Vagas
-        <BaseIcon name="ChevronRight" class="!size-4" />
-      </router-link>
-      <router-link
-        v-else
         to="/signin"
         class="mt-8 flex w-full items-center justify-center gap-2 rounded-lg bg-slate-900 py-3 text-sm font-bold text-white transition hover:bg-slate-800"
       >
