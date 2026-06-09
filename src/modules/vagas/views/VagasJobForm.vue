@@ -65,7 +65,7 @@
 
         <div>
           <label class="mb-2 block text-sm font-medium text-slate-700">Modalidade</label>
-          <div class="flex gap-2">
+          <div class="flex flex-wrap items-center gap-2">
             <button
               v-for="opt in modalityOptions"
               :key="opt.value"
@@ -79,15 +79,18 @@
               <BaseIcon :name="opt.icon" class="!size-4" />
               {{ opt.label }}
             </button>
-          </div>
-        </div>
 
-        <div v-if="form.modality === 'hybrid'" class="grid grid-cols-2 gap-4">
-          <FormSelect
-            v-model="form.hybridDaysPerWeek"
-            label="Dias presenciais por semana"
-            :options="hybridDaysOptions"
-          />
+            <div v-if="form.modality === 'hybrid'" class="flex items-center gap-2 border-l border-slate-200 pl-3">
+              <span class="text-xs text-slate-500">Dias presenciais:</span>
+              <select
+                v-model="form.hybridDaysPerWeek"
+                class="rounded-md border border-slate-200 bg-white px-2 py-1.5 text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-300"
+              >
+                <option :value="null" disabled>—</option>
+                <option v-for="n in 5" :key="n" :value="n">{{ n }}x por semana</option>
+              </select>
+            </div>
+          </div>
         </div>
 
         <div v-if="form.modality !== 'remote'" class="grid grid-cols-2 gap-4">
