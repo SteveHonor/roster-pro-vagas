@@ -15,7 +15,6 @@
 import EmptyLayout from '@/layouts/EmptyLayout';
 import DefaultLayout from '@/layouts/DefaultLayout';
 import AuthLayout from '@/layouts/AuthLayout';
-import MobileLayout from '@/layouts/MobileLayout';
 import Confirmation from '@/components/confirmation/Confirmation';
 import Maintenance from '@/views/Maintenance';
 import Limit from '@/components/plan/Limit';
@@ -51,7 +50,6 @@ export default {
     EmptyLayout,
     DefaultLayout,
     AuthLayout,
-    MobileLayout,
     Confirmation,
     Maintenance,
     Limit,
