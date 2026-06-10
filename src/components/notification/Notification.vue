@@ -144,11 +144,14 @@ export default {
     },
     recent() {
       return [...this.notificationStore.notifications]
+        .filter(n => n.origin?.startsWith('vagas_'))
         .sort((a, b) => new Date(b.notified_at || b.created_at) - new Date(a.notified_at || a.created_at))
         .slice(0, 8);
     },
     unreadCount() {
-      return this.notificationStore.notifications.filter(n => n.status === 'sent').length;
+      return this.notificationStore.notifications
+        .filter(n => n.status === 'sent' && n.origin?.startsWith('vagas_'))
+        .length;
     }
   },
   mounted() {
