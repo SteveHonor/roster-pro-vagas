@@ -116,6 +116,46 @@
         </div>
       </div>
 
+      <!-- ── Contato ──────────────────────────────────── -->
+      <div class="border-t border-slate-100 pt-4 pb-4 space-y-2.5">
+        <p class="text-[11px] font-semibold uppercase tracking-widest text-slate-400">Contato</p>
+
+        <div v-if="application.candidate?.email" class="flex items-center gap-2.5 text-sm text-slate-600">
+          <BaseIcon name="Envelope" class="!size-4 flex-shrink-0 text-slate-300" />
+          <a :href="`mailto:${application.candidate.email}`" class="hover:text-blue-600 hover:underline truncate">
+            {{ application.candidate.email }}
+          </a>
+        </div>
+
+        <div v-if="application.candidate?.phone" class="flex items-center gap-2.5 text-sm text-slate-600">
+          <BaseIcon name="Phone" class="!size-4 flex-shrink-0 text-slate-300" />
+          <span>{{ application.candidate.phone }}</span>
+        </div>
+
+        <div class="flex flex-wrap gap-2 pt-1">
+          <a
+            v-if="application.candidate?.linkedinUrl"
+            :href="application.candidate.linkedinUrl"
+            target="_blank" rel="noopener"
+            class="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-medium text-slate-600 shadow-sm transition hover:border-sky-300 hover:bg-sky-50 hover:text-sky-700"
+          >
+            <BaseIcon name="LinkedIn" class="!size-3.5 text-sky-500" />
+            LinkedIn
+            <BaseIcon name="ExternalLink" class="!size-3 text-slate-300" />
+          </a>
+          <a
+            v-if="application.candidate?.resumeUrl"
+            :href="application.candidate.resumeUrl"
+            target="_blank" rel="noopener"
+            class="inline-flex items-center gap-1.5 rounded-lg border border-blue-200 bg-blue-50 px-3 py-1.5 text-xs font-medium text-blue-700 shadow-sm transition hover:border-blue-300 hover:bg-blue-100"
+          >
+            <BaseIcon name="DocumentText" class="!size-3.5" />
+            Currículo (PDF)
+            <BaseIcon name="ExternalLink" class="!size-3 text-blue-400" />
+          </a>
+        </div>
+      </div>
+
       <!-- ── Match ──────────────────────────────────────── -->
       <div v-if="application.candidate?.resumeUrl" class="border-t border-slate-100 pt-4 pb-4">
         <div class="mb-3 flex items-center justify-between">
@@ -214,46 +254,6 @@
         >
           <BaseIcon name="XMark" class="!size-3.5 flex-shrink-0" />
           {{ matchError }}
-        </div>
-      </div>
-
-      <!-- ── Contato ──────────────────────────────────── -->
-      <div class="border-t border-slate-100 pt-4 pb-4 space-y-2.5">
-        <p class="text-[11px] font-semibold uppercase tracking-widest text-slate-400">Contato</p>
-
-        <div v-if="application.candidate?.email" class="flex items-center gap-2.5 text-sm text-slate-600">
-          <BaseIcon name="Envelope" class="!size-4 flex-shrink-0 text-slate-300" />
-          <a :href="`mailto:${application.candidate.email}`" class="hover:text-blue-600 hover:underline truncate">
-            {{ application.candidate.email }}
-          </a>
-        </div>
-
-        <div v-if="application.candidate?.phone" class="flex items-center gap-2.5 text-sm text-slate-600">
-          <BaseIcon name="Phone" class="!size-4 flex-shrink-0 text-slate-300" />
-          <span>{{ application.candidate.phone }}</span>
-        </div>
-
-        <div class="flex flex-wrap gap-2 pt-1">
-          <a
-            v-if="application.candidate?.linkedinUrl"
-            :href="application.candidate.linkedinUrl"
-            target="_blank" rel="noopener"
-            class="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-medium text-slate-600 shadow-sm transition hover:border-sky-300 hover:bg-sky-50 hover:text-sky-700"
-          >
-            <BaseIcon name="LinkedIn" class="!size-3.5 text-sky-500" />
-            LinkedIn
-            <BaseIcon name="ExternalLink" class="!size-3 text-slate-300" />
-          </a>
-          <a
-            v-if="application.candidate?.resumeUrl"
-            :href="application.candidate.resumeUrl"
-            target="_blank" rel="noopener"
-            class="inline-flex items-center gap-1.5 rounded-lg border border-blue-200 bg-blue-50 px-3 py-1.5 text-xs font-medium text-blue-700 shadow-sm transition hover:border-blue-300 hover:bg-blue-100"
-          >
-            <BaseIcon name="DocumentText" class="!size-3.5" />
-            Currículo (PDF)
-            <BaseIcon name="ExternalLink" class="!size-3 text-blue-400" />
-          </a>
         </div>
       </div>
 
