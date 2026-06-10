@@ -1,23 +1,78 @@
 <template>
   <Drawer context="vagas-candidate" :exit-button="true" :on-save="null">
     <template #footer>
-      <div class="flex w-full gap-2">
-        <button
-          type="button"
-          class="flex flex-1 items-center justify-center gap-1.5 rounded-md border border-slate-200 py-2 text-xs font-medium text-slate-500 transition hover:border-amber-200 hover:bg-amber-50 hover:text-amber-700"
-          @click="archiveApplication"
+      <div class="flex w-full flex-col gap-2">
+
+        <!-- Contratado -->
+        <div
+          v-if="currentStage?.stageType === 'hired'"
+          class="flex items-center justify-center gap-2 rounded-md bg-emerald-500 py-2.5 text-xs font-semibold text-white"
         >
-          <BaseIcon name="ArchiveBox" class="!size-3.5" />
-          Arquivar
-        </button>
+          <BaseIcon name="CheckCircle" class="!size-4" />
+          Candidato contratado
+        </div>
+
+        <!-- Avançar (primário) -->
         <button
+          v-if="nextApplicationStage && currentStage?.stageType !== 'hired'"
           type="button"
-          class="flex flex-1 items-center justify-center gap-1.5 rounded-md border border-slate-200 py-2 text-xs font-medium text-slate-500 transition hover:border-red-200 hover:bg-red-50 hover:text-red-600"
-          @click="rejectApplication"
+          class="flex w-full items-center justify-center gap-2 rounded-md py-2.5 text-sm font-semibold text-white shadow-sm transition hover:brightness-110 active:scale-[0.99]"
+          :style="{ backgroundColor: nextApplicationStage.color || '#3b82f6' }"
+          @click="advanceStage"
         >
-          <BaseIcon name="XMark" class="!size-3.5" />
-          Reprovar
+          Avançar para {{ nextApplicationStage.name }}
+          <BaseIcon name="ChevronRight" class="!size-4" />
         </button>
+
+        <!-- Ações secundárias -->
+        <div class="flex gap-2">
+          <button
+            v-if="currentStage?.stageType === 'interview'"
+            type="button"
+            class="flex flex-1 items-center justify-center gap-1.5 rounded-md border border-slate-200 py-2 text-xs font-medium text-slate-600 transition hover:bg-slate-50"
+            @click="$emit('schedule-interview')"
+          >
+            <BaseIcon name="Calendar" class="!size-3.5 text-slate-400" />
+            Agendar
+          </button>
+          <button
+            v-if="currentStage?.stageType === 'offer'"
+            type="button"
+            class="flex flex-1 items-center justify-center gap-1.5 rounded-md border border-slate-200 py-2 text-xs font-medium text-slate-600 transition hover:bg-slate-50"
+            @click="$emit('send-offer')"
+          >
+            <BaseIcon name="DocumentText" class="!size-3.5 text-slate-400" />
+            Proposta
+          </button>
+          <button
+            type="button"
+            class="flex flex-1 items-center justify-center gap-1.5 rounded-md border border-slate-200 py-2 text-xs font-medium text-slate-500 transition hover:border-amber-200 hover:bg-amber-50 hover:text-amber-700"
+            @click="archiveApplication"
+          >
+            <BaseIcon name="ArchiveBox" class="!size-3.5" />
+            Arquivar
+          </button>
+          <button
+            type="button"
+            class="flex flex-1 items-center justify-center gap-1.5 rounded-md border border-slate-200 py-2 text-xs font-medium text-slate-500 transition hover:border-red-200 hover:bg-red-50 hover:text-red-600"
+            @click="rejectApplication"
+          >
+            <BaseIcon name="XMark" class="!size-3.5" />
+            Reprovar
+          </button>
+        </div>
+
+        <!-- Voltar (terciário) -->
+        <button
+          v-if="prevApplicationStage && currentStage?.stageType !== 'hired'"
+          type="button"
+          class="flex items-center justify-center gap-1 text-xs text-slate-400 transition hover:text-slate-600"
+          @click="retreatStage"
+        >
+          <BaseIcon name="ChevronLeft" class="!size-3.5" />
+          Voltar para {{ prevApplicationStage.name }}
+        </button>
+
       </div>
     </template>
 
@@ -179,65 +234,6 @@
           <BaseIcon name="LockClosed" class="!size-3.5 flex-shrink-0 text-slate-400" />
           <span>Visível apenas para o seu time · Salvo automaticamente ao sair do campo</span>
         </div>
-      </div>
-
-      <!-- ── Ações ─────────────────────────────────────── -->
-      <div class="border-t border-slate-100 pt-4 space-y-2">
-        <p class="mb-2 text-[11px] font-semibold uppercase tracking-widest text-slate-400">Ações</p>
-
-        <!-- Contratado indicator -->
-        <div
-          v-if="currentStage?.stageType === 'hired'"
-          class="flex items-center justify-center gap-2 rounded-md bg-emerald-500 py-2.5 text-xs font-semibold text-white"
-        >
-          <BaseIcon name="CheckCircle" class="!size-4" />
-          Candidato contratado
-        </div>
-
-        <!-- Avançar para próxima etapa (ação primária) -->
-        <button
-          v-if="nextApplicationStage && currentStage?.stageType !== 'hired'"
-          type="button"
-          class="flex w-full items-center justify-center gap-2 rounded-md py-2.5 text-sm font-semibold text-white shadow-sm transition hover:brightness-110 active:scale-[0.99]"
-          :style="{ backgroundColor: nextApplicationStage.color || '#3b82f6' }"
-          @click="advanceStage"
-        >
-          Avançar para {{ nextApplicationStage.name }}
-          <BaseIcon name="ChevronRight" class="!size-4" />
-        </button>
-
-        <!-- Ação específica da etapa -->
-        <button
-          v-if="currentStage?.stageType === 'interview'"
-          type="button"
-          class="flex w-full items-center justify-center gap-2 rounded-md border border-slate-200 bg-white py-2.5 text-sm font-medium text-slate-700 transition hover:bg-slate-50"
-          @click="$emit('schedule-interview')"
-        >
-          <BaseIcon name="Calendar" class="!size-4 text-slate-400" />
-          Agendar entrevista
-        </button>
-
-        <button
-          v-if="currentStage?.stageType === 'offer'"
-          type="button"
-          class="flex w-full items-center justify-center gap-2 rounded-md border border-slate-200 bg-white py-2.5 text-sm font-medium text-slate-700 transition hover:bg-slate-50"
-          @click="$emit('send-offer')"
-        >
-          <BaseIcon name="DocumentText" class="!size-4 text-slate-400" />
-          Enviar proposta
-        </button>
-
-        <!-- Voltar para etapa anterior (ação terciária) -->
-        <button
-          v-if="prevApplicationStage && currentStage?.stageType !== 'hired'"
-          type="button"
-          class="flex w-full items-center justify-center gap-1.5 rounded-md py-2 text-xs text-slate-400 transition hover:text-slate-600"
-          @click="retreatStage"
-        >
-          <BaseIcon name="ChevronLeft" class="!size-3.5" />
-          Voltar para {{ prevApplicationStage.name }}
-        </button>
-
       </div>
 
     </div>
