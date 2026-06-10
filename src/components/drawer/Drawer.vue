@@ -29,15 +29,17 @@
               class="flex h-full flex-col overflow-y-auto bg-white shadow-xl"
             >
               <div
-                class="flex justify-between border-b border-gray-100 px-6 py-4"
+                class="flex items-start justify-between border-b border-gray-100 px-6 py-4"
               >
-                <h2
-                  id="slide-over-title"
-                  ref="h2"
-                  class="text-xl font-semibold leading-10 text-gray-600"
-                >
-                  {{ drawer.title }}
-                </h2>
+                <slot name="header">
+                  <h2
+                    id="slide-over-title"
+                    ref="h2"
+                    class="text-xl font-semibold leading-10 text-gray-600"
+                  >
+                    {{ drawer.title }}
+                  </h2>
+                </slot>
 
                 <button v-if="exitButton" type="button" @click="exit">
                   <svg

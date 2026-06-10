@@ -1,5 +1,37 @@
 <template>
   <Drawer context="vagas-candidate" :exit-button="true" :on-save="null">
+    <template v-if="application && application.id" #header>
+      <div class="flex items-center gap-3 min-w-0 flex-1 pr-4">
+        <div
+          class="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl text-sm font-bold text-white shadow"
+          :style="{ backgroundColor: stageColor }"
+        >
+          {{ initials }}
+        </div>
+        <div class="min-w-0">
+          <p class="text-base font-semibold text-slate-800 leading-tight truncate">{{ application.candidate?.name }}</p>
+          <div class="mt-1 flex flex-wrap items-center gap-2">
+            <div class="flex items-center gap-1">
+              <span class="text-[10px] text-slate-400">Origem:</span>
+              <span :class="viaBadge(application.appliedVia).cls" class="inline-flex items-center rounded px-1.5 py-0.5 text-[11px] font-semibold">
+                {{ viaBadge(application.appliedVia).label }}
+              </span>
+            </div>
+            <span class="text-slate-200">·</span>
+            <div v-if="currentStage" class="flex items-center gap-1">
+              <span class="text-[10px] text-slate-400">Etapa:</span>
+              <span
+                class="inline-flex items-center gap-1 rounded px-1.5 py-0.5 text-[11px] font-semibold"
+                :style="{ backgroundColor: stageColor + '18', color: stageColor }"
+              >
+                <span class="h-1.5 w-1.5 rounded-full" :style="{ backgroundColor: stageColor }" />
+                {{ currentStage.name }}
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </template>
     <template #footer>
       <div class="flex w-full flex-col gap-2">
 
@@ -80,41 +112,6 @@
     </template>
 
     <div v-if="application && application.id" class="flex flex-col">
-
-      <!-- ── Hero ─────────────────────────────────────── -->
-      <div class="flex items-center gap-3 pb-5">
-        <div
-          class="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl text-sm font-bold text-white shadow"
-          :style="{ backgroundColor: stageColor }"
-        >
-          {{ initials }}
-        </div>
-        <div class="min-w-0 flex-1">
-          <p class="text-base font-semibold text-slate-800 leading-tight">{{ application.candidate?.name }}</p>
-          <p v-if="application.candidate?.locationCity" class="mt-0.5 text-xs text-slate-400">
-            {{ application.candidate.locationCity }}{{ application.candidate.locationState ? `, ${application.candidate.locationState}` : '' }}
-          </p>
-          <div class="mt-2 flex flex-wrap items-center gap-2">
-            <div class="flex items-center gap-1">
-              <span class="text-[10px] text-slate-400">Origem:</span>
-              <span :class="viaBadge(application.appliedVia).cls" class="inline-flex items-center rounded px-1.5 py-0.5 text-[11px] font-semibold">
-                {{ viaBadge(application.appliedVia).label }}
-              </span>
-            </div>
-            <span class="text-slate-200">·</span>
-            <div v-if="currentStage" class="flex items-center gap-1">
-              <span class="text-[10px] text-slate-400">Etapa:</span>
-              <span
-                class="inline-flex items-center gap-1 rounded px-1.5 py-0.5 text-[11px] font-semibold"
-                :style="{ backgroundColor: stageColor + '18', color: stageColor }"
-              >
-                <span class="h-1.5 w-1.5 rounded-full" :style="{ backgroundColor: stageColor }" />
-                {{ currentStage.name }}
-              </span>
-            </div>
-          </div>
-        </div>
-      </div>
 
       <!-- ── Contato ──────────────────────────────────── -->
       <div class="border-t border-slate-100 pt-4 pb-4 space-y-2.5">
