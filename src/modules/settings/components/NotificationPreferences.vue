@@ -159,7 +159,7 @@
         <div class="px-4 py-4">
           <p class="mb-3 text-xs leading-relaxed text-gray-500">
             WhatsApp tem <strong class="text-gray-700">95% de taxa de abertura</strong> vs 22% do e-mail.
-            Seu time confirma escalas com 1 toque, sem baixar nenhum app.
+            Fique por dentro de candidaturas e propostas em tempo real, direto no celular.
           </p>
           <ul class="mb-4 space-y-1.5">
             <li v-for="b in waBenefits" :key="b" class="flex items-start gap-2 text-xs text-gray-600">
@@ -244,7 +244,7 @@
             </div>
             <div>
               <p class="text-xs font-semibold text-gray-800">WhatsApp</p>
-              <p class="text-xs text-gray-400">Direto no celular. Confirme escalas em 1 toque.</p>
+              <p class="text-xs text-gray-400">Direto no celular. Acompanhe candidaturas em tempo real.</p>
               <span
                 v-if="!canUseWhatsApp"
                 class="mt-1 inline-flex cursor-pointer items-center gap-1 rounded-full bg-amber-50 px-2 py-0.5 text-[10px] font-semibold text-amber-700 hover:bg-amber-100"
@@ -275,53 +275,44 @@ export default {
     loading: true,
     preferences: [],
     consentModal: { open: false },
-    adminOnlyTypes: ['payment_failed', 'subscription_expiring', 'account_limit_warning'],
+    adminOnlyTypes: ['payment_received', 'payment_failed', 'subscription_expiring', 'account_limit_warning'],
     labels: {
-      schedule_created:       'Escalas criadas',
-      schedule_changed:       'Alterações em escalas',
-      schedule_cancelled:     'Escalas canceladas',
-      schedule_reminder:      'Lembrete de escala',
-      swap_request:           'Solicitações de troca',
-      absence_approved:       'Ausências aprovadas/recusadas',
-      broadcast:              'Comunicados',
-      evaluation_received:    'Avaliações recebidas',
-      payment_received:       'Confirmação de pagamento',
-      payment_failed:         'Falha no pagamento',
-      subscription_expiring:  'Plano vencendo',
-      account_limit_warning:  'Limite da conta'
+      candidate_applied:     'Nova candidatura',
+      interview_scheduled:   'Entrevista agendada',
+      offer_accepted:        'Proposta aceita',
+      offer_rejected:        'Proposta recusada',
+      broadcast:             'Comunicados',
+      payment_received:      'Confirmação de pagamento',
+      payment_failed:        'Falha no pagamento',
+      subscription_expiring: 'Plano vencendo',
+      account_limit_warning: 'Limite da conta'
     },
     descriptions: {
-      schedule_created:       'Quando uma nova escala é publicada',
-      schedule_changed:       'Quando sua escala é modificada',
-      schedule_cancelled:     'Quando uma escala sua é cancelada',
-      schedule_reminder:      'Lembrete antecipado antes do dia da escala',
-      swap_request:           'Quando alguém solicita ou aceita uma troca',
-      absence_approved:       'Resultado das suas solicitações de ausência',
-      broadcast:              'Mensagens enviadas pelo administrador',
-      evaluation_received:    'Quando você recebe uma nova avaliação',
-      payment_received:       'Quando seu pagamento é confirmado pelo administrador',
-      payment_failed:         'Quando há problema no pagamento do plano',
-      subscription_expiring:  'Aviso antecipado antes do vencimento do plano',
-      account_limit_warning:  'Quando a conta se aproxima do limite do plano'
+      candidate_applied:     'Quando um novo candidato se inscreve em uma vaga',
+      interview_scheduled:   'Quando uma entrevista é agendada para um candidato',
+      offer_accepted:        'Quando um candidato aceita uma proposta enviada',
+      offer_rejected:        'Quando um candidato recusa uma proposta enviada',
+      broadcast:             'Mensagens enviadas pelo administrador',
+      payment_received:      'Pagamento do plano confirmado',
+      payment_failed:        'Quando há problema no pagamento do plano',
+      subscription_expiring: 'Aviso antecipado antes do vencimento do plano',
+      account_limit_warning: 'Quando a conta se aproxima do limite do plano'
     },
     waBenefits: [
-      'Confirmação de escalas em 1 toque (Aceitar / Recusar)',
-      'Lembretes antes do dia do evento',
-      'Consulte sua agenda respondendo "agenda"'
+      'Saiba na hora quando um candidato se inscrever',
+      'Notificações de entrevistas e propostas no celular',
+      'Resposta mais rápida ao candidato'
     ],
     config: {
-      schedule_created:      { icon: 'Calendar',          bg: 'bg-blue-50',   color: 'text-blue-500' },
-      schedule_changed:      { icon: 'Pencil',            bg: 'bg-amber-50',  color: 'text-amber-500' },
-      schedule_cancelled:    { icon: 'XMark',             bg: 'bg-red-50',    color: 'text-red-500' },
-      schedule_reminder:     { icon: 'Bell',              bg: 'bg-indigo-50', color: 'text-indigo-500' },
-      swap_request:          { icon: 'ArrowPath',         bg: 'bg-purple-50', color: 'text-purple-500' },
-      absence_approved:      { icon: 'Check',             bg: 'bg-green-50',  color: 'text-green-500' },
-      broadcast:             { icon: 'Megaphone',         bg: 'bg-rose-50',   color: 'text-rose-500' },
-      evaluation_received:   { icon: 'Star',              bg: 'bg-yellow-50', color: 'text-yellow-500' },
-      payment_received:      { icon: 'BankNotes',         bg: 'bg-green-50',  color: 'text-green-600' },
-      payment_failed:        { icon: 'Exclamation',       bg: 'bg-red-50',    color: 'text-red-500' },
-      subscription_expiring: { icon: 'Clock',             bg: 'bg-orange-50', color: 'text-orange-500' },
-      account_limit_warning: { icon: 'ChartBar',          bg: 'bg-amber-50',  color: 'text-amber-500' }
+      candidate_applied:     { icon: 'Inbox',        bg: 'bg-blue-50',    color: 'text-blue-500' },
+      interview_scheduled:   { icon: 'Calendar',     bg: 'bg-indigo-50',  color: 'text-indigo-500' },
+      offer_accepted:        { icon: 'CheckCircle',  bg: 'bg-green-50',   color: 'text-green-500' },
+      offer_rejected:        { icon: 'XMark',        bg: 'bg-red-50',     color: 'text-red-500' },
+      broadcast:             { icon: 'Megaphone',    bg: 'bg-rose-50',    color: 'text-rose-500' },
+      payment_received:      { icon: 'BankNotes',    bg: 'bg-green-50',   color: 'text-green-600' },
+      payment_failed:        { icon: 'Exclamation',  bg: 'bg-red-50',     color: 'text-red-500' },
+      subscription_expiring: { icon: 'Clock',        bg: 'bg-orange-50',  color: 'text-orange-500' },
+      account_limit_warning: { icon: 'ChartBar',     bg: 'bg-amber-50',   color: 'text-amber-500' }
     }
   }),
   computed: {
@@ -338,8 +329,9 @@ export default {
       return useAuthStore().isAdmin;
     },
     visiblePreferences() {
-      if (this.isAdmin) return this.preferences;
-      return this.preferences.filter(p => !this.adminOnlyTypes.includes(p.notificationType));
+      const relevant = this.preferences.filter(p => p.notificationType in this.labels);
+      if (this.isAdmin) return relevant;
+      return relevant.filter(p => !this.adminOnlyTypes.includes(p.notificationType));
     }
   },
   mounted() {

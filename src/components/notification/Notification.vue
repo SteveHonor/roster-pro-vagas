@@ -188,27 +188,21 @@ export default {
     },
     iconName(origin) {
       const map = {
-        schedule_user: 'Calendar',
-        schedule_item: 'Calendar',
-        schedule_change: 'ArrowPath',
-        swap_request: 'ArrowPath',
-        block: 'HandRaised',
-        feedback: 'Star',
-        event: 'CalendarDays',
-        broadcast_message: 'Megaphone'
+        vagas_application_created: 'Inbox',
+        vagas_interview_scheduled: 'Calendar',
+        vagas_offer_accepted:      'CheckCircle',
+        vagas_offer_rejected:      'XMark',
+        broadcast_message:         'Megaphone'
       };
       return map[origin] || 'Bell';
     },
     iconBg(origin) {
       const map = {
-        schedule_user: 'bg-blue-500',
-        schedule_item: 'bg-blue-500',
-        schedule_change: 'bg-amber-500',
-        swap_request: 'bg-amber-500',
-        block: 'bg-red-500',
-        feedback: 'bg-yellow-400',
-        event: 'bg-slate-600',
-        broadcast_message: 'bg-purple-500'
+        vagas_application_created: 'bg-blue-500',
+        vagas_interview_scheduled: 'bg-indigo-500',
+        vagas_offer_accepted:      'bg-green-500',
+        vagas_offer_rejected:      'bg-red-500',
+        broadcast_message:         'bg-purple-500'
       };
       return map[origin] || 'bg-slate-400';
     },
