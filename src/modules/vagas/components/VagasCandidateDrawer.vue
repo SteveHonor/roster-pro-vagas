@@ -114,7 +114,7 @@
     <div v-if="application && application.id" class="flex flex-col">
 
       <!-- ── Contato ──────────────────────────────────── -->
-      <div class="border-t border-slate-100 pt-4 pb-4 space-y-2.5">
+      <div class="pt-4 pb-4 space-y-2.5">
         <p class="text-[11px] font-semibold uppercase tracking-widest text-slate-400">Contato</p>
 
         <div v-if="application.candidate?.email" class="flex items-center gap-2.5 text-sm text-slate-600">
