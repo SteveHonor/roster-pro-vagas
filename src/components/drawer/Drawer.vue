@@ -59,7 +59,7 @@
 
               <div class="relative mt-6 flex-1 px-6 sm:px-8">
                 <div v-if="drawer.open(context)">
-                  <form @submit.prevent>
+                  <form class="pb-3" @submit.prevent>
                     <slot ref="formSlot" />
                   </form>
                 </div>
