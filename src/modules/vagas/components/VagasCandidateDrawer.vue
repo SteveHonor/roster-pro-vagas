@@ -184,6 +184,97 @@
         </div>
       </div>
 
+      <!-- ── Agenda (entrevista / proposta) ────────────── -->
+      <div
+        v-if="application.nextInterview || application.activeOffer"
+        class="border-t border-slate-100 pt-4 pb-4"
+      >
+        <p class="mb-2.5 text-[11px] font-semibold uppercase tracking-widest text-slate-400">Agenda</p>
+
+        <!-- Próxima entrevista -->
+        <div
+          v-if="application.nextInterview"
+          class="mb-2 flex items-start gap-3 rounded-md border px-3 py-2.5"
+          :class="application.nextInterview.status === 'scheduled'
+            ? 'border-blue-100 bg-blue-50'
+            : 'border-slate-100 bg-slate-50'"
+        >
+          <div
+            class="mt-0.5 flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-md"
+            :class="application.nextInterview.status === 'scheduled' ? 'bg-blue-100' : 'bg-slate-100'"
+          >
+            <BaseIcon
+              name="Calendar"
+              class="!size-3.5"
+              :class="application.nextInterview.status === 'scheduled' ? 'text-blue-600' : 'text-slate-400'"
+            />
+          </div>
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center gap-2 flex-wrap">
+              <span
+                class="text-xs font-semibold"
+                :class="application.nextInterview.status === 'scheduled' ? 'text-blue-700' : 'text-slate-600'"
+              >
+                {{ interviewStatusLabel(application.nextInterview.status) }}
+              </span>
+              <span class="rounded px-1.5 py-0.5 text-[10px] font-bold bg-white text-slate-500 ring-1 ring-slate-200">
+                {{ modalityLabel(application.nextInterview.modality) }}
+              </span>
+              <span v-if="application.nextInterview.durationMinutes" class="text-[10px] text-slate-400">
+                {{ application.nextInterview.durationMinutes }}min
+              </span>
+            </div>
+            <p class="mt-0.5 flex items-center gap-1 text-xs text-slate-600">
+              <BaseIcon name="Clock" class="!size-3 flex-shrink-0 text-slate-300" />
+              {{ formatAgendaDateTime(application.nextInterview.scheduledAt) }}
+            </p>
+            <a
+              v-if="application.nextInterview.meetingLink && application.nextInterview.status === 'scheduled'"
+              :href="application.nextInterview.meetingLink"
+              target="_blank"
+              rel="noopener"
+              class="mt-1.5 inline-flex items-center gap-1 text-[11px] font-medium text-blue-600 hover:underline"
+            >
+              <BaseIcon name="ExternalLink" class="!size-3" />
+              Abrir reunião
+            </a>
+          </div>
+        </div>
+
+        <!-- Proposta ativa -->
+        <div
+          v-if="application.activeOffer"
+          class="flex items-start gap-3 rounded-md border px-3 py-2.5"
+          :class="offerSectionCls(application.activeOffer.status)"
+        >
+          <div
+            class="mt-0.5 flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-md"
+            :class="offerIconBg(application.activeOffer.status)"
+          >
+            <BaseIcon name="DocumentText" class="!size-3.5" :class="offerIconColor(application.activeOffer.status)" />
+          </div>
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center gap-2 flex-wrap">
+              <span class="text-xs font-semibold" :class="offerTextColor(application.activeOffer.status)">
+                {{ offerStatusLabel(application.activeOffer.status) }}
+              </span>
+              <span
+                v-if="application.activeOffer.salary"
+                class="rounded px-1.5 py-0.5 text-[10px] font-bold bg-white text-slate-600 ring-1 ring-slate-200"
+              >
+                {{ formatSalaryValue(application.activeOffer.salary) }}
+              </span>
+            </div>
+            <p v-if="application.activeOffer.expiresAt && application.activeOffer.status === 'sent'" class="mt-0.5 text-[11px] text-amber-500">
+              Expira {{ formatAgendaDate(application.activeOffer.expiresAt) }}
+            </p>
+            <p v-if="application.activeOffer.respondedAt" class="mt-0.5 text-[11px] text-slate-400">
+              Respondida {{ formatAgendaDate(application.activeOffer.respondedAt) }}
+            </p>
+          </div>
+        </div>
+      </div>
+
       <!-- ── Match ──────────────────────────────────────── -->
       <div v-if="application.candidate?.resumeUrl" class="border-t border-slate-100 pt-4 pb-4">
         <div class="mb-3 flex items-center justify-between">
@@ -378,6 +469,7 @@ import BaseIcon from '@/components/icons/BaseIcon';
 import { useVagasStore } from '@/modules/vagas/store';
 import { useDrawerStore } from '@/components/drawer/store';
 import vagasService from '@/services/vagas';
+import { formatDateTime, formatDate, formatCurrencyFull } from '@/utils/format';
 
 export default {
   components: { Drawer, BaseIcon },
@@ -525,6 +617,73 @@ export default {
         manual:   { cls: 'bg-slate-100 text-slate-600', label: 'Manual'     }
       }[via] || { cls: 'bg-slate-100 text-slate-500', label: via };
     },
+
+    modalityLabel(m) {
+      return { video: 'Vídeo', phone: 'Telefone', in_person: 'Presencial' }[m] || m;
+    },
+
+    interviewStatusLabel(status) {
+      return {
+        scheduled: 'Entrevista agendada',
+        completed: 'Entrevista realizada',
+        no_show:   'Não compareceu',
+        cancelled: 'Entrevista cancelada'
+      }[status] || 'Entrevista';
+    },
+
+    offerStatusLabel(status) {
+      return {
+        draft:    'Proposta em rascunho',
+        sent:     'Proposta enviada',
+        accepted: 'Proposta aceita',
+        rejected: 'Proposta recusada',
+        expired:  'Proposta expirada'
+      }[status] || 'Proposta';
+    },
+
+    offerSectionCls(status) {
+      return {
+        sent:     'border-indigo-100 bg-indigo-50',
+        draft:    'border-slate-100 bg-slate-50',
+        accepted: 'border-emerald-100 bg-emerald-50',
+        rejected: 'border-red-100 bg-red-50',
+        expired:  'border-slate-100 bg-slate-50'
+      }[status] || 'border-slate-100 bg-slate-50';
+    },
+
+    offerIconBg(status) {
+      return {
+        sent:     'bg-indigo-100',
+        draft:    'bg-slate-100',
+        accepted: 'bg-emerald-100',
+        rejected: 'bg-red-100',
+        expired:  'bg-slate-100'
+      }[status] || 'bg-slate-100';
+    },
+
+    offerIconColor(status) {
+      return {
+        sent:     'text-indigo-600',
+        draft:    'text-slate-400',
+        accepted: 'text-emerald-600',
+        rejected: 'text-red-500',
+        expired:  'text-slate-400'
+      }[status] || 'text-slate-400';
+    },
+
+    offerTextColor(status) {
+      return {
+        sent:     'text-indigo-700',
+        draft:    'text-slate-600',
+        accepted: 'text-emerald-700',
+        rejected: 'text-red-600',
+        expired:  'text-slate-500'
+      }[status] || 'text-slate-600';
+    },
+
+    formatAgendaDateTime(v) { return formatDateTime(v) || '—'; },
+    formatAgendaDate(v)     { return formatDate(v) || '—'; },
+    formatSalaryValue(v)    { return v ? formatCurrencyFull(v) : ''; },
 
     async saveNotes() {
       try {

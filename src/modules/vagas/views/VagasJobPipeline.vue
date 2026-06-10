@@ -208,6 +208,30 @@
                 </div>
               </div>
 
+              <!-- Interview / offer indicator row -->
+              <div
+                v-if="app.nextInterview || app.activeOffer"
+                class="mt-2 flex flex-wrap gap-1"
+              >
+                <span
+                  v-if="app.nextInterview"
+                  :class="app.nextInterview.status === 'scheduled' ? 'bg-blue-50 text-blue-600' : 'bg-slate-100 text-slate-500'"
+                  class="flex items-center gap-1 rounded px-1.5 py-0.5 text-[10px] font-medium"
+                  :title="`Entrevista ${app.nextInterview.status === 'scheduled' ? 'agendada' : app.nextInterview.status}`"
+                >
+                  <BaseIcon name="Calendar" class="!size-3 flex-shrink-0" />
+                  {{ formatCardDate(app.nextInterview.scheduledAt) }}
+                </span>
+                <span
+                  v-if="app.activeOffer"
+                  :class="offerCardCls(app.activeOffer.status)"
+                  class="flex items-center gap-1 rounded px-1.5 py-0.5 text-[10px] font-medium"
+                >
+                  <BaseIcon name="DocumentText" class="!size-3 flex-shrink-0" />
+                  {{ offerCardLabel(app.activeOffer.status) }}
+                </span>
+              </div>
+
               <!-- Advance button -->
               <div v-if="nextStage(stage)" class="mt-2 border-t border-slate-100 pt-1.5">
                 <button
@@ -372,6 +396,32 @@ export default {
         linkedin: { cls: 'bg-sky-100 text-sky-700',     label: 'LinkedIn'   },
         manual:   { cls: 'bg-slate-100 text-slate-600', label: 'Manual'     }
       }[via] || { cls: 'bg-slate-100 text-slate-500', label: via };
+    },
+
+    formatCardDate(v) {
+      if (!v) return '';
+      const d = new Date(v);
+      return d.toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' });
+    },
+
+    offerCardCls(status) {
+      return {
+        sent:     'bg-indigo-50 text-indigo-600',
+        draft:    'bg-slate-100 text-slate-500',
+        accepted: 'bg-emerald-50 text-emerald-600',
+        rejected: 'bg-red-50 text-red-500',
+        expired:  'bg-slate-100 text-slate-400'
+      }[status] || 'bg-slate-100 text-slate-500';
+    },
+
+    offerCardLabel(status) {
+      return {
+        sent:     'Proposta enviada',
+        draft:    'Proposta rascunho',
+        accepted: 'Proposta aceita',
+        rejected: 'Proposta recusada',
+        expired:  'Proposta expirada'
+      }[status] || 'Proposta';
     },
 
     avatarColor(name) {
