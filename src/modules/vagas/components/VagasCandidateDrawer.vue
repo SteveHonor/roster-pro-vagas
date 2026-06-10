@@ -75,7 +75,7 @@
           <button
             v-if="currentStage?.stageType === 'interview'"
             type="button"
-            class="flex flex-1 items-center justify-center gap-1.5 rounded-md border border-slate-200 py-2 text-xs font-medium text-slate-600 transition hover:bg-slate-50"
+            class="flex flex-1 items-center justify-center gap-1.5 rounded-md border border-slate-200 py-2.5 text-xs font-medium text-slate-600 transition hover:bg-slate-50"
             @click="$emit('schedule-interview')"
           >
             <BaseIcon name="Calendar" class="!size-3.5 text-slate-400" />
@@ -84,7 +84,7 @@
           <button
             v-if="currentStage?.stageType === 'offer'"
             type="button"
-            class="flex flex-1 items-center justify-center gap-1.5 rounded-md border border-slate-200 py-2 text-xs font-medium text-slate-600 transition hover:bg-slate-50"
+            class="flex flex-1 items-center justify-center gap-1.5 rounded-md border border-slate-200 py-2.5 text-xs font-medium text-slate-600 transition hover:bg-slate-50"
             @click="$emit('send-offer')"
           >
             <BaseIcon name="DocumentText" class="!size-3.5 text-slate-400" />
@@ -92,7 +92,7 @@
           </button>
           <button
             type="button"
-            class="flex flex-1 items-center justify-center gap-1.5 rounded-md border border-slate-200 py-2 text-xs font-medium text-slate-500 transition hover:border-amber-200 hover:bg-amber-50 hover:text-amber-700"
+            class="flex flex-1 items-center justify-center gap-1.5 rounded-md border border-slate-200 py-2.5 text-xs font-medium text-slate-500 transition hover:border-amber-200 hover:bg-amber-50 hover:text-amber-700"
             @click="archiveApplication"
           >
             <BaseIcon name="ArchiveBox" class="!size-3.5" />
@@ -100,7 +100,7 @@
           </button>
           <button
             type="button"
-            class="flex flex-1 items-center justify-center gap-1.5 rounded-md border border-slate-200 py-2 text-xs font-medium text-slate-500 transition hover:border-red-200 hover:bg-red-50 hover:text-red-600"
+            class="flex flex-1 items-center justify-center gap-1.5 rounded-md border border-slate-200 py-2.5 text-xs font-medium text-slate-500 transition hover:border-red-200 hover:bg-red-50 hover:text-red-600"
             @click="rejectApplication"
           >
             <BaseIcon name="XMark" class="!size-3.5" />
