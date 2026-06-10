@@ -60,11 +60,9 @@
               </div>
 
               <div class="relative flex-1 overflow-y-auto px-6 pt-6 sm:px-8">
-                <div v-if="drawer.open(context)">
-                  <form class="pb-3" @submit.prevent>
-                    <slot ref="formSlot" />
-                  </form>
-                </div>
+                <form v-if="drawer.open(context)" class="pb-3" @submit.prevent>
+                  <slot ref="formSlot" />
+                </form>
               </div>
 
               <div class="flex-shrink-0 flex w-full items-center justify-between border-t border-gray-100 bg-white px-4 pt-3 pb-5">
