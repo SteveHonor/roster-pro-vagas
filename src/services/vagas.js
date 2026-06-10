@@ -23,8 +23,12 @@ export default {
   updatePipelineStage: (jobId, id, data) => axios.put(`/vagas/jobs/${jobId}/pipeline_stages/${id}`, { pipeline_stage: data }),
   deletePipelineStage: (jobId, id)    => axios.delete(`/vagas/jobs/${jobId}/pipeline_stages/${id}`),
 
+  fetchInterviews: (params = {}) => axios.get('/vagas/interviews', { params }),
   createInterview: data => axios.post('/vagas/interviews', data),
+  updateInterview: (id, data) => axios.put(`/vagas/interviews/${id}`, { interview: data }),
 
+  fetchOffers: (params = {}) => axios.get('/vagas/offers', { params }),
   createOffer: data => axios.post('/vagas/offers', data),
-  sendOffer: id => axios.post(`/vagas/offers/${id}/send_offer`)
+  sendOffer: id => axios.post(`/vagas/offers/${id}/send_offer`),
+  resendOffer: id => axios.post(`/vagas/offers/${id}/resend_offer`)
 };

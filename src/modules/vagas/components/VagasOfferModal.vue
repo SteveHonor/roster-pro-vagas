@@ -1,6 +1,27 @@
 <template>
   <Modal :open="open">
     <div class="w-full rounded-md bg-white shadow-xl sm:max-w-lg">
+
+      <!-- Estado de sucesso -->
+      <div v-if="success" class="flex flex-col items-center gap-3 px-8 py-10 text-center">
+        <div class="flex h-12 w-12 items-center justify-center rounded-full bg-emerald-100">
+          <BaseIcon name="CheckCircle" class="!size-6 text-emerald-600" />
+        </div>
+        <p class="text-base font-semibold text-slate-800">
+          {{ successMessage }}
+        </p>
+        <p v-if="lastAction === 'send'" class="text-sm text-slate-500">Email com os detalhes da proposta e botões de aceitar/recusar foi enviado ao candidato.</p>
+        <p v-else class="text-sm text-slate-500">Você pode enviá-la na página Agenda.</p>
+        <button
+          type="button"
+          class="mt-2 rounded-md bg-slate-800 px-5 py-2 text-sm font-semibold text-white hover:bg-slate-700"
+          @click="closeAndReset"
+        >
+          Fechar
+        </button>
+      </div>
+
+      <template v-else>
       <!-- Header -->
       <div class="flex items-center justify-between border-b border-slate-100 px-5 py-4">
         <h3 class="font-semibold text-slate-800">Enviar proposta</h3>
@@ -74,6 +95,7 @@
           Enviar proposta
         </BaseButton>
       </div>
+      </template>
     </div>
   </Modal>
 </template>
@@ -101,6 +123,8 @@ export default {
     return {
       saving: false,
       sendAction: null,
+      success: false,
+      lastAction: null,
       form: {
         salary: null,
         startDate: '',
@@ -114,6 +138,9 @@ export default {
   computed: {
     salaryFormatted() {
       return this.form.salary ? formatCurrencyCents(this.form.salary) : '';
+    },
+    successMessage() {
+      return this.lastAction === 'send' ? 'Proposta enviada!' : 'Rascunho salvo!';
     }
   },
 
@@ -134,14 +161,21 @@ export default {
           await vagasService.sendOffer(offer.id);
         }
         this.$emit('created', offer);
-        this.$emit('close');
-        this.form = { salary: null, startDate: '', benefits: '', message: '', expiresAt: '' };
+        this.lastAction = action;
+        this.success = true;
       } catch (error) {
         console.error(error);
       } finally {
         this.saving = false;
         this.sendAction = null;
       }
+    },
+
+    closeAndReset() {
+      this.success = false;
+      this.lastAction = null;
+      this.form = { salary: null, startDate: '', benefits: '', message: '', expiresAt: '' };
+      this.$emit('close');
     }
   }
 };

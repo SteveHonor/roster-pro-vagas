@@ -61,6 +61,13 @@ export default {
           role: 'operator'
         },
         {
+          to: '/agenda',
+          icon: 'Calendar',
+          title: 'Agenda',
+          subtitle: 'Entrevistas e Propostas',
+          role: 'operator'
+        },
+        {
           to: '/users',
           icon: 'users',
           title: 'Equipe',

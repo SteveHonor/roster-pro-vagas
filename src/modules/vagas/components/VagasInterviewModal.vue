@@ -1,6 +1,24 @@
 <template>
   <Modal :open="open">
     <div class="w-full rounded-md bg-white shadow-xl sm:max-w-md">
+
+      <!-- Estado de sucesso -->
+      <div v-if="success" class="flex flex-col items-center gap-3 px-8 py-10 text-center">
+        <div class="flex h-12 w-12 items-center justify-center rounded-full bg-emerald-100">
+          <BaseIcon name="CheckCircle" class="!size-6 text-emerald-600" />
+        </div>
+        <p class="text-base font-semibold text-slate-800">Entrevista agendada!</p>
+        <p class="text-sm text-slate-500">Email de confirmação enviado ao candidato.</p>
+        <button
+          type="button"
+          class="mt-2 rounded-md bg-slate-800 px-5 py-2 text-sm font-semibold text-white hover:bg-slate-700"
+          @click="closeAndReset"
+        >
+          Fechar
+        </button>
+      </div>
+
+      <template v-else>
       <!-- Header -->
       <div class="flex items-center justify-between border-b border-slate-100 px-5 py-4">
         <h3 class="font-semibold text-slate-800">Agendar entrevista</h3>
@@ -63,6 +81,7 @@
           Agendar
         </BaseButton>
       </div>
+      </template>
     </div>
   </Modal>
 </template>
@@ -88,6 +107,7 @@ export default {
   data() {
     return {
       saving: false,
+      success: false,
       form: {
         scheduledAt: '',
         durationMinutes: 60,
@@ -118,13 +138,18 @@ export default {
           applicationId: this.applicationId
         });
         this.$emit('created', interview);
-        this.$emit('close');
-        this.form = { scheduledAt: '', durationMinutes: 60, modality: 'video', meetingLink: '' };
+        this.success = true;
       } catch (error) {
         console.error(error);
       } finally {
         this.saving = false;
       }
+    },
+
+    closeAndReset() {
+      this.success = false;
+      this.form = { scheduledAt: '', durationMinutes: 60, modality: 'video', meetingLink: '' };
+      this.$emit('close');
     }
   }
 };

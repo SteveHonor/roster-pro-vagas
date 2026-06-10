@@ -7,6 +7,7 @@ import UsersModule    from '@/modules/users/router';
 import SettingsModule from '@/modules/settings/router';
 import PoliticsModule from '@/modules/politics/router';
 import VagasModule    from '@/modules/vagas/router';
+import AgendaModule   from '@/modules/agenda/router';
 
 import NotFound from '@/views/NotFound';
 
@@ -28,6 +29,7 @@ const router = createRouter({
     ...SettingsModule,
     ...PoliticsModule,
     ...VagasModule,
+    ...AgendaModule,
     {
       path: '/:catchAll(.*)',
       redirect: '/pagina-nao-encontrada',
