@@ -1,117 +1,238 @@
 <template>
-  <Drawer
-    context="vagas-candidate"
-    :exit-button="true"
-    :on-save="null"
-  >
-    <div v-if="application && application.id" class="space-y-6">
+  <Drawer context="vagas-candidate" :exit-button="true" :on-save="null">
+    <div v-if="application && application.id" class="flex flex-col">
 
-      <!-- Perfil -->
-      <div class="flex items-start gap-3">
-        <div class="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-md bg-slate-700 text-sm font-bold text-white">
+      <!-- ── Hero ─────────────────────────────────────── -->
+      <div class="flex items-center gap-3 pb-5">
+        <div
+          class="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl text-sm font-bold text-white shadow"
+          :style="{ backgroundColor: stageColor }"
+        >
           {{ initials }}
         </div>
         <div class="min-w-0 flex-1">
-          <p class="font-semibold text-slate-800">{{ application.candidate?.name }}</p>
-          <p v-if="application.candidate?.locationCity" class="text-xs text-slate-400">
-            {{ application.candidate.locationCity }}
+          <p class="text-base font-semibold text-slate-800 leading-tight">{{ application.candidate?.name }}</p>
+          <p v-if="application.candidate?.locationCity" class="mt-0.5 text-xs text-slate-400">
+            {{ application.candidate.locationCity }}{{ application.candidate.locationState ? `, ${application.candidate.locationState}` : '' }}
           </p>
-          <span :class="viaBadge(application.appliedVia).cls" class="mt-1 inline-flex items-center rounded px-1.5 py-0.5 text-[10px] font-semibold">
-            {{ viaBadge(application.appliedVia).label }}
-          </span>
+          <div class="mt-2 flex flex-wrap items-center gap-2">
+            <div class="flex items-center gap-1">
+              <span class="text-[10px] text-slate-400">Origem:</span>
+              <span :class="viaBadge(application.appliedVia).cls" class="inline-flex items-center rounded px-1.5 py-0.5 text-[11px] font-semibold">
+                {{ viaBadge(application.appliedVia).label }}
+              </span>
+            </div>
+            <span class="text-slate-200">·</span>
+            <div v-if="currentStage" class="flex items-center gap-1">
+              <span class="text-[10px] text-slate-400">Etapa:</span>
+              <span
+                class="inline-flex items-center gap-1 rounded px-1.5 py-0.5 text-[11px] font-semibold"
+                :style="{ backgroundColor: stageColor + '18', color: stageColor }"
+              >
+                <span class="h-1.5 w-1.5 rounded-full" :style="{ backgroundColor: stageColor }" />
+                {{ currentStage.name }}
+              </span>
+            </div>
+          </div>
         </div>
       </div>
 
-      <!-- Contato -->
-      <div class="space-y-1.5">
-        <p class="text-[10px] font-semibold uppercase tracking-wide text-slate-400">Contato</p>
-        <div v-if="application.candidate?.email" class="flex items-center gap-2 text-sm text-slate-600">
-          <BaseIcon name="Envelope" class="!size-4 flex-shrink-0 text-slate-400" />
-          <a :href="`mailto:${application.candidate.email}`" class="hover:underline">{{ application.candidate.email }}</a>
+      <!-- ── Contato ──────────────────────────────────── -->
+      <div class="border-t border-slate-100 pt-4 pb-4 space-y-2.5">
+        <p class="text-[11px] font-semibold uppercase tracking-widest text-slate-400">Contato</p>
+
+        <div v-if="application.candidate?.email" class="flex items-center gap-2.5 text-sm text-slate-600">
+          <BaseIcon name="Envelope" class="!size-4 flex-shrink-0 text-slate-300" />
+          <a :href="`mailto:${application.candidate.email}`" class="hover:text-blue-600 hover:underline truncate">
+            {{ application.candidate.email }}
+          </a>
         </div>
-        <div v-if="application.candidate?.phone" class="flex items-center gap-2 text-sm text-slate-600">
-          <BaseIcon name="Phone" class="!size-4 flex-shrink-0 text-slate-400" />
+
+        <div v-if="application.candidate?.phone" class="flex items-center gap-2.5 text-sm text-slate-600">
+          <BaseIcon name="Phone" class="!size-4 flex-shrink-0 text-slate-300" />
           <span>{{ application.candidate.phone }}</span>
         </div>
-        <div v-if="application.candidate?.linkedinUrl" class="flex items-center gap-2 text-sm text-slate-600">
-          <BaseIcon name="LinkedIn" class="!size-4 flex-shrink-0 text-slate-400" />
-          <a :href="application.candidate.linkedinUrl" target="_blank" rel="noopener" class="hover:underline">LinkedIn</a>
+
+        <div class="flex flex-wrap gap-2 pt-1">
+          <a
+            v-if="application.candidate?.linkedinUrl"
+            :href="application.candidate.linkedinUrl"
+            target="_blank" rel="noopener"
+            class="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-medium text-slate-600 shadow-sm transition hover:border-sky-300 hover:bg-sky-50 hover:text-sky-700"
+          >
+            <BaseIcon name="LinkedIn" class="!size-3.5 text-sky-500" />
+            LinkedIn
+            <BaseIcon name="ExternalLink" class="!size-3 text-slate-300" />
+          </a>
+          <a
+            v-if="application.candidate?.resumeUrl"
+            :href="application.candidate.resumeUrl"
+            target="_blank" rel="noopener"
+            class="inline-flex items-center gap-1.5 rounded-lg border border-blue-200 bg-blue-50 px-3 py-1.5 text-xs font-medium text-blue-700 shadow-sm transition hover:border-blue-300 hover:bg-blue-100"
+          >
+            <BaseIcon name="DocumentText" class="!size-3.5" />
+            Currículo (PDF)
+            <BaseIcon name="ExternalLink" class="!size-3 text-blue-400" />
+          </a>
         </div>
       </div>
 
-      <!-- Rating -->
-      <div>
-        <p class="mb-2 text-[10px] font-semibold uppercase tracking-wide text-slate-400">Avaliação</p>
-        <div class="flex gap-1">
+      <!-- ── Resumo IA ─────────────────────────────────── -->
+      <div v-if="application.candidate?.resumeUrl" class="border-t border-slate-100 pt-4 pb-4">
+        <div class="mb-3">
+          <p class="flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-widest text-slate-400">
+            <BaseIcon name="Sparkles" class="!size-3.5 text-violet-400" />
+            Resumo IA
+          </p>
+        </div>
+
+        <!-- Summary rendered -->
+        <div
+          v-if="localSummary && !summarizing"
+          class="rounded-md border border-slate-100 bg-slate-50 px-4 py-3 text-sm text-slate-700"
+        >
+          <div class="summary-body" v-html="formattedSummary" />
           <button
-            v-for="n in 5"
-            :key="n"
+            v-if="localSummary.length > 500"
             type="button"
-            class="transition-transform hover:scale-110"
-            @click="setRating(n)"
+            class="mt-2 text-xs font-medium text-blue-500 hover:text-blue-700 transition"
+            @click="summaryExpanded = !summaryExpanded"
           >
-            <BaseIcon
-              name="Star"
-              class="!size-5"
-              :style="n <= localRating ? { color: 'var(--brand-primary, #2563eb)' } : {}"
-              :class="n > localRating ? 'text-slate-200' : ''"
-            />
+            {{ summaryExpanded ? 'Ver menos' : 'Ver mais...' }}
           </button>
         </div>
-      </div>
 
-      <!-- Cover letter -->
-      <div v-if="application.coverLetter">
-        <p class="mb-1.5 text-[10px] font-semibold uppercase tracking-wide text-slate-400">Carta de apresentação</p>
-        <div class="rounded-md border border-slate-200 bg-slate-50 px-4 py-3">
-          <p class="text-sm leading-relaxed text-slate-700">{{ application.coverLetter }}</p>
+        <!-- Loading skeleton -->
+        <div v-else-if="summarizing" class="rounded-xl border border-slate-100 bg-slate-50 px-4 py-4 space-y-2">
+          <div class="flex items-center gap-2 mb-3">
+            <BaseIcon name="Sparkles" class="!size-4 animate-pulse text-violet-400" />
+            <span class="text-xs text-slate-400">Analisando currículo…</span>
+          </div>
+          <div class="h-2 w-2/3 animate-pulse rounded-full bg-slate-200" />
+          <div class="h-2 w-full animate-pulse rounded-full bg-slate-200" />
+          <div class="h-2 w-5/6 animate-pulse rounded-full bg-slate-200" />
+          <div class="h-2 w-3/4 animate-pulse rounded-full bg-slate-200" />
+          <div class="h-2 w-full animate-pulse rounded-full bg-slate-200" />
+        </div>
+
+        <!-- Empty state -->
+        <button
+          v-else
+          type="button"
+          class="flex w-full items-center justify-center gap-2 rounded-xl border border-dashed border-slate-200 bg-slate-50 py-4 text-xs font-medium text-slate-400 transition hover:border-violet-300 hover:bg-violet-50 hover:text-violet-600"
+          @click="generateSummary(false)"
+        >
+          <BaseIcon name="Sparkles" class="!size-4" />
+          Gerar resumo com IA
+        </button>
+
+        <div
+          v-if="summaryError"
+          class="mt-2 flex items-center gap-2 rounded-lg border border-red-100 bg-red-50 px-3 py-2 text-xs text-red-500"
+        >
+          <BaseIcon name="XMark" class="!size-3.5 flex-shrink-0" />
+          {{ summaryError }}
         </div>
       </div>
 
-      <!-- Notas internas -->
-      <div>
-        <p class="mb-1.5 text-[10px] font-semibold uppercase tracking-wide text-slate-400">Notas internas</p>
+      <!-- ── Notas internas ───────────────────────────── -->
+      <div class="border-t border-slate-100 pt-4 pb-4">
+        <div class="mb-2.5 flex items-center justify-between">
+          <p class="text-[11px] font-semibold uppercase tracking-widest text-slate-400">Notas internas</p>
+          <span
+            v-if="notesSaved"
+            class="flex items-center gap-1 text-[10px] text-emerald-500 transition"
+          >
+            <BaseIcon name="CheckCircle" class="!size-3" />
+            Salvo
+          </span>
+        </div>
         <textarea
           v-model="localNotes"
-          rows="4"
-          placeholder="Anotações visíveis apenas para o time de RH..."
-          class="w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700 placeholder:text-slate-400 focus:border-slate-500 focus:outline-none"
+          rows="3"
+          placeholder="Adicione observações sobre este candidato…"
+          class="w-full resize-none rounded-md border border-slate-200 bg-white px-3 py-2.5 text-sm text-slate-700 placeholder:text-slate-300 focus:border-slate-400 focus:outline-none focus:ring-1 focus:ring-slate-200"
           @blur="saveNotes"
         />
+        <div class="mt-2 flex items-center gap-2 rounded-md bg-slate-100 px-3 py-2 text-xs font-medium text-slate-600">
+          <BaseIcon name="LockClosed" class="!size-3.5 flex-shrink-0 text-slate-400" />
+          <span>Visível apenas para o seu time · Salvo automaticamente ao sair do campo</span>
+        </div>
       </div>
 
-      <!-- Ações -->
-      <div class="space-y-2">
-        <p class="text-[10px] font-semibold uppercase tracking-wide text-slate-400">Ações</p>
-        <div class="flex gap-2">
-          <button
-            class="flex flex-1 items-center justify-center gap-1.5 rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-xs font-medium text-slate-700 transition hover:bg-slate-100"
-            @click="$emit('schedule-interview')"
-          >
-            <BaseIcon name="Calendar" class="!size-4" />
-            Agendar entrevista
-          </button>
-          <button
-            class="flex flex-1 items-center justify-center gap-1.5 rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-xs font-medium text-slate-700 transition hover:bg-slate-100"
-            @click="$emit('send-offer')"
-          >
-            <BaseIcon name="DocumentText" class="!size-4" />
-            Enviar proposta
-          </button>
+      <!-- ── Ações ─────────────────────────────────────── -->
+      <div class="border-t border-slate-100 pt-4 space-y-2">
+        <p class="mb-2 text-[11px] font-semibold uppercase tracking-widest text-slate-400">Ações</p>
+
+        <!-- Contratado indicator -->
+        <div
+          v-if="currentStage?.stageType === 'hired'"
+          class="flex items-center justify-center gap-2 rounded-md bg-emerald-500 py-2.5 text-xs font-semibold text-white"
+        >
+          <BaseIcon name="CheckCircle" class="!size-4" />
+          Candidato contratado
         </div>
-        <div class="flex gap-2">
+
+        <!-- Avançar para próxima etapa (ação primária) -->
+        <button
+          v-if="nextApplicationStage && currentStage?.stageType !== 'hired'"
+          type="button"
+          class="flex w-full items-center justify-center gap-2 rounded-md py-2.5 text-sm font-semibold text-white shadow-sm transition hover:brightness-110 active:scale-[0.99]"
+          :style="{ backgroundColor: nextApplicationStage.color || '#3b82f6' }"
+          @click="advanceStage"
+        >
+          Avançar para {{ nextApplicationStage.name }}
+          <BaseIcon name="ChevronRight" class="!size-4" />
+        </button>
+
+        <!-- Ação específica da etapa -->
+        <button
+          v-if="currentStage?.stageType === 'interview'"
+          type="button"
+          class="flex w-full items-center justify-center gap-2 rounded-md border border-slate-200 bg-white py-2.5 text-sm font-medium text-slate-700 transition hover:bg-slate-50"
+          @click="$emit('schedule-interview')"
+        >
+          <BaseIcon name="Calendar" class="!size-4 text-slate-400" />
+          Agendar entrevista
+        </button>
+
+        <button
+          v-if="currentStage?.stageType === 'offer'"
+          type="button"
+          class="flex w-full items-center justify-center gap-2 rounded-md border border-slate-200 bg-white py-2.5 text-sm font-medium text-slate-700 transition hover:bg-slate-50"
+          @click="$emit('send-offer')"
+        >
+          <BaseIcon name="DocumentText" class="!size-4 text-slate-400" />
+          Enviar proposta
+        </button>
+
+        <!-- Voltar para etapa anterior (ação terciária) -->
+        <button
+          v-if="prevApplicationStage && currentStage?.stageType !== 'hired'"
+          type="button"
+          class="flex w-full items-center justify-center gap-1.5 rounded-md py-2 text-xs text-slate-400 transition hover:text-slate-600"
+          @click="retreatStage"
+        >
+          <BaseIcon name="ChevronLeft" class="!size-3.5" />
+          Voltar para {{ prevApplicationStage.name }}
+        </button>
+
+        <!-- Divisor + ações destrutivas -->
+        <div class="border-t border-slate-100 pt-2 flex gap-2">
           <button
-            class="flex flex-1 items-center justify-center gap-1.5 rounded-md border border-amber-200 bg-amber-50 px-3 py-2 text-xs font-medium text-amber-700 transition hover:bg-amber-100"
+            type="button"
+            class="flex flex-1 items-center justify-center gap-1.5 rounded-md border border-slate-200 py-2 text-xs font-medium text-slate-500 transition hover:border-amber-200 hover:bg-amber-50 hover:text-amber-700"
             @click="archiveApplication"
           >
-            <BaseIcon name="ArchiveBox" class="!size-4" />
+            <BaseIcon name="ArchiveBox" class="!size-3.5" />
             Arquivar
           </button>
           <button
-            class="flex flex-1 items-center justify-center gap-1.5 rounded-md border border-red-200 bg-red-50 px-3 py-2 text-xs font-medium text-red-600 transition hover:bg-red-100"
+            type="button"
+            class="flex flex-1 items-center justify-center gap-1.5 rounded-md border border-slate-200 py-2 text-xs font-medium text-slate-500 transition hover:border-red-200 hover:bg-red-50 hover:text-red-600"
             @click="rejectApplication"
           >
-            <BaseIcon name="XMark" class="!size-4" />
+            <BaseIcon name="XMark" class="!size-3.5" />
             Reprovar
           </button>
         </div>
@@ -130,61 +251,171 @@ import vagasService from '@/services/vagas';
 
 export default {
   components: { Drawer, BaseIcon },
-
   emits: ['schedule-interview', 'send-offer', 'updated'],
 
   data() {
     return {
-      localRating: 0,
-      localNotes: ''
+      localNotes:   '',
+      localSummary: '',
+      summarizing:  false,
+      summaryError: '',
+      notesSaved:      false,
+      summaryExpanded: false
     };
   },
 
   computed: {
-    vagasStore: () => useVagasStore(),
+    vagasStore:  () => useVagasStore(),
     drawerStore: () => useDrawerStore(),
-    application() {
-      return this.vagasStore.application || {};
-    },
+
+    application() { return this.vagasStore.application || {}; },
+
     initials() {
       const name = this.application.candidate?.name || '';
       return name.split(' ').slice(0, 2).map(w => w[0]).join('').toUpperCase();
+    },
+
+    currentStage() {
+      const id = this.application.stageId;
+      if (!id) return this.vagasStore.stages[0] || null;
+      return this.vagasStore.stages.find(s => s.id === id) || null;
+    },
+
+    stageColor() { return this.currentStage?.color || '#475569'; },
+
+    nextApplicationStage() {
+      if (!this.currentStage) return null;
+      const sorted = [...this.vagasStore.stages].sort((a, b) => a.position - b.position);
+      const idx = sorted.findIndex(s => s.id === this.currentStage.id);
+      return sorted[idx + 1] || null;
+    },
+
+    prevApplicationStage() {
+      if (!this.currentStage) return null;
+      const sorted = [...this.vagasStore.stages].sort((a, b) => a.position - b.position);
+      const idx = sorted.findIndex(s => s.id === this.currentStage.id);
+      return idx > 0 ? sorted[idx - 1] : null;
+    },
+
+    stageActionStyle() {
+      const c = this.stageColor;
+      return { borderColor: c + '40', backgroundColor: c + '12', color: c };
+    },
+
+    formattedSummary() {
+      if (!this.localSummary) return '';
+      const raw = this.summaryExpanded || this.localSummary.length <= 500
+        ? this.localSummary
+        : this.localSummary.slice(0, 500).trimEnd() + '…';
+      const lines = raw.split('\n');
+      let html = '';
+
+      for (let i = 0; i < lines.length; i++) {
+        const raw = lines[i];
+        const line = raw.trim();
+
+        if (!line) continue;
+
+        // h1 — skip (usually just the candidate name repeated)
+        if (/^#\s/.test(line)) continue;
+
+        // h2 — section header
+        if (/^##\s/.test(line)) {
+          const text = line.replace(/^##\s+/, '');
+          html += `<p class="summary-h2">${text}</p>`;
+          continue;
+        }
+
+        // list item with optional bold label  "- **Label:** text"
+        if (/^-\s/.test(line)) {
+          const content = line
+            .replace(/^-\s+/, '')
+            .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+          html += `<div class="summary-li">• ${content}</div>`;
+          continue;
+        }
+
+        // numbered list  "1. text"
+        if (/^\d+\.\s/.test(line)) {
+          const content = line
+            .replace(/^\d+\.\s+/, '')
+            .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+          html += `<div class="summary-li summary-li--num">${content}</div>`;
+          continue;
+        }
+
+        // regular paragraph
+        const content = line.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+        html += `<p class="summary-p">${content}</p>`;
+      }
+
+      return html;
     }
   },
 
   watch: {
     application(val) {
-      this.localRating = val?.rating || 0;
-      this.localNotes = val?.internalNotes || '';
+      this.localNotes      = val?.internalNotes || '';
+      this.localSummary    = val?.aiSummary || '';
+      this.summaryError    = '';
+      this.summaryExpanded = false;
     }
   },
 
   methods: {
     viaBadge(via) {
       return {
-        form: { cls: 'bg-blue-100 text-blue-700', label: 'Formulário' },
-        whatsapp: { cls: 'bg-green-100 text-green-700', label: 'WhatsApp' },
-        linkedin: { cls: 'bg-sky-100 text-sky-700', label: 'LinkedIn' },
-        manual: { cls: 'bg-slate-100 text-slate-600', label: 'Manual' }
+        form:     { cls: 'bg-blue-100 text-blue-700',   label: 'Formulário' },
+        whatsapp: { cls: 'bg-green-100 text-green-700', label: 'WhatsApp'   },
+        linkedin: { cls: 'bg-sky-100 text-sky-700',     label: 'LinkedIn'   },
+        manual:   { cls: 'bg-slate-100 text-slate-600', label: 'Manual'     }
       }[via] || { cls: 'bg-slate-100 text-slate-500', label: via };
-    },
-
-    async setRating(n) {
-      this.localRating = n;
-      try {
-        await vagasService.updateApplication(this.application.jobId, this.application.id, { rating: n });
-        this.vagasStore.updateApplicationRating(this.application.id, n);
-      } catch (error) {
-        console.error(error);
-      }
     },
 
     async saveNotes() {
       try {
         await vagasService.updateApplication(this.application.jobId, this.application.id, { internalNotes: this.localNotes });
-      } catch (error) {
-        console.error(error);
+        this.notesSaved = true;
+        setTimeout(() => { this.notesSaved = false; }, 2000);
+      } catch (e) { console.error(e); }
+    },
+
+    async generateSummary(force = false) {
+      if (this.summarizing) return;
+      if (!force && this.localSummary) return;
+      this.summarizing  = true;
+      this.summaryError = '';
+      try {
+        const data = await vagasService.summarizeApplication(this.application.jobId, this.application.id);
+        this.localSummary = data.summary;
+        if (this.vagasStore.application) this.vagasStore.application.aiSummary = data.summary;
+      } catch (e) {
+        this.summaryError = e?.response?.data?.error || 'Erro ao gerar resumo. Tente novamente.';
+      } finally {
+        this.summarizing = false;
       }
+    },
+
+    async advanceStage() {
+      const next = this.nextApplicationStage;
+      if (!next || !this.application?.id) return;
+      try {
+        await vagasService.moveApplicationStage(this.application.jobId, this.application.id, next.id);
+        this.vagasStore.moveApplication(this.application.id, next.id);
+        if (this.vagasStore.application) this.vagasStore.application.stageId = next.id;
+        this.$emit('updated');
+      } catch (e) { console.error(e); }
+    },
+
+    async retreatStage() {
+      const prev = this.prevApplicationStage;
+      if (!prev || !this.application?.id) return;
+      try {
+        await vagasService.moveApplicationStage(this.application.jobId, this.application.id, prev.id);
+        this.vagasStore.moveApplication(this.application.id, prev.id);
+        if (this.vagasStore.application) this.vagasStore.application.stageId = prev.id;
+        this.$emit('updated');
+      } catch (e) { console.error(e); }
     },
 
     async archiveApplication() {
@@ -192,9 +423,7 @@ export default {
         await vagasService.updateApplication(this.application.jobId, this.application.id, { status: 'archived' });
         this.$emit('updated');
         this.drawerStore.close();
-      } catch (error) {
-        console.error(error);
-      }
+      } catch (e) { console.error(e); }
     },
 
     async rejectApplication() {
@@ -202,10 +431,46 @@ export default {
         await vagasService.updateApplication(this.application.jobId, this.application.id, { status: 'rejected' });
         this.$emit('updated');
         this.drawerStore.close();
-      } catch (error) {
-        console.error(error);
-      }
+      } catch (e) { console.error(e); }
     }
   }
 };
 </script>
+
+<style scoped>
+.summary-body :deep(.summary-h2) {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #64748b;
+  margin: 1rem 0 0.4rem;
+}
+.summary-body :deep(.summary-h2:first-child) { margin-top: 0; }
+
+.summary-body :deep(.summary-p) {
+  font-size: 0.8125rem;
+  color: #475569;
+  line-height: 1.55;
+  margin: 0 0 0.35rem;
+}
+
+.summary-body :deep(.summary-li) {
+  font-size: 0.8125rem;
+  color: #475569;
+  line-height: 1.5;
+  padding-left: 0.25rem;
+  margin: 0.15rem 0;
+}
+
+.summary-body :deep(.summary-li--num) {
+  font-weight: 600;
+  color: #334155;
+  margin-top: 0.4rem;
+}
+
+.summary-body :deep(strong) {
+  font-weight: 600;
+  color: #1e293b;
+}
+</style>

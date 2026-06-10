@@ -11,8 +11,15 @@ export default {
   updateApplication: (jobId, id, data) => axios.put(`/vagas/jobs/${jobId}/applications/${id}`, data),
   moveApplicationStage: (jobId, id, stageId) =>
     axios.put(`/vagas/jobs/${jobId}/applications/${id}/move_stage`, { stageId }),
+  reorderApplications: (jobId, ids) =>
+    axios.put(`/vagas/jobs/${jobId}/applications/reorder`, { ids }),
+  summarizeApplication: (jobId, id) =>
+    axios.post(`/vagas/jobs/${jobId}/applications/${id}/summarize`),
 
-  fetchPipelineStages: jobId => axios.get(`/vagas/jobs/${jobId}/pipeline_stages`),
+  fetchPipelineStages:  jobId          => axios.get(`/vagas/jobs/${jobId}/pipeline_stages`),
+  createPipelineStage: (jobId, data)  => axios.post(`/vagas/jobs/${jobId}/pipeline_stages`, { pipeline_stage: data }),
+  updatePipelineStage: (jobId, id, data) => axios.put(`/vagas/jobs/${jobId}/pipeline_stages/${id}`, { pipeline_stage: data }),
+  deletePipelineStage: (jobId, id)    => axios.delete(`/vagas/jobs/${jobId}/pipeline_stages/${id}`),
 
   createInterview: data => axios.post('/vagas/interviews', data),
 

@@ -136,24 +136,159 @@
       <div class="space-y-4">
         <p class="text-[11px] font-semibold uppercase tracking-wide text-slate-400">Descrição do cargo</p>
 
-        <FormTextarea
+        <FormRichEditor
           v-model="form.description"
           label="Descrição da vaga"
           placeholder="Descreva as responsabilidades e o contexto da posição..."
-          :rows="5"
         />
-        <FormTextarea
+        <FormRichEditor
           v-model="form.requirements"
           label="Requisitos"
           placeholder="Liste os requisitos necessários e desejáveis..."
-          :rows="4"
         />
-        <FormTextarea
+        <FormRichEditor
           v-model="form.benefits"
           label="Benefícios"
           placeholder="Liste os benefícios oferecidos..."
-          :rows="4"
         />
+      </div>
+
+      <hr class="border-slate-100" />
+
+      <!-- ── Pipeline de seleção ──────────────────────── -->
+      <div class="space-y-4">
+        <div class="flex items-center justify-between">
+          <p class="text-[11px] font-semibold uppercase tracking-wide text-slate-400">Pipeline de seleção</p>
+          <span class="text-[11px] text-slate-400">{{ form.stages.length }}/5 etapas</span>
+        </div>
+
+        <p class="text-xs text-slate-400">
+          Defina as etapas do processo seletivo. As candidaturas percorrerão este funil no kanban.
+        </p>
+
+        <!-- Stage list -->
+        <div class="space-y-2">
+          <div
+            v-for="(stage, i) in form.stages"
+            :key="stage._key"
+            class="group rounded-lg border border-slate-200 bg-white transition hover:border-slate-300"
+          >
+            <div class="flex items-center gap-3 px-3 py-3">
+              <!-- Position -->
+              <span class="w-4 flex-shrink-0 text-center text-xs font-bold text-slate-300">
+                {{ i + 1 }}
+              </span>
+
+              <!-- Color swatch button -->
+              <button
+                type="button"
+                class="flex-shrink-0 h-6 w-6 rounded-md shadow-sm transition hover:opacity-80 focus:outline-none focus:ring-2 focus:ring-offset-1"
+                :style="{ backgroundColor: stage.color, '--tw-ring-color': stage.color }"
+                title="Alterar cor"
+                @click="colorPickerOpen = colorPickerOpen === i ? null : i"
+              />
+
+              <!-- Name -->
+              <FormInput
+                v-model="stage.name"
+                placeholder="Nome da etapa"
+                wrapper-class="min-w-0 w-44 flex-shrink"
+              />
+
+              <!-- Divider -->
+              <div class="h-8 w-px flex-shrink-0 bg-slate-100" />
+
+              <!-- Botão de Ação -->
+              <div class="flex flex-1 flex-col justify-center gap-1 min-w-0">
+                <div class="flex flex-wrap items-center gap-1">
+                  <span class="flex-shrink-0 text-[10px] font-semibold uppercase tracking-wide text-slate-400">
+                    Botão de Ação
+                  </span>
+                  <div class="flex gap-1">
+                    <button
+                      v-for="opt in STAGE_ACTION_OPTIONS"
+                      :key="opt.value"
+                      type="button"
+                      class="inline-flex items-center rounded px-2 py-0.5 text-[10px] font-medium transition"
+                      :class="stage.stageType === opt.value
+                        ? 'bg-slate-700 text-white'
+                        : 'text-slate-400 hover:bg-slate-100 hover:text-slate-600'"
+                      :title="opt.label"
+                      @click="stage.stageType = opt.value"
+                    >
+                      {{ opt.short }}
+                    </button>
+                  </div>
+                </div>
+                <p class="text-[10px] leading-none text-slate-300">
+                  Ação exibida ao abrir um candidato nesta etapa
+                </p>
+              </div>
+
+              <!-- Delete (visible on hover) -->
+              <button
+                v-if="form.stages.length > 2"
+                type="button"
+                class="flex-shrink-0 text-slate-200 opacity-0 transition group-hover:opacity-100 hover:!text-red-400"
+                title="Remover etapa"
+                @click="removeStage(i)"
+              >
+                <BaseIcon name="Trash" class="!size-4" />
+              </button>
+            </div>
+
+            <!-- Inline color palette -->
+            <div
+              v-if="colorPickerOpen === i"
+              class="flex flex-wrap items-center gap-2 border-t border-slate-100 bg-slate-50 px-3 py-2.5"
+            >
+              <button
+                v-for="color in STAGE_PRESET_COLORS"
+                :key="color"
+                type="button"
+                class="h-5 w-5 rounded-md transition hover:scale-110 focus:outline-none"
+                :class="stage.color === color ? 'ring-2 ring-offset-1 ring-slate-400 scale-110' : ''"
+                :style="{ backgroundColor: color }"
+                @click="stage.color = color; colorPickerOpen = null"
+              />
+              <label class="cursor-pointer" title="Cor personalizada">
+                <span class="flex h-5 w-5 items-center justify-center rounded-md border border-dashed border-slate-300 bg-white text-slate-400 hover:border-slate-400 transition">
+                  <BaseIcon name="Pencil" class="!size-3" />
+                </span>
+                <input type="color" v-model="stage.color" class="sr-only" @input="colorPickerOpen = null" />
+              </label>
+            </div>
+          </div>
+
+          <!-- Add button -->
+          <button
+            v-if="form.stages.length < 5"
+            type="button"
+            class="flex w-full items-center justify-center gap-2 rounded-lg border border-dashed border-slate-200 bg-slate-50 py-3 text-xs font-medium text-slate-400 transition hover:border-slate-300 hover:bg-white hover:text-slate-600"
+            @click="addStage"
+          >
+            <BaseIcon name="Plus" class="!size-3.5" />
+            Adicionar etapa
+          </button>
+        </div>
+
+        <!-- Pipeline preview -->
+        <div class="flex items-center gap-1 flex-wrap">
+          <template v-for="(stage, i) in form.stages" :key="stage._key">
+            <div
+              class="flex items-center gap-1.5 rounded-md px-2.5 py-1 text-[11px] font-semibold"
+              :style="{ backgroundColor: stage.color + '18', color: stage.color }"
+            >
+              <span class="h-1.5 w-1.5 rounded-full flex-shrink-0" :style="{ backgroundColor: stage.color }" />
+              {{ stage.name || '—' }}
+            </div>
+            <BaseIcon
+              v-if="i < form.stages.length - 1"
+              name="ChevronRight"
+              class="!size-3 flex-shrink-0 text-slate-300"
+            />
+          </template>
+        </div>
       </div>
 
       <hr class="border-slate-100" />
@@ -213,18 +348,51 @@ import BaseButton from '@/components/base/Button';
 import BaseIcon from '@/components/icons/BaseIcon';
 import FormInput from '@/components/form/Input';
 import FormSelect from '@/components/form/Select';
-import FormTextarea from '@/components/form/Textarea';
+import FormRichEditor from '@/components/form/RichEditor';
 import vagasService from '@/services/vagas';
 import { useOnboardingStore } from '@/components/onboarding/store';
 
+const STAGE_ACTION_OPTIONS = [
+  { value: 'screening', label: 'Nenhuma',            short: 'Nenhuma'     },
+  { value: 'interview', label: 'Agendar entrevista',  short: 'Entrevista'  },
+  { value: 'offer',     label: 'Enviar proposta',     short: 'Proposta'    },
+  { value: 'hired',     label: 'Contratado',          short: 'Contratado'  },
+];
+
+const STAGE_PRESET_COLORS = [
+  '#3b82f6', '#6366f1', '#8b5cf6', '#ec4899',
+  '#ef4444', '#f97316', '#f59e0b', '#10b981',
+  '#14b8a6', '#06b6d4', '#64748b', '#1e293b'
+];
+
+const DEFAULT_STAGES = [
+  { name: 'Triagem',    color: '#3b82f6', stageType: 'screening' },
+  { name: 'Entrevista', color: '#8b5cf6', stageType: 'interview' },
+  { name: 'Proposta',   color: '#f59e0b', stageType: 'offer'     },
+  { name: 'Contratado', color: '#10b981', stageType: 'hired'     }
+];
+
+let _keyCounter = 0;
+const makeStage = (data = {}) => ({
+  _key:      ++_keyCounter,
+  id:        data.id        || null,
+  name:      data.name      || '',
+  color:     data.color     || '#6366f1',
+  stageType: data.stageType || data.stage_type || 'interview'
+});
+
 export default {
-  components: { BaseButton, BaseIcon, FormInput, FormSelect, FormTextarea },
+  components: { BaseButton, BaseIcon, FormInput, FormSelect, FormRichEditor },
 
   data() {
     return {
       loading: false,
       saving: false,
       saveAction: null,
+      stagesToDelete: [],
+      colorPickerOpen: null,
+      STAGE_PRESET_COLORS,
+      STAGE_ACTION_OPTIONS,
       form: {
         title: '',
         employmentType: '',
@@ -241,7 +409,8 @@ export default {
         description: '',
         requirements: '',
         benefits: '',
-        closesAt: ''
+        closesAt: '',
+        stages: DEFAULT_STAGES.map(makeStage)
       },
       modalityOptions: [
         { value: 'remote',     label: 'Remoto',     icon: 'Pin'     },
@@ -279,7 +448,10 @@ export default {
     if (this.isEditing) {
       this.loading = true;
       try {
-        const job = await vagasService.fetchJob(this.$route.params.id);
+        const [job, stages] = await Promise.all([
+          vagasService.fetchJob(this.$route.params.id),
+          vagasService.fetchPipelineStages(this.$route.params.id)
+        ]);
         this.form = {
           title:             job.title || '',
           employmentType:    job.employmentType || '',
@@ -296,7 +468,10 @@ export default {
           description:       job.description || '',
           requirements:      job.requirements || '',
           benefits:          job.benefits || '',
-          closesAt:          job.closesAt ? job.closesAt.slice(0, 10) : ''
+          closesAt:          job.closesAt ? job.closesAt.slice(0, 10) : '',
+          stages:            stages.length
+            ? stages.map(makeStage)
+            : DEFAULT_STAGES.map(makeStage)
         };
       } finally {
         this.loading = false;
@@ -305,26 +480,56 @@ export default {
   },
 
   methods: {
+    addStage() {
+      if (this.form.stages.length >= 5) return;
+      this.form.stages.push(makeStage());
+    },
+
+    removeStage(index) {
+      const stage = this.form.stages[index];
+      if (stage.id) this.stagesToDelete.push(stage.id);
+      this.form.stages.splice(index, 1);
+    },
+
+    async syncStages(jobId) {
+      const stages = this.form.stages;
+
+      // Delete removed stages
+      await Promise.all(
+        this.stagesToDelete.map(id => vagasService.deletePipelineStage(jobId, id).catch(() => {}))
+      );
+
+      // Create or update each stage
+      await Promise.all(
+        stages.map((stage, i) => {
+          const data = { name: stage.name, color: stage.color, stage_type: stage.stageType, position: i };
+          return stage.id
+            ? vagasService.updatePipelineStage(jobId, stage.id, data)
+            : vagasService.createPipelineStage(jobId, data);
+        })
+      );
+    },
+
     async save(action) {
       this.saving = true;
       this.saveAction = action;
       try {
+        const { stages: _stages, ...jobFields } = this.form;
         const payload = {
-          ...this.form,
+          ...jobFields,
           salaryVisible: !this.form.salaryNegotiable,
           status: action === 'draft' ? 'draft' : 'published'
         };
 
         if (this.isEditing) {
-          await vagasService.updateJob(this.$route.params.id, payload);
-          if (action === 'publish') {
-            await vagasService.publishJob(this.$route.params.id);
-          }
+          const jobId = this.$route.params.id;
+          await vagasService.updateJob(jobId, payload);
+          await this.syncStages(jobId);
+          if (action === 'publish') await vagasService.publishJob(jobId);
         } else {
           const job = await vagasService.createJob(payload);
-          if (action === 'publish' && job?.id) {
-            await vagasService.publishJob(job.id);
-          }
+          await this.syncStages(job.id);
+          if (action === 'publish' && job?.id) await vagasService.publishJob(job.id);
           useOnboardingStore().setVagaCreated();
         }
 

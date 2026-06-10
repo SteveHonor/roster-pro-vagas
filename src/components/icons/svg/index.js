@@ -26,6 +26,7 @@ import Inbox from './Inbox';
 import UserCircle from './UserCircle';
 import BankNotes from './BankNotes';
 import LinkSlash from './LinkSlash';
+import ExternalLink from './ExternalLink';
 import Bell from './Bell';
 import BellAlert from './BellAlert';
 import QueueList from './QueueList';
@@ -98,6 +99,7 @@ export {
   UserCircle,
   BankNotes,
   LinkSlash,
+  ExternalLink,
   Bell,
   BellAlert,
   QueueList,

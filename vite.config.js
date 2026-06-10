@@ -60,6 +60,11 @@ export default defineConfig({
     https: {
       key: fs.readFileSync('./cert/localhost.key'),
       cert: fs.readFileSync('./cert/localhost.crt')
+    },
+    hmr: {
+      host: 'vagas.lvh.me',
+      port: 5174,
+      protocol: 'wss'
     }
   },
   resolve: {
