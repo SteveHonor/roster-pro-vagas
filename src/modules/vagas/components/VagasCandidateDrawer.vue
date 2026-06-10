@@ -12,17 +12,31 @@
           Candidato contratado
         </div>
 
-        <!-- Avançar (primário) -->
-        <button
-          v-if="nextApplicationStage && currentStage?.stageType !== 'hired'"
-          type="button"
-          class="flex w-full items-center justify-center gap-2 rounded-md py-2.5 text-sm font-semibold text-white shadow-sm transition hover:brightness-110 active:scale-[0.99]"
-          :style="{ backgroundColor: nextApplicationStage.color || '#3b82f6' }"
-          @click="advanceStage"
+        <!-- Avançar + Voltar na mesma linha -->
+        <div
+          v-if="currentStage?.stageType !== 'hired'"
+          class="flex gap-2"
         >
-          Avançar para {{ nextApplicationStage.name }}
-          <BaseIcon name="ChevronRight" class="!size-4" />
-        </button>
+          <button
+            v-if="prevApplicationStage"
+            type="button"
+            class="flex flex-1 items-center justify-center gap-1 rounded-md border border-slate-200 py-2.5 text-xs font-medium text-slate-500 transition hover:bg-slate-50"
+            @click="retreatStage"
+          >
+            <BaseIcon name="ChevronLeft" class="!size-3.5" />
+            Voltar para {{ prevApplicationStage.name }}
+          </button>
+          <button
+            v-if="nextApplicationStage"
+            type="button"
+            class="flex flex-1 items-center justify-center gap-2 rounded-md py-2.5 text-sm font-semibold text-white shadow-sm transition hover:brightness-110 active:scale-[0.99]"
+            :style="{ backgroundColor: nextApplicationStage.color || '#3b82f6' }"
+            @click="advanceStage"
+          >
+            Avançar para {{ nextApplicationStage.name }}
+            <BaseIcon name="ChevronRight" class="!size-4" />
+          </button>
+        </div>
 
         <!-- Ações secundárias -->
         <div class="flex gap-2">
@@ -61,17 +75,6 @@
             Reprovar
           </button>
         </div>
-
-        <!-- Voltar (terciário) -->
-        <button
-          v-if="prevApplicationStage && currentStage?.stageType !== 'hired'"
-          type="button"
-          class="flex items-center justify-center gap-1 text-xs text-slate-400 transition hover:text-slate-600"
-          @click="retreatStage"
-        >
-          <BaseIcon name="ChevronLeft" class="!size-3.5" />
-          Voltar para {{ prevApplicationStage.name }}
-        </button>
 
       </div>
     </template>
