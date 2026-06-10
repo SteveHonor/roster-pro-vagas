@@ -59,13 +59,13 @@
 
               <div class="relative mt-6 flex-1 px-6 sm:px-8">
                 <div v-if="drawer.open(context)">
-                  <form class="mb-40" @submit.prevent>
+                  <form @submit.prevent>
                     <slot ref="formSlot" />
                   </form>
                 </div>
               </div>
 
-              <div class="fixed bottom-0 flex w-full items-center justify-between border-t border-gray-100 bg-white px-4 py-3">
+              <div class="sticky bottom-0 flex w-full items-center justify-between border-t border-gray-100 bg-white px-4 py-3">
                 <slot name="footer">
                   <button
                     type="button"
