@@ -129,7 +129,7 @@
               <button
                 v-else
                 type="button"
-                title="Disponível no plano Essential ou superior"
+                title="Disponível no Vagas Pro"
                 class="relative inline-flex h-5 w-9 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent bg-gray-100 transition-colors"
                 @click="planStore.setOpen('upgrade')"
               >
@@ -172,7 +172,7 @@
             class="w-full rounded-lg bg-emerald-500 py-2 text-xs font-bold text-white transition-colors hover:bg-emerald-600"
             @click="planStore.setOpen('upgrade')"
           >
-            Desbloquear no Essential
+            Desbloquear no Vagas Pro
           </button>
         </div>
       </div>
@@ -251,7 +251,7 @@
                 @click="planStore.setOpen('upgrade')"
               >
                 <BaseIcon name="LockClosed" class="!h-2.5 !w-2.5" />
-                Essential+
+                Vagas Pro
               </span>
             </div>
           </div>

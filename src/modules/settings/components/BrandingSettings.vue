@@ -6,7 +6,7 @@
 
       <span class="inline-flex items-center gap-1.5 rounded-full bg-orange-50 px-3 py-1.5 text-xs font-semibold text-orange-500">
         <BaseIcon name="LockClosed" class="!size-3" />
-        Disponível a partir do plano Pro
+        Disponível no Vagas Pro
       </span>
 
       <h2 class="mt-5 text-2xl font-bold text-gray-900">Identidade Visual</h2>

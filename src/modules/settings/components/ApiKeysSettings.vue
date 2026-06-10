@@ -10,7 +10,7 @@
         <div class="text-center">
           <span class="inline-flex items-center gap-1.5 rounded-full bg-orange-50 px-3 py-1.5 text-xs font-semibold text-orange-500">
             <BaseIcon name="LockClosed" class="!size-3" />
-            Disponível no plano Pro
+            Disponível no Vagas Pro
           </span>
           <h2 class="mt-4 text-2xl font-bold text-gray-900">Integre o RosterPro Vagas com qualquer sistema</h2>
           <p class="mt-3 text-sm leading-relaxed text-gray-500">
@@ -55,7 +55,7 @@ v-for="uc in useCases" :key="uc.label"
             @click="planStore.setOpen('upgrade')"
           >
             <BaseIcon name="Rocket" class="!size-4" />
-            Fazer upgrade para o Pro
+            Fazer upgrade para o Vagas Pro
           </button>
           <p class="mt-2.5 text-xs text-gray-400">A partir de R$ 149/mês &middot; Cancele quando quiser</p>
         </div>

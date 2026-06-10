@@ -59,13 +59,13 @@ export default {
           name:    'Identidade Visual',
           key:     'branding',
           icon:    'Sparkles',
-          premium: brandingLocked ? 'Pro' : false
+          premium: brandingLocked ? 'Vagas Pro' : false
         });
         list.push({
           name:    'Integrações',
           key:     'api_keys',
           icon:    'Cog',
-          premium: apiLocked ? 'Pro' : false
+          premium: apiLocked ? 'Vagas Pro' : false
         });
       }
 

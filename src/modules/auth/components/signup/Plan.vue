@@ -149,7 +149,7 @@
                 <th
                   v-for="name in planNames"
                   :key="name"
-                  :class="['px-4 py-4 text-center font-semibold', name === 'Pro' ? 'text-slate-900' : 'text-slate-500']"
+                  :class="['px-4 py-4 text-center font-semibold', name === 'Vagas Pro' ? 'text-slate-900' : 'text-slate-500']"
                 >
                   {{ name }}
                 </th>
@@ -205,7 +205,7 @@ export default {
       loadError: false,
       signupError: '',
       stripe: null,
-      planNames: ['Free', 'Pro'],
+      planNames: ['Vagas Free', 'Vagas Pro'],
       comparison: [
         {
           category: 'Limites',

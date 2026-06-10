@@ -89,7 +89,7 @@
               class="text-[11px]"
               :class="canUseWhatsApp ? 'text-emerald-700' : 'text-purple-700'"
             >
-              {{ canUseWhatsApp ? 'Receba avisos direto no WhatsApp' : 'WA disponível no Essential' }}
+              {{ canUseWhatsApp ? 'Receba avisos direto no WhatsApp' : 'WA disponível no Vagas Pro' }}
             </span>
           </div>
           <button

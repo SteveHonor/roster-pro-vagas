@@ -76,7 +76,7 @@
           <div
             class="mt-4 space-y-2 border-t border-gray-100 pt-4 text-xs text-gray-500"
           >
-            <p><strong>Planos:</strong> Free • Essential • Pro • Business</p>
+            <p><strong>Planos:</strong> Vagas Free • Vagas Pro</p>
             <p><strong>Pagamento:</strong> Stripe</p>
             <p>
               <strong>Contato:</strong>

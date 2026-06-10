@@ -280,7 +280,7 @@ export default {
     },
 
     prevPlan(name) {
-      return { Essential: 'Free', Pro: 'Essential', Business: 'Pro' }[name] || null;
+      return { 'Vagas Pro': 'Vagas Free' }[name] || null;
     },
 
     featureHighlights(highlights) {

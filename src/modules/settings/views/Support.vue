@@ -60,7 +60,7 @@
         <div>
           <div class="flex items-center gap-1.5">
             <p class="font-semibold text-gray-500">WhatsApp</p>
-            <span class="rounded-full bg-orange-100 px-1.5 py-px text-[10px] font-semibold text-orange-500">Pro</span>
+            <span class="rounded-full bg-orange-100 px-1.5 py-px text-[10px] font-semibold text-orange-500">Vagas Pro</span>
           </div>
           <p class="mt-0.5 text-xs text-gray-400">Atendimento via WhatsApp com resposta rápida.</p>
           <p class="mt-1 flex items-center gap-0.5 text-xs font-semibold text-orange-500">Fazer upgrade <BaseIcon name="ChevronRight" class="!h-3 !w-3" /></p>
@@ -125,7 +125,7 @@ export default {
       faqs: [
         {
           question: 'O sistema possui plano gratuito?',
-          answer: 'Sim. O plano Free é 100% gratuito, sem necessidade de cartão de crédito, com suporte por e-mail com resposta em até 5 dias.'
+          answer: 'Sim. O Vagas Free é 100% gratuito, sem necessidade de cartão de crédito, com suporte por e-mail com resposta em até 5 dias.'
         },
         {
           question: 'Meus dados estão protegidos pela LGPD?',
@@ -133,7 +133,7 @@ export default {
         },
         {
           question: 'Como entro em contato com o suporte?',
-          answer: 'O canal depende do seu plano. Free: e-mail com resposta em até 5 dias úteis. Essential: e-mail com resposta em até 2 dias úteis. Pro: WhatsApp com resposta em até 8h (Seg–Sáb, 9h–18h). Business: WhatsApp com resposta em até 4h (Seg–Sáb, 9h–18h).'
+          answer: 'O canal depende do seu plano. Vagas Free: e-mail com resposta em até 5 dias úteis. Vagas Pro: WhatsApp com resposta em até 24h (Seg–Sáb, 9h–18h).'
         }
       ]
     };
@@ -144,18 +144,17 @@ export default {
       return (this.planStore.name || '').toLowerCase();
     },
     hasWhatsApp() {
-      return ['pro', 'business'].includes(this.planName);
+      return this.planName.includes('pro');
     },
     hasDedicated() {
-      return this.planName === 'business';
+      return false;
     },
     emailSla() {
-      if (this.planName === 'essential') return 'em até 2 dias úteis';
       if (this.hasWhatsApp) return 'quando necessário';
       return 'em até 5 dias úteis';
     },
     whatsAppSla() {
-      return this.planName === 'business' ? 'até 4h' : 'até 8h';
+      return 'até 24h';
     },
     slaFooter() {
       if (this.hasWhatsApp) return `WhatsApp — resposta em ${this.whatsAppSla} (Seg–Sáb, 9h–18h).`;

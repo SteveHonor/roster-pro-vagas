@@ -59,42 +59,27 @@ const STORAGE_KEY = 'plan_banner_dismissed_at';
 const DISMISS_HOURS = 8;
 
 const ROUTE_BANNERS = {
+  '/vagas': {
+    free: { title: 'Pipeline ilimitado e IA de currículos — Vagas Pro', description: 'No Vagas Free você pode publicar vagas com limite. Faça upgrade e recrute sem restrições.' },
+    pro:  { title: 'Vagas Pro ativo',                                   description: 'Pipeline ilimitado, IA de currículos e analytics de funil disponíveis.' }
+  },
   '/dashboard': {
-    free:      { title: 'Dashboard avançado disponível no plano Pro',           description: 'Acesse relatórios completos, histórico e análises de desempenho da sua equipe.' },
-    essential: { title: 'Dashboard avançado disponível no plano Pro',           description: 'Acesse relatórios completos, histórico e análises de desempenho da sua equipe.' },
-    pro:       { title: 'Dashboard completo com múltiplas unidades — Business', description: 'Centralize análises de todas as unidades e tenha visibilidade total do seu negócio.' }
+    free: { title: 'Analytics de funil disponível no Vagas Pro', description: 'Acompanhe taxa de conversão por etapa, tempo médio de contratação e desempenho das vagas.' },
+    pro:  { title: 'Dashboard completo ativo',                   description: 'Acesse relatórios de funil, candidaturas e desempenho do seu processo seletivo.' }
   },
   '/users': {
-    free:      { title: 'Adicione mais colaboradores com o Essential',          description: 'O plano gratuito limita o número de usuários. Expanda sua equipe sem restrições.' },
-    essential: { title: 'Mais usuários e equipes no plano Pro',                 description: 'Escale sua operação com mais colaboradores, equipes e permissões avançadas.' },
-    pro:       { title: 'Usuários ilimitados e múltiplas unidades — Business',  description: 'Gerencie equipes grandes com suporte prioritário e recursos enterprise.' }
-  },
-  '/calendar': {
-    free:      { title: 'Histórico completo de escalas — a partir do Essential', description: 'Consulte todas as escalas passadas e identifique padrões da sua equipe.' },
-    essential: { title: 'Escalas com aprovação e relatórios avançados no Pro',   description: 'Automatize fluxos de aprovação e acesse relatórios detalhados de presença.' },
-    pro:       { title: 'Gestão de escalas para múltiplas unidades — Business',  description: 'Centralize o controle de escalas de todas as suas unidades em um único lugar.' }
-  },
-  '/requests': {
-    free:      { title: 'Gestão completa de trocas e ausências — a partir do Essential', description: 'Nos planos pagos, controle solicitações com mais visibilidade e histórico.' },
-    essential: { title: 'Fluxos avançados de aprovação no plano Pro',              description: 'Crie regras personalizadas para trocas, ausências e aprovações automáticas.' },
-    pro:       { title: 'Gestão de solicitações multi-unidade — Business',         description: 'Consolide e gerencie solicitações de todas as unidades com visibilidade total.' }
-  },
-  '/evaluations': {
-    free:      { title: 'Relatórios de desempenho no plano Pro', description: 'Acompanhe avaliações, tendências e engajamento de cada voluntário.' },
-    essential: { title: 'Relatórios de desempenho no plano Pro', description: 'Acompanhe avaliações, tendências e engajamento de cada colaborador.' },
-    pro:       { title: 'Análise comparativa entre unidades — Business', description: 'Compare desempenho entre equipes e unidades com relatórios consolidados.' }
+    free: { title: 'Adicione mais recrutadores com o Vagas Pro', description: 'O Vagas Free limita o número de usuários. Expanda seu time de recrutamento.' },
+    pro:  { title: 'Usuários ilimitados no Vagas Pro',           description: 'Gerencie todo o seu time de recrutamento sem restrições.' }
   },
   '/settings': {
-    free:      { title: 'Notificações via WhatsApp e IA — a partir do Essential', description: 'Avise sua equipe automaticamente com mensagens personalizadas por IA.' },
-    essential: { title: 'Integrações avançadas e automações no plano Pro',         description: 'Conecte ferramentas externas e automatize processos da sua operação.' },
-    pro:       { title: 'Configurações enterprise e SLA garantido — Business',     description: 'Acesso a SSO, integrações customizadas e suporte prioritário 24h.' }
+    free: { title: 'Notificações via WhatsApp e API — Vagas Pro', description: 'Integre seus sistemas e receba alertas de candidaturas direto no WhatsApp.' },
+    pro:  { title: 'Todas as integrações disponíveis',            description: 'API REST e notificações WhatsApp ativos no seu plano.' }
   }
 };
 
 const DEFAULT_BANNERS = {
-  free:      { title: 'Você está no plano gratuito',                   description: 'Desbloqueie histórico, WhatsApp, IA e muito mais. Veja o que o Roster Pro pode oferecer.' },
-  essential: { title: 'Desbloqueie recursos avançados no plano Pro',   description: 'Relatórios completos, automações e integrações para sua operação crescer.' },
-  pro:       { title: 'Leve sua operação ao próximo nível — Business', description: 'Múltiplas unidades, usuários ilimitados e suporte prioritário para negócios em expansão.' }
+  free: { title: 'Você está no Vagas Free', description: 'Desbloqueie pipeline ilimitado, IA de currículos, analytics e muito mais com o Vagas Pro.' },
+  pro:  { title: 'Vagas Pro ativo',         description: 'Aproveite pipeline ilimitado, IA de currículos e analytics de funil.' }
 };
 
 export default {
@@ -106,9 +91,10 @@ export default {
     visible() { return this.planStore.shouldShowBanner && !this.dismissed; },
     current() {
       const path = this.$route?.path || '';
-      const plan = (this.planStore.name || '').toLowerCase();
+      const raw  = (this.planStore.name || '').toLowerCase();
+      const plan = raw.includes('pro') ? 'pro' : 'free';
       const routeKey = Object.keys(ROUTE_BANNERS).find(k => path.startsWith(k));
-      return (routeKey ? ROUTE_BANNERS[routeKey]?.[plan] : null) ?? DEFAULT_BANNERS[plan] ?? DEFAULT_BANNERS.free;
+      return (routeKey ? ROUTE_BANNERS[routeKey]?.[plan] : null) ?? DEFAULT_BANNERS[plan];
     }
   },
   created() {
