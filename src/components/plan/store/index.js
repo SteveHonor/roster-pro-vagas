@@ -23,7 +23,7 @@ export const usePlanStore = defineStore('plan', {
 
     shouldShowBanner: state => {
       const name = (state.name || '').toLowerCase();
-      return ['free', 'essential', 'pro'].includes(name);
+      return name.includes('free') || name.includes('pro');
     }
   },
 
