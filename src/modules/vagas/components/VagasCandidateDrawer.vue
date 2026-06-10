@@ -113,6 +113,37 @@
 
     <div v-if="application && application.id" class="flex flex-col">
 
+      <!-- ── Posição na etapa ───────────────────────────── -->
+      <div v-if="applicationsInCurrentStage.length > 1" class="pb-4">
+        <p class="mb-2.5 text-[11px] font-semibold uppercase tracking-widest text-slate-400">Posição na etapa</p>
+        <div class="flex items-center gap-3 rounded-md border border-slate-200 bg-slate-50 px-4 py-3">
+          <button
+            type="button"
+            class="flex items-center gap-1.5 rounded-md border border-slate-200 bg-white px-3 py-2 text-xs font-medium text-slate-600 shadow-sm transition hover:bg-slate-100 disabled:opacity-30 disabled:cursor-not-allowed"
+            :disabled="currentPositionIndex === 0"
+            @click="movePositionUp"
+          >
+            <BaseIcon name="ChevronUp" class="!size-3.5" />
+            Subir
+          </button>
+          <div class="flex flex-1 flex-col items-center">
+            <span class="text-2xl font-black tabular-nums leading-none" :style="{ color: stageColor }">
+              {{ currentPositionIndex + 1 }}º
+            </span>
+            <span class="mt-0.5 text-[10px] text-slate-400">de {{ applicationsInCurrentStage.length }}</span>
+          </div>
+          <button
+            type="button"
+            class="flex items-center gap-1.5 rounded-md border border-slate-200 bg-white px-3 py-2 text-xs font-medium text-slate-600 shadow-sm transition hover:bg-slate-100 disabled:opacity-30 disabled:cursor-not-allowed"
+            :disabled="currentPositionIndex === applicationsInCurrentStage.length - 1"
+            @click="movePositionDown"
+          >
+            Descer
+            <BaseIcon name="ChevronDown" class="!size-3.5" />
+          </button>
+        </div>
+      </div>
+
       <!-- ── Contato ──────────────────────────────────── -->
       <div class="pb-4 space-y-2.5">
         <p class="text-[11px] font-semibold uppercase tracking-widest text-slate-400">Contato</p>
@@ -405,6 +436,23 @@ export default {
       return { borderColor: c + '40', backgroundColor: c + '12', color: c };
     },
 
+    applicationsInCurrentStage() {
+      if (!this.currentStage) return [];
+      const stageId = this.currentStage.id;
+      const sorted = [...this.vagasStore.stages].sort((a, b) => a.position - b.position);
+      const isFirstStage = sorted[0]?.id === stageId;
+      return this.vagasStore.applications
+        .filter(a => {
+          if (a.status !== 'active') return false;
+          return a.stageId === stageId || (isFirstStage && !a.stageId);
+        })
+        .sort((a, b) => (a.position ?? 0) - (b.position ?? 0));
+    },
+
+    currentPositionIndex() {
+      return this.applicationsInCurrentStage.findIndex(a => a.id === this.application?.id);
+    },
+
     formattedSummary() {
       if (!this.localSummary) return '';
       const raw = this.summaryExpanded || this.localSummary.length <= 500
@@ -565,6 +613,31 @@ export default {
         await vagasService.updateApplication(this.application.jobId, this.application.id, { status: 'rejected' });
         this.$emit('updated');
         this.drawerStore.close();
+      } catch (e) { console.error(e); }
+    },
+
+    async movePositionUp() {
+      const idx = this.currentPositionIndex;
+      if (idx <= 0) return;
+      await this._reorderPosition(idx, idx - 1);
+    },
+
+    async movePositionDown() {
+      const idx = this.currentPositionIndex;
+      if (idx >= this.applicationsInCurrentStage.length - 1) return;
+      await this._reorderPosition(idx, idx + 1);
+    },
+
+    async _reorderPosition(fromIdx, toIdx) {
+      const apps = [...this.applicationsInCurrentStage];
+      const [moved] = apps.splice(fromIdx, 1);
+      apps.splice(toIdx, 0, moved);
+      apps.forEach((app, i) => {
+        const storeApp = this.vagasStore.applications.find(a => a.id === app.id);
+        if (storeApp) storeApp.position = i;
+      });
+      try {
+        await vagasService.reorderApplications(this.application.jobId, apps.map(a => a.id));
       } catch (e) { console.error(e); }
     }
   }

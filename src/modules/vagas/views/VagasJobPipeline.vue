@@ -59,6 +59,7 @@
       <BaseIcon name="Sparkles" class="!size-3.5 mt-0.5 flex-shrink-0 text-blue-400" />
       <div class="flex flex-1 flex-wrap items-center gap-x-4 gap-y-1">
         <span>Clique num card para abrir o perfil completo do candidato.</span>
+        <span>Arraste pelo <BaseIcon name="GripVertical" class="!size-3 inline-block align-middle" /> para reordenar candidatos na coluna.</span>
         <span>Use <strong>"Mover para"</strong> no card para avançar rapidamente sem abrir.</span>
         <span>Candidatos arquivados ou reprovados saem do pipeline automaticamente.</span>
       </div>
@@ -137,14 +138,15 @@
             :list="applicationsInStage(stage.id)"
             ghost-class="opacity-40"
             chosen-class="ring-2 ring-blue-300"
+            handle=".drag-handle"
             animation="150"
             class="scrollbar-hide flex min-h-[56px] flex-1 flex-col gap-2 overflow-y-auto border-t border-slate-100 bg-slate-50/60 p-2"
             @end="(e) => onDragEnd(e, stage)"
           >
             <div
-              v-for="app in applicationsInStage(stage.id)"
+              v-for="(app, appIdx) in applicationsInStage(stage.id)"
               :key="app.id"
-              class="cursor-pointer rounded-md border border-slate-200/70 bg-white p-3 shadow-sm transition hover:border-slate-300 hover:shadow"
+              class="group cursor-pointer rounded-md border border-slate-200/70 bg-white p-3 shadow-sm transition hover:border-slate-300 hover:shadow"
               @click="openCandidate(app)"
             >
               <!-- Avatar + Name -->
@@ -163,6 +165,19 @@
                   <p v-if="app.candidate?.email" class="truncate text-[10px] leading-tight text-slate-400">
                     {{ app.candidate.email }}
                   </p>
+                </div>
+                <!-- Position badge + drag handle -->
+                <div class="flex flex-shrink-0 flex-col items-end gap-1 ml-1">
+                  <span class="rounded bg-slate-100 px-1.5 py-0.5 text-[10px] font-bold text-slate-500 tabular-nums leading-none">
+                    {{ appIdx + 1 }}º
+                  </span>
+                  <div
+                    class="drag-handle flex cursor-grab items-center justify-center rounded p-0.5 text-slate-400 transition hover:bg-slate-100 hover:text-slate-600 active:cursor-grabbing"
+                    title="Arraste para reordenar"
+                    @click.stop
+                  >
+                    <BaseIcon name="GripVertical" class="!size-3.5" />
+                  </div>
                 </div>
               </div>
 

@@ -65,6 +65,7 @@ import CursorArrowRays from './CursorArrowRays';
 import CheckCircle from './CheckCircle';
 import Clipboard from './Clipboard';
 import EllipsisVertical from './EllipsisVertical';
+import GripVertical from './GripVertical';
 import Shield from './Shield';
 import Briefcase from './Briefcase';
 import Eye from './Eye';
@@ -138,6 +139,7 @@ export {
   CheckCircle,
   Clipboard,
   EllipsisVertical,
+  GripVertical,
   Shield,
   Briefcase,
   Eye,

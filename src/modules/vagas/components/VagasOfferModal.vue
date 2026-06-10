@@ -38,7 +38,7 @@
           <div class="space-y-1 text-xs text-slate-600">
             <p v-if="form.salary">
               <span class="font-medium">Salário:</span>
-              R$ {{ salaryFormatted }}
+              {{ salaryFormatted }}
             </p>
             <p v-if="form.startDate">
               <span class="font-medium">Início:</span>
@@ -85,6 +85,7 @@ import BaseIcon from '@/components/icons/BaseIcon';
 import FormInput from '@/components/form/Input';
 import FormTextarea from '@/components/form/Textarea';
 import vagasService from '@/services/vagas';
+import { formatCurrencyCents, formatDate as fmtDate } from '@/utils/format';
 
 export default {
   components: { Modal, BaseButton, BaseIcon, FormInput, FormTextarea },
@@ -112,16 +113,13 @@ export default {
 
   computed: {
     salaryFormatted() {
-      if (!this.form.salary) return '';
-      return (this.form.salary / 100).toLocaleString('pt-BR', { minimumFractionDigits: 2 });
+      return this.form.salary ? formatCurrencyCents(this.form.salary) : '';
     }
   },
 
   methods: {
     formatDate(dateStr) {
-      if (!dateStr) return '';
-      const [year, month, day] = dateStr.split('-');
-      return `${day}/${month}/${year}`;
+      return fmtDate(dateStr) || '';
     },
 
     async submit(action) {
