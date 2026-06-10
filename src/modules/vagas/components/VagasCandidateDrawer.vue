@@ -1,5 +1,26 @@
 <template>
   <Drawer context="vagas-candidate" :exit-button="true" :on-save="null">
+    <template #footer>
+      <div class="flex w-full gap-2">
+        <button
+          type="button"
+          class="flex flex-1 items-center justify-center gap-1.5 rounded-md border border-slate-200 py-2 text-xs font-medium text-slate-500 transition hover:border-amber-200 hover:bg-amber-50 hover:text-amber-700"
+          @click="archiveApplication"
+        >
+          <BaseIcon name="ArchiveBox" class="!size-3.5" />
+          Arquivar
+        </button>
+        <button
+          type="button"
+          class="flex flex-1 items-center justify-center gap-1.5 rounded-md border border-slate-200 py-2 text-xs font-medium text-slate-500 transition hover:border-red-200 hover:bg-red-50 hover:text-red-600"
+          @click="rejectApplication"
+        >
+          <BaseIcon name="XMark" class="!size-3.5" />
+          Reprovar
+        </button>
+      </div>
+    </template>
+
     <div v-if="application && application.id" class="flex flex-col">
 
       <!-- ── Hero ─────────────────────────────────────── -->
@@ -217,25 +238,6 @@
           Voltar para {{ prevApplicationStage.name }}
         </button>
 
-        <!-- Divisor + ações destrutivas -->
-        <div class="border-t border-slate-100 pt-2 flex gap-2">
-          <button
-            type="button"
-            class="flex flex-1 items-center justify-center gap-1.5 rounded-md border border-slate-200 py-2 text-xs font-medium text-slate-500 transition hover:border-amber-200 hover:bg-amber-50 hover:text-amber-700"
-            @click="archiveApplication"
-          >
-            <BaseIcon name="ArchiveBox" class="!size-3.5" />
-            Arquivar
-          </button>
-          <button
-            type="button"
-            class="flex flex-1 items-center justify-center gap-1.5 rounded-md border border-slate-200 py-2 text-xs font-medium text-slate-500 transition hover:border-red-200 hover:bg-red-50 hover:text-red-600"
-            @click="rejectApplication"
-          >
-            <BaseIcon name="XMark" class="!size-3.5" />
-            Reprovar
-          </button>
-        </div>
       </div>
 
     </div>

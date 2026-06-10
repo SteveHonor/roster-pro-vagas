@@ -66,72 +66,74 @@
               </div>
 
               <div class="fixed bottom-0 flex w-full items-center justify-between border-t border-gray-100 bg-white px-4 py-3">
-                <button
-                  type="button"
-                  class="h-10 min-w-24 rounded-md border border-gray-200 px-4 text-sm text-gray-600 transition hover:bg-gray-50"
-                  @click="close()"
-                >
-                  {{ actionCloseName }}
-                </button>
-
-                <!-- Modo confirmação dupla (confirmar + cancelar) -->
-                <div v-if="confirmation" class="flex gap-3">
+                <slot name="footer">
                   <button
                     type="button"
-                    :class="[
-                      { hidden: typeof onCancel !== 'function' },
-                      saving ? 'cursor-not-allowed opacity-50' : 'hover:bg-red-100'
-                    ]"
-                    class="flex h-10 min-w-24 items-center justify-center gap-2 rounded-md border border-red-200 bg-red-50 px-4 text-sm font-medium text-red-700 transition"
-                    :disabled="saving"
-                    @click="cancel"
+                    class="h-10 min-w-24 rounded-md border border-gray-200 px-4 text-sm text-gray-600 transition hover:bg-gray-50"
+                    @click="close()"
                   >
-                    <svg v-if="savingAction === 'cancel'" class="h-4 w-4 animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                      <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" />
-                      <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
-                    </svg>
-                    {{ savingAction === 'cancel' ? 'Aguarde...' : cancelLabel }}
+                    {{ actionCloseName }}
                   </button>
 
-                  <button
-                    type="button"
-                    class="flex h-10 min-w-24 items-center justify-center gap-2 rounded-md px-4 text-sm font-semibold text-white transition"
-                    :class="[
-                      disabled || saving ? 'cursor-not-allowed bg-gray-300' : 'hover:opacity-90',
-                      { hidden: typeof onConfirm !== 'function' }
-                    ]"
-                    :style="!(disabled || saving) ? { background: 'var(--brand-primary)' } : {}"
-                    :disabled="disabled || saving"
-                    @click="confirm"
-                  >
-                    <svg v-if="savingAction === 'confirm'" class="h-4 w-4 animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                      <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" />
-                      <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
-                    </svg>
-                    {{ savingAction === 'confirm' ? 'Aguarde...' : confirmLabel }}
-                  </button>
-                </div>
+                  <!-- Modo confirmação dupla (confirmar + cancelar) -->
+                  <div v-if="confirmation" class="flex gap-3">
+                    <button
+                      type="button"
+                      :class="[
+                        { hidden: typeof onCancel !== 'function' },
+                        saving ? 'cursor-not-allowed opacity-50' : 'hover:bg-red-100'
+                      ]"
+                      class="flex h-10 min-w-24 items-center justify-center gap-2 rounded-md border border-red-200 bg-red-50 px-4 text-sm font-medium text-red-700 transition"
+                      :disabled="saving"
+                      @click="cancel"
+                    >
+                      <svg v-if="savingAction === 'cancel'" class="h-4 w-4 animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" />
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                      </svg>
+                      {{ savingAction === 'cancel' ? 'Aguarde...' : cancelLabel }}
+                    </button>
 
-                <!-- Modo simples (salvar) -->
-                <div v-else>
-                  <button
-                    type="button"
-                    class="flex h-10 min-w-24 items-center justify-center gap-2 rounded-md px-4 text-sm font-semibold text-white transition"
-                    :class="[
-                      disabled || saving ? 'cursor-not-allowed bg-gray-300' : 'hover:opacity-90',
-                      { hidden: typeof onSave !== 'function' }
-                    ]"
-                    :style="!(disabled || saving) ? { background: 'var(--brand-primary)' } : {}"
-                    :disabled="disabled || saving"
-                    @click="save"
-                  >
-                    <svg v-if="saving" class="h-4 w-4 animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                      <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" />
-                      <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
-                    </svg>
-                    {{ saving ? 'Salvando...' : confirmLabel }}
-                  </button>
-                </div>
+                    <button
+                      type="button"
+                      class="flex h-10 min-w-24 items-center justify-center gap-2 rounded-md px-4 text-sm font-semibold text-white transition"
+                      :class="[
+                        disabled || saving ? 'cursor-not-allowed bg-gray-300' : 'hover:opacity-90',
+                        { hidden: typeof onConfirm !== 'function' }
+                      ]"
+                      :style="!(disabled || saving) ? { background: 'var(--brand-primary)' } : {}"
+                      :disabled="disabled || saving"
+                      @click="confirm"
+                    >
+                      <svg v-if="savingAction === 'confirm'" class="h-4 w-4 animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" />
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                      </svg>
+                      {{ savingAction === 'confirm' ? 'Aguarde...' : confirmLabel }}
+                    </button>
+                  </div>
+
+                  <!-- Modo simples (salvar) -->
+                  <div v-else>
+                    <button
+                      type="button"
+                      class="flex h-10 min-w-24 items-center justify-center gap-2 rounded-md px-4 text-sm font-semibold text-white transition"
+                      :class="[
+                        disabled || saving ? 'cursor-not-allowed bg-gray-300' : 'hover:opacity-90',
+                        { hidden: typeof onSave !== 'function' }
+                      ]"
+                      :style="!(disabled || saving) ? { background: 'var(--brand-primary)' } : {}"
+                      :disabled="disabled || saving"
+                      @click="save"
+                    >
+                      <svg v-if="saving" class="h-4 w-4 animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" />
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                      </svg>
+                      {{ saving ? 'Salvando...' : confirmLabel }}
+                    </button>
+                  </div>
+                </slot>
               </div>
             </div>
           </div>
