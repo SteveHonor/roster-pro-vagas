@@ -65,7 +65,7 @@
                 </div>
               </div>
 
-              <div class="sticky bottom-0 flex w-full items-center justify-between border-t border-gray-100 bg-white px-4 py-3">
+              <div class="sticky bottom-0 flex w-full items-center justify-between border-t border-gray-100 bg-white px-4 pt-3 pb-5">
                 <slot name="footer">
                   <button
                     type="button"
