@@ -116,6 +116,107 @@
         </div>
       </div>
 
+      <!-- ── Match ──────────────────────────────────────── -->
+      <div v-if="application.candidate?.resumeUrl" class="border-t border-slate-100 pt-4 pb-4">
+        <div class="mb-3 flex items-center justify-between">
+          <p class="flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-widest text-slate-400">
+            <BaseIcon name="Sparkles" class="!size-3.5 text-violet-400" />
+            Match com a vaga
+          </p>
+          <button
+            v-if="!localMatchScore && !matching"
+            type="button"
+            class="text-[10px] font-medium text-violet-500 transition hover:text-violet-700"
+            @click="computeMatch"
+          >
+            Calcular
+          </button>
+          <button
+            v-else-if="localMatchScore"
+            type="button"
+            class="text-[10px] text-slate-400 transition hover:text-slate-600"
+            @click="computeMatch(true)"
+          >
+            Recalcular
+          </button>
+        </div>
+
+        <!-- Score computed -->
+        <div v-if="localMatchScore != null && !matching" class="space-y-2">
+          <!-- Score ring + label -->
+          <div class="flex items-center gap-3">
+            <div
+              class="flex h-14 w-14 flex-shrink-0 items-center justify-center rounded-full text-lg font-black"
+              :class="matchScoreCls(localMatchScore).ring"
+            >
+              <span :class="matchScoreCls(localMatchScore).text">{{ localMatchScore }}</span>
+            </div>
+            <div>
+              <p class="text-sm font-semibold" :class="matchScoreCls(localMatchScore).text">
+                {{ matchScoreCls(localMatchScore).label }}
+              </p>
+              <p class="text-xs text-slate-400">compatibilidade com a vaga</p>
+            </div>
+          </div>
+
+          <!-- Strengths -->
+          <div v-if="localMatchReasons.strengths?.length" class="space-y-1">
+            <p class="text-[10px] font-semibold uppercase tracking-wide text-emerald-600">Pontos fortes</p>
+            <div
+              v-for="(s, i) in localMatchReasons.strengths"
+              :key="i"
+              class="flex items-start gap-1.5 text-xs text-slate-600"
+            >
+              <BaseIcon name="Check" class="!size-3.5 mt-0.5 flex-shrink-0 text-emerald-500" />
+              {{ s }}
+            </div>
+          </div>
+
+          <!-- Gaps -->
+          <div v-if="localMatchReasons.gaps?.length" class="space-y-1">
+            <p class="text-[10px] font-semibold uppercase tracking-wide text-amber-600">Pontos de atenção</p>
+            <div
+              v-for="(g, i) in localMatchReasons.gaps"
+              :key="i"
+              class="flex items-start gap-1.5 text-xs text-slate-600"
+            >
+              <BaseIcon name="ExclamationCircle" class="!size-3.5 mt-0.5 flex-shrink-0 text-amber-500" />
+              {{ g }}
+            </div>
+          </div>
+        </div>
+
+        <!-- Loading -->
+        <div v-else-if="matching" class="space-y-2 rounded-xl border border-slate-100 bg-slate-50 px-4 py-4">
+          <div class="flex items-center gap-2 mb-2">
+            <BaseIcon name="Sparkles" class="!size-4 animate-pulse text-violet-400" />
+            <span class="text-xs text-slate-400">Calculando compatibilidade…</span>
+          </div>
+          <div class="h-2 w-1/3 animate-pulse rounded-full bg-slate-200" />
+          <div class="h-2 w-2/3 animate-pulse rounded-full bg-slate-200" />
+          <div class="h-2 w-1/2 animate-pulse rounded-full bg-slate-200" />
+        </div>
+
+        <!-- Empty state -->
+        <button
+          v-else
+          type="button"
+          class="flex w-full items-center justify-center gap-2 rounded-xl border border-dashed border-slate-200 bg-slate-50 py-4 text-xs font-medium text-slate-400 transition hover:border-violet-300 hover:bg-violet-50 hover:text-violet-600"
+          @click="computeMatch(false)"
+        >
+          <BaseIcon name="Sparkles" class="!size-4" />
+          Calcular match com a vaga
+        </button>
+
+        <div
+          v-if="matchError"
+          class="mt-2 flex items-center gap-2 rounded-lg border border-red-100 bg-red-50 px-3 py-2 text-xs text-red-500"
+        >
+          <BaseIcon name="XMark" class="!size-3.5 flex-shrink-0" />
+          {{ matchError }}
+        </div>
+      </div>
+
       <!-- ── Contato ──────────────────────────────────── -->
       <div class="border-t border-slate-100 pt-4 pb-4 space-y-2.5">
         <p class="text-[11px] font-semibold uppercase tracking-widest text-slate-400">Contato</p>
@@ -261,7 +362,11 @@ export default {
       summarizing:  false,
       summaryError: '',
       notesSaved:      false,
-      summaryExpanded: false
+      summaryExpanded: false,
+      localMatchScore:   null,
+      localMatchReasons: {},
+      matching:   false,
+      matchError: ''
     };
   },
 
@@ -360,6 +465,9 @@ export default {
       this.localSummary    = val?.aiSummary || '';
       this.summaryError    = '';
       this.summaryExpanded = false;
+      this.localMatchScore   = val?.matchScore ?? null;
+      this.localMatchReasons = val?.matchReasons || {};
+      this.matchError        = '';
     }
   },
 
@@ -425,6 +533,34 @@ export default {
         this.$emit('updated');
         this.drawerStore.close();
       } catch (e) { console.error(e); }
+    },
+
+    async computeMatch(force = false) {
+      if (this.matching) return;
+      if (!force && this.localMatchScore != null) return;
+      this.matching   = true;
+      this.matchError = '';
+      try {
+        const data = await vagasService.matchScoreApplication(this.application.jobId, this.application.id);
+        this.localMatchScore   = data.score;
+        this.localMatchReasons = { strengths: data.strengths, gaps: data.gaps };
+        if (this.vagasStore.application) {
+          this.vagasStore.application.matchScore   = data.score;
+          this.vagasStore.application.matchReasons = this.localMatchReasons;
+        }
+        const storeApp = this.vagasStore.applications?.find(a => a.id === this.application.id);
+        if (storeApp) storeApp.matchScore = data.score;
+      } catch (e) {
+        this.matchError = e?.response?.data?.error || 'Erro ao calcular match. Tente novamente.';
+      } finally {
+        this.matching = false;
+      }
+    },
+
+    matchScoreCls(score) {
+      if (score >= 75) return { ring: 'bg-emerald-50 border-2 border-emerald-400', text: 'text-emerald-600', label: 'Excelente match' };
+      if (score >= 50) return { ring: 'bg-amber-50 border-2 border-amber-400',   text: 'text-amber-600',   label: 'Match razoável' };
+      return               { ring: 'bg-red-50 border-2 border-red-400',           text: 'text-red-600',     label: 'Match baixo' };
     },
 
     async rejectApplication() {

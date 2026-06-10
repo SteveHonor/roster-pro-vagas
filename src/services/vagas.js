@@ -15,6 +15,8 @@ export default {
     axios.put(`/vagas/jobs/${jobId}/applications/reorder`, { ids }),
   summarizeApplication: (jobId, id) =>
     axios.post(`/vagas/jobs/${jobId}/applications/${id}/summarize`),
+  matchScoreApplication: (jobId, id) =>
+    axios.post(`/vagas/jobs/${jobId}/applications/${id}/match_score`),
 
   fetchPipelineStages:  jobId          => axios.get(`/vagas/jobs/${jobId}/pipeline_stages`),
   createPipelineStage: (jobId, data)  => axios.post(`/vagas/jobs/${jobId}/pipeline_stages`, { pipeline_stage: data }),

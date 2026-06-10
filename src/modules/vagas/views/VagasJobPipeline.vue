@@ -166,7 +166,7 @@
                 </div>
               </div>
 
-              <!-- Meta row: via badge + days -->
+              <!-- Meta row: via badge + match + days -->
               <div class="mt-2.5 flex items-center justify-between">
                 <span
                   :class="viaBadge(app.appliedVia).cls"
@@ -175,12 +175,22 @@
                 >
                   {{ viaBadge(app.appliedVia).label }}
                 </span>
-                <span
-                  class="text-[10px] text-slate-400"
-                  :title="`${daysInStage(app)} dia(s) nesta etapa`"
-                >
-                  {{ daysInStage(app) === 0 ? 'hoje' : `há ${daysInStage(app)}d` }}
-                </span>
+                <div class="flex items-center gap-1.5">
+                  <span
+                    v-if="app.matchScore != null"
+                    :class="matchScoreCls(app.matchScore)"
+                    class="rounded px-1.5 py-0.5 text-[10px] font-bold"
+                    title="Match com a vaga"
+                  >
+                    {{ app.matchScore }}%
+                  </span>
+                  <span
+                    class="text-[10px] text-slate-400"
+                    :title="`${daysInStage(app)} dia(s) nesta etapa`"
+                  >
+                    {{ daysInStage(app) === 0 ? 'hoje' : `há ${daysInStage(app)}d` }}
+                  </span>
+                </div>
               </div>
 
               <!-- Advance button -->
@@ -332,6 +342,12 @@ export default {
 
     modalityLabel(modality) {
       return { remote: 'Remoto', hybrid: 'Híbrido', presential: 'Presencial' }[modality] || modality;
+    },
+
+    matchScoreCls(score) {
+      if (score >= 75) return 'bg-emerald-100 text-emerald-700';
+      if (score >= 50) return 'bg-amber-100 text-amber-700';
+      return 'bg-red-100 text-red-600';
     },
 
     viaBadge(via) {
