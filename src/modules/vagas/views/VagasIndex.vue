@@ -9,7 +9,7 @@
           icon="search"
           class="w-full"
         />
-        <BaseButton icon="Plus" @click="$router.push('/vagas/nova')">
+        <BaseButton icon="Plus" @click="$router.push('/hiring/nova')">
           Nova vaga
         </BaseButton>
       </div>
@@ -60,7 +60,7 @@
               <div class="flex items-center gap-1">
                 <button
                   class="inline-flex items-center gap-1.5 rounded border border-slate-200 px-3 py-1.5 text-[11px] font-medium text-slate-600 transition hover:bg-slate-50"
-                  @click="$router.push(`/vagas/${job.id}/pipeline`)"
+                  @click="$router.push(`/hiring/${job.id}/pipeline`)"
                 >
                   <BaseIcon name="QueueList" class="!size-3.5" />
                   Pipeline
@@ -68,7 +68,7 @@
                 <button
                   class="inline-flex items-center justify-center rounded p-1.5 text-slate-400 transition hover:bg-slate-100 hover:text-slate-700"
                   title="Editar vaga"
-                  @click="$router.push(`/vagas/${job.id}/editar`)"
+                  @click="$router.push(`/hiring/${job.id}/editar`)"
                 >
                   <BaseIcon name="Pencil" class="!size-4" />
                 </button>
@@ -92,7 +92,7 @@
         title="Nenhuma vaga encontrada"
         :description="activeTab === 'all' ? 'Publique sua primeira vaga para começar a receber candidatos.' : 'Nenhuma vaga com esse status no momento.'"
       >
-        <BaseButton v-if="activeTab === 'all'" icon="Plus" @click="$router.push('/vagas/nova')">
+        <BaseButton v-if="activeTab === 'all'" icon="Plus" @click="$router.push('/hiring/nova')">
           Criar primeira vaga
         </BaseButton>
       </Empty>
@@ -138,7 +138,7 @@ export default {
   },
 
   async mounted() {
-    this.breadcrumbStore.setBreadcrumb([{ name: 'Vagas', path: '/vagas' }]);
+    this.breadcrumbStore.setBreadcrumb([{ name: 'Vagas', path: '/hiring' }]);
     try {
       this.jobs = await vagasService.fetchJobs();
     } finally {
@@ -205,7 +205,7 @@ export default {
         confirmText: 'Encerrar vaga',
         onConfirm:   async () => {
           try {
-            await this.axios.delete(`/vagas/jobs/${job.id}`);
+            await this.axios.delete(`/hiring/jobs/${job.id}`);
             job.status = 'closed';
           } catch (error) {
             console.error(error);

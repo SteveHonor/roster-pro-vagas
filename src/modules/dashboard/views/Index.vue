@@ -6,7 +6,7 @@
         <h1 class="text-xl font-bold text-slate-800">Dashboard</h1>
         <p class="text-sm text-slate-400">Visão geral do seu processo seletivo</p>
       </div>
-      <BaseButton icon="Plus" @click="$router.push('/vagas/nova')">
+      <BaseButton icon="Plus" @click="$router.push('/hiring/nova')">
         Nova vaga
       </BaseButton>
     </div>
@@ -75,7 +75,7 @@
         <div class="flex flex-col items-center gap-5">
           <button
             class="inline-flex items-center gap-2 rounded-md bg-slate-800 px-4 py-2 text-sm font-semibold text-white transition hover:bg-slate-700"
-            @click="$router.push('/vagas/nova')"
+            @click="$router.push('/hiring/nova')"
           >
             <BaseIcon name="Plus" class="!size-4" />
             Publicar primeira vaga
@@ -106,7 +106,7 @@
       <h2 class="mb-3 flex items-center gap-2 text-sm font-semibold text-slate-700">
         <BaseIcon name="Briefcase" class="!size-4 text-slate-400" />
         Vagas recentes
-        <router-link to="/vagas" class="ml-auto text-xs font-normal text-blue-600 hover:underline">Ver todas</router-link>
+        <router-link to="/hiring" class="ml-auto text-xs font-normal text-blue-600 hover:underline">Ver todas</router-link>
       </h2>
 
       <SkeletonRows v-if="loading" :rows="3" has-trailing />
@@ -116,7 +116,7 @@
           v-for="job in recentJobs"
           :key="job.id"
           class="cursor-pointer"
-          @click.native="$router.push(`/vagas/${job.id}/pipeline`)"
+          @click="$router.push(`/hiring/${job.id}/pipeline`)"
         >
           <div>
             <p class="text-sm font-medium text-slate-800">{{ job.title }}</p>
@@ -144,7 +144,7 @@
       >
         <button
           class="inline-flex items-center gap-2 rounded-md bg-slate-800 px-4 py-2 text-sm font-semibold text-white transition hover:bg-slate-700"
-          @click="$router.push('/vagas/nova')"
+          @click="$router.push('/hiring/nova')"
         >
           <BaseIcon name="Plus" class="!size-4" />
           Criar primeira vaga

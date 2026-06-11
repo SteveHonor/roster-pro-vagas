@@ -54,7 +54,7 @@ export default {
           role: 'operator'
         },
         {
-          to: '/vagas',
+          to: '/hiring',
           icon: 'briefcase',
           title: 'Vagas',
           subtitle: 'Recrutamento',

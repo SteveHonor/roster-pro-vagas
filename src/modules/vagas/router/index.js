@@ -4,7 +4,7 @@ import VagasJobPipeline from '@/modules/vagas/views/VagasJobPipeline';
 
 export default [
   {
-    path: '/vagas',
+    path: '/hiring',
     meta: {
       breadcrumb: 'Vagas'
     },

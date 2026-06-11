@@ -302,7 +302,7 @@ export default {
         // Usuário tem APENAS o módulo vagas ativo → redireciona direto para /vagas
         const activeModules = response.activeModules || [];
         if (activeModules.length === 1 && activeModules[0] === 'vagas') {
-          this.$router.replace('/vagas');
+          this.$router.replace('/hiring');
           return;
         }
 
@@ -315,7 +315,7 @@ export default {
       if (this.authStore.isSignedIn && this.authStore.currentStepLogin === 1) {
         // Usuário com apenas vagas ativo que chega direto na rota de login
         if (this.authStore.activeModules?.length === 1 && this.authStore.activeModules[0] === 'vagas') {
-          this.$router.replace('/vagas');
+          this.$router.replace('/hiring');
           return;
         }
         this.$router.replace(this.$can.canAccess('operator') ? '/' : '/member');

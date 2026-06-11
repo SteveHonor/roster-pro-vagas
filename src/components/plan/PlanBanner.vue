@@ -59,7 +59,7 @@ const STORAGE_KEY = 'plan_banner_dismissed_at';
 const DISMISS_HOURS = 8;
 
 const ROUTE_BANNERS = {
-  '/vagas': {
+  '/hiring': {
     free: { title: 'Pipeline ilimitado e IA de currículos — Vagas Pro', description: 'No Vagas Free você pode publicar vagas com limite. Faça upgrade e recrute sem restrições.' },
     pro:  { title: 'Vagas Pro ativo',                                   description: 'Pipeline ilimitado, IA de currículos e analytics de funil disponíveis.' }
   },

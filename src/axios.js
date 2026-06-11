@@ -35,7 +35,7 @@ axios.interceptors.request.use(
       config.headers['X-Device-Token'] = authStore.deviceToken;
     }
 
-    config.headers['X-Module'] = 'vagas';
+    config.headers['X-Module'] = 'hiring';
 
     if (!isFormData) {
       config.headers['Content-Type'] = 'application/json';

@@ -338,7 +338,7 @@ export default {
       return { notificationsSubscription, systemSubscription };
     },
     async getNotifications() {
-      await this.axios.get('/notifications', { params: { app: 'vagas' } }).then(response => {
+      await this.axios.get('/notifications', { params: { app: 'hiring' } }).then(response => {
         this.notificationStore.setNotifications(response);
       });
     },

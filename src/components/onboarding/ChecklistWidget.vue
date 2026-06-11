@@ -97,7 +97,7 @@
         <div v-if="section2Open" class="mt-1 space-y-0.5">
           <!-- Criar primeira vaga -->
           <router-link
-            to="/vagas/nova"
+            to="/hiring/nova"
             class="flex items-center gap-3 rounded-lg px-2 py-2 hover:bg-gray-50 transition-colors"
           >
             <div

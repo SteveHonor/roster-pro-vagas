@@ -4,7 +4,7 @@
     <div class="flex items-center gap-3">
       <button
         class="flex items-center justify-center rounded-md border border-slate-200 bg-white p-1.5 text-slate-500 transition hover:bg-slate-50"
-        @click="$router.push('/vagas')"
+        @click="$router.push('/hiring')"
       >
         <BaseIcon name="ChevronLeft" class="!size-4" />
       </button>
@@ -315,7 +315,7 @@
     <div class="flex items-center justify-between pb-6">
       <button
         class="rounded-md border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-600 transition hover:bg-slate-50"
-        @click="$router.push('/vagas')"
+        @click="$router.push('/hiring')"
       >
         Cancelar
       </button>
@@ -533,7 +533,7 @@ export default {
           useOnboardingStore().setVagaCreated();
         }
 
-        this.$router.push('/vagas');
+        this.$router.push('/hiring');
       } catch (error) {
         console.error(error);
       } finally {

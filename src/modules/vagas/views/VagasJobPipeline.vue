@@ -7,7 +7,7 @@
         <button
           type="button"
           class="mt-0.5 flex items-center justify-center rounded-md border border-slate-200 bg-white p-1.5 text-slate-500 transition hover:bg-slate-50"
-          @click="$router.push('/vagas')"
+          @click="$router.push('/hiring')"
         >
           <BaseIcon name="ChevronLeft" class="!size-4" />
         </button>
@@ -333,7 +333,7 @@ export default {
       ]);
       this.job = job;
       this.breadcrumbStore.setBreadcrumb([
-        { name: 'Vagas', path: '/vagas' },
+        { name: 'Vagas', path: '/hiring' },
         { name: job.title }
       ]);
       this.vagasStore.setStages(stages);
