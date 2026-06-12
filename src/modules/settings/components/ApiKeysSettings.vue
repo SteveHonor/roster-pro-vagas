@@ -125,96 +125,28 @@ v-for="uc in useCases" :key="uc.label"
             </table>
           </div>
 
-          <!-- Como usar — colapsável dentro da seção API -->
-          <div class="border-t border-gray-100">
-            <button
-              type="button"
-              class="flex w-full items-center justify-between px-5 py-3.5 text-left"
-              @click="showDocs = !showDocs"
+          <!-- Link para documentação -->
+          <div class="border-t border-gray-100 px-5 py-4">
+            <a
+              href="https://www.rosterpro.com.br/desenvolvedores"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="flex items-center justify-between rounded-lg border border-gray-200 bg-gray-50 px-4 py-3.5 transition hover:border-gray-300 hover:bg-gray-100"
             >
-              <div class="flex items-center gap-2">
-                <BaseIcon name="DocumentText" class="!size-4 text-gray-400" />
-                <span class="text-sm font-medium text-gray-600">Como usar a API</span>
-              </div>
-              <BaseIcon :name="showDocs ? 'ChevronUp' : 'ChevronDown'" class="!size-4 text-gray-400" />
-            </button>
-
-            <div v-if="showDocs" class="border-t border-gray-100 px-5 pb-5 pt-4 space-y-6">
-
-              <div>
-                <p class="mb-2 text-xs font-semibold uppercase tracking-wide text-gray-400">Autenticação</p>
-                <p class="mb-3 text-xs text-gray-500">Todas as requisições precisam do header <code class="rounded bg-gray-100 px-1 py-0.5 text-gray-700">Authorization</code> com sua API key.</p>
-                <div class="overflow-hidden rounded-lg bg-gray-900">
-                  <div class="flex items-center gap-2 border-b border-gray-800 px-4 py-2">
-                    <span class="h-2 w-2 rounded-full bg-red-500/70" />
-                    <span class="h-2 w-2 rounded-full bg-yellow-500/70" />
-                    <span class="h-2 w-2 rounded-full bg-green-500/70" />
-                    <span class="ml-2 text-xs text-gray-500">Terminal</span>
-                  </div>
-                  <pre class="overflow-x-auto p-4 font-mono text-xs leading-6 text-gray-300">curl https://api.rosterpro.com.br/api/v1/users \
-  -H <span class="text-green-400">"Authorization: Bearer rp_sua_key_aqui"</span></pre>
+              <div class="flex items-center gap-3">
+                <div class="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg border border-gray-200 bg-white">
+                  <BaseIcon name="DocumentText" class="!size-4 text-gray-500" />
+                </div>
+                <div>
+                  <p class="text-sm font-semibold text-gray-800">Documentação completa da API</p>
+                  <p class="mt-0.5 text-xs text-gray-400">Autenticação · Endpoints · Exemplos de código · Rate limits</p>
                 </div>
               </div>
-
-              <div>
-                <p class="mb-3 text-xs font-semibold uppercase tracking-wide text-gray-400">Endpoints disponíveis</p>
-                <div class="overflow-hidden rounded-lg border border-gray-200">
-                  <table class="w-full text-xs">
-                    <thead class="bg-gray-50">
-                      <tr>
-                        <th class="px-4 py-2 text-left font-semibold text-gray-500">Método</th>
-                        <th class="px-4 py-2 text-left font-semibold text-gray-500">Endpoint</th>
-                        <th class="px-4 py-2 text-left font-semibold text-gray-500">Descrição</th>
-                      </tr>
-                    </thead>
-                    <tbody class="divide-y divide-gray-100">
-                      <tr v-for="ep in endpoints" :key="ep.path" class="hover:bg-gray-50">
-                        <td class="px-4 py-2.5">
-                          <span :class="methodClass(ep.method)" class="rounded px-1.5 py-0.5 font-mono font-semibold">{{ ep.method }}</span>
-                        </td>
-                        <td class="px-4 py-2.5 font-mono text-gray-600">/api/v1/{{ ep.path }}</td>
-                        <td class="px-4 py-2.5 text-gray-500">{{ ep.description }}</td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
+              <div class="flex items-center gap-1.5 text-xs font-semibold text-blue-600">
+                Ver documentação
+                <BaseIcon name="ArrowRight" class="!size-3.5" />
               </div>
-
-              <div>
-                <p class="mb-2 text-xs font-semibold uppercase tracking-wide text-gray-400">Exemplo de resposta — <code class="lowercase normal-case text-gray-500">GET /api/v1/users</code></p>
-                <div class="overflow-hidden rounded-lg bg-gray-900">
-                  <pre class="overflow-x-auto p-4 font-mono text-xs leading-6"><span class="text-gray-400">{</span>
-  <span class="text-blue-400">"data"</span><span class="text-gray-400">: [</span>
-    <span class="text-gray-400">{</span>
-      <span class="text-blue-400">"id"</span><span class="text-gray-400">:</span> <span class="text-yellow-300">"uuid"</span><span class="text-gray-400">,</span>
-      <span class="text-blue-400">"name"</span><span class="text-gray-400">:</span> <span class="text-yellow-300">"Ana Lima"</span><span class="text-gray-400">,</span>
-      <span class="text-blue-400">"email"</span><span class="text-gray-400">:</span> <span class="text-yellow-300">"ana@empresa.com"</span><span class="text-gray-400">,</span>
-      <span class="text-blue-400">"profile"</span><span class="text-gray-400">:</span> <span class="text-yellow-300">"operator"</span>
-    <span class="text-gray-400">}</span>
-  <span class="text-gray-400">],</span>
-  <span class="text-blue-400">"meta"</span><span class="text-gray-400">: {</span> <span class="text-blue-400">"total"</span><span class="text-gray-400">:</span> <span class="text-purple-400">42</span> <span class="text-gray-400">}</span>
-<span class="text-gray-400">}</span></pre>
-                </div>
-              </div>
-
-              <div class="flex items-start gap-3 rounded-lg border border-blue-100 bg-blue-50 p-3">
-                <BaseIcon name="Exclamation" class="!size-4 flex-shrink-0 text-blue-400 mt-0.5" />
-                <p class="text-xs text-blue-700">
-                  As keys têm escopo somente leitura. Cada key é única por conta e pode ser revogada a qualquer momento.
-                  Em caso de comprometimento, revogue imediatamente e gere uma nova.
-                </p>
-              </div>
-
-              <div class="flex items-start gap-3 rounded-lg border border-gray-200 bg-gray-50 p-3">
-                <BaseIcon name="Sparkles" class="!size-4 flex-shrink-0 text-gray-400 mt-0.5" />
-                <p class="text-xs text-gray-500">
-                  Nossa API está em constante evolução. Novos endpoints serão disponibilizados em breve —
-                  incluindo criação de vagas, gerenciamento de candidatos e notificações.
-                  Acompanhe as novidades no changelog da plataforma.
-                </p>
-              </div>
-
-            </div>
+            </a>
           </div>
         </div>
 
@@ -386,22 +318,12 @@ export default {
       keys:         [],
       loading:      true,
       showCreate:   false,
-      showDocs:     false,
       showMcp:      false,
       newKeyName:   '',
       newKey:       null,
       creating:     false,
       copied:       false,
       revokeTarget: null,
-      endpoints: [
-        { method: 'GET',   path: 'vagas/jobs',                       description: 'Lista vagas da conta' },
-        { method: 'POST',  path: 'vagas/jobs',                       description: 'Cria nova vaga' },
-        { method: 'GET',   path: 'vagas/jobs/:id',                   description: 'Detalhes de uma vaga' },
-        { method: 'PATCH', path: 'vagas/jobs/:id/publish',           description: 'Publica uma vaga' },
-        { method: 'GET',   path: 'vagas/jobs/:id/applications',      description: 'Lista candidaturas de uma vaga' },
-        { method: 'PATCH', path: 'vagas/applications/:id/stage',     description: 'Move candidato de etapa no pipeline' },
-        { method: 'GET',   path: 'users',                            description: 'Lista recrutadores da conta' },
-      ],
       useCases: [
         { label: 'Sincronize com ATS',             icon: 'Squares'      },
         { label: 'Exporte para BI',                icon: 'ChartBar'     },
@@ -471,14 +393,6 @@ export default {
     },
     formatDate(date) {
       return new Date(date).toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' });
-    },
-    methodClass(method) {
-      return {
-        GET:   'text-green-700 bg-green-50',
-        POST:  'text-blue-700 bg-blue-50',
-        PATCH: 'text-yellow-700 bg-yellow-50',
-        DELETE:'text-red-700 bg-red-50',
-      }[method] ?? 'text-gray-700 bg-gray-100';
     }
   }
 };
